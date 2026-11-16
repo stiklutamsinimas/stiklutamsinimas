@@ -4,8 +4,8 @@ category: pastatams
 order: 3
 icon: layers
 
-seoTitle: Stiklo dekoravimas plėvelėmis | stiklutamsinimas.eu
-seoDescription: Stiklo dekoravimas plėvelėmis – matinės ir raštuotos plėvelės, logotipai ant stiklo, spalvoti akcentai. Privatumas ir stilius namams, biurams ir verslui.
+seoTitle: Stiklo matinimas ir dekoravimas plėvelėmis | stiklutamsinimas.eu
+seoDescription: Stiklo matinimas ir dekoravimas plėvelėmis – matinės ir raštuotos plėvelės, logotipai ant stiklo durų, pertvarų matinimas biurams ir namams.
 
 h1: Stiklų dekoravimas plėvelėmis
 lead: Matinės, raštuotos ir spalvotos plėvelės paverčia paprastą stiklą interjero akcentu. Jos suteikia privatumo neužtemdant patalpos, o įmonės logotipas ant stiklo durų sustiprina įvaizdį.
@@ -15,7 +15,7 @@ cover: ../../assets/dekoravimas/dekoratyvine-plevele-geometrinis-rastas.jpg
 coverAlt: Stiklinė pertvara su geometrinio rašto dekoratyvine plėvele
 
 highlights:
-  - Matinės plėvelės privatumui
+  - Stiklo pertvarų ir durų matinimas
   - Raštai, ornamentai ir logotipai
   - Spalvoti akcentai ir saugumo juostos
   - Greita alternatyva smėliavimui
@@ -37,6 +37,18 @@ benefits:
 gallery:
   - src: ../../assets/dekoravimas/dekoratyvine-plevele-geometrinis-rastas.jpg
     alt: Geometrinio rašto dekoratyvinė plėvelė ant stiklo pertvaros
+  - src: ../../assets/dekoravimas/laukiamojo-pertvaru-matinimas.jpg
+    alt: Laukiamojo stiklinių pertvarų ir durų matinimas plėvele
+  - src: ../../assets/dekoravimas/logotipas-ant-stiklo-duru.jpg
+    alt: Įmonės logotipas ant stiklo durų matine plėvele
+  - src: ../../assets/dekoravimas/stiklo-sienos-matinimas.jpg
+    alt: Biuro stiklo sienos matinimas plėvele
+  - src: ../../assets/dekoravimas/biuro-pertvaru-matinimas.jpg
+    alt: Biuro stiklinių pertvarų matinimas
+  - src: ../../assets/dekoravimas/biuro-stiklo-sienos-matine-juosta.jpg
+    alt: Matinė juosta ant biuro stiklo sienos
+  - src: ../../assets/dekoravimas/duru-matine-plevele.jpg
+    alt: Stiklinių durų matinė plėvelė
   - src: ../../assets/dekoravimas/dekoratyvine-plevele-medis.jpg
     alt: Dekoratyvinė plėvelė su medžio raštu ant lango
   - src: ../../assets/dekoravimas/biuro-stiklo-dekoravimas.jpg
@@ -79,6 +91,10 @@ related:
 ## Stiklo dekoravimas – stilius ir privatumas
 
 Dekoratyvinės plėvelės leidžia per kelias valandas pakeisti stiklo paviršiaus išvaizdą be jokių remonto darbų. Tai **ekonomiška ir greita alternatyva smėliavimui ar graviravimui** – o atsibodus plėvelę galima pakeisti nauja.
+
+## Stiklo matinimas plėvele
+
+Stiklo matinimas – populiariausias būdas biurų pertvaroms, laukiamiesiems ir įėjimo durims suteikti privatumo. Matinė plėvelė atrodo kaip smėliuotas stiklas, praleidžia šviesą, tačiau paslepia, kas vyksta už stiklo. Galima matinti visą stiklą arba tik juostą akių lygyje.
 
 ## Ką galime sukurti
 

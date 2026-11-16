@@ -11,8 +11,8 @@ h1: Lipdukų spausdinimas ir reklamos darbai
 lead: Spausdiname ir išpjauname lipdukus, apklijuojame automobilius, vitrinas ir valtis, gaminame reklamines lentas. Padėsime ir su maketu – nuo idėjos iki priklijuoto rezultato.
 excerpt: Lipdukai, transporto ir vitrinų apklijavimas, plačiaformatė spauda, maketavimas.
 
-cover: ../../assets/reklama/furgono-reklama-lipdukai.jpg
-coverAlt: Raudonas furgonas, apklijuotas įmonės reklaminiais lipdukais
+cover: ../../assets/reklama/galinio-stiklo-reklama.jpg
+coverAlt: Reklama ant automobilio galinio stiklo
 
 highlights:
   - Lipdukų spauda ir ploteriavimas
@@ -35,12 +35,32 @@ benefits:
     text: Vitrinų apklijavimas, darbo laiko lentelės, užrašai ant stiklo durų.
 
 gallery:
+  - src: ../../assets/reklama/galinio-stiklo-reklama.jpg
+    alt: Reklama ant automobilio galinio stiklo
+  - src: ../../assets/reklama/pastato-reklaminis-baneris.jpg
+    alt: Reklaminis baneris ant pastato fasado
+  - src: ../../assets/reklama/degalu-kolonele-pries.jpg
+    alt: Degalų kolonėlė prieš apklijavimą – nusidėvėjusi plėvelė
+  - src: ../../assets/reklama/degalu-kolonele-po.jpg
+    alt: Degalų kolonėlė po apklijavimo nauja spausdinta plėvele
+  - src: ../../assets/reklama/reklamine-iskaba.jpg
+    alt: Kavinės reklaminė iškaba
+  - src: ../../assets/reklama/spausdinta-meniu-lenta.jpg
+    alt: Spausdinta kavinės meniu lenta
   - src: ../../assets/reklama/furgono-reklama-lipdukai.jpg
     alt: Furgonas su įmonės reklama
-  - src: ../../assets/reklama/lipdukas-ant-automobilio-lango.jpg
-    alt: Vyčio lipdukas ant automobilio lango
+  - src: ../../assets/reklama/stalo-apklijavimas.jpg
+    alt: Stalo paviršiaus apklijavimas spausdinta plėvele
   - src: ../../assets/reklama/valties-apklijavimas.jpg
     alt: Valties apklijavimas dizaino lipdukais
+  - src: ../../assets/reklama/degalu-kolonele-pries-2.jpg
+    alt: Degalų kolonėlė prieš apklijavimą – suplyšusi sena plėvelė
+  - src: ../../assets/reklama/degalu-kolonele-po-2.jpg
+    alt: Degalų kolonėlė po apklijavimo
+  - src: ../../assets/reklama/spausdintas-plakatas.jpg
+    alt: Spausdintas reklaminis plakatas
+  - src: ../../assets/reklama/lipdukas-ant-automobilio-lango.jpg
+    alt: Vyčio lipdukas ant automobilio lango
   - src: ../../assets/reklama/valties-dizaino-lipdukai.jpg
     alt: Valtis su oranžiniais dizaino lipdukais
   - src: ../../assets/reklama/automobilio-dizaino-lipdukai.jpg
@@ -55,14 +75,8 @@ gallery:
     alt: Grožio salono durų lipdukai
   - src: ../../assets/reklama/vitrinos-apklijavimas.jpg
     alt: Vitrinos apklijavimas užrašais
-  - src: ../../assets/reklama/reklamines-lentos.jpg
-    alt: Spausdintos reklaminės lentos
-  - src: ../../assets/reklama/automobilio-reklamos-uzrasai.jpg
-    alt: Automobilio reklamos užrašai
   - src: ../../assets/reklama/vitrinos-plevele.jpg
     alt: Vitrinos plėvelė su užrašais
-  - src: ../../assets/reklama/motociklo-lipdukai.jpg
-    alt: Motociklo dizaino lipdukai
 
 faq:
   - q: Ar galite sukurti maketą?
@@ -85,8 +99,9 @@ Teikiame visus reklamos darbus – **nuo maketavimo ir spaudos iki ploteriavimo 
 ## Ką gaminame
 
 - **Lipdukai** – spausdinti ir išpjauti, įvairių formų ir dydžių.
-- **Transporto priemonių reklama** – automobilių, furgonų, valčių ir motociklų apklijavimas.
+- **Transporto priemonių reklama** – automobilių, furgonų, valčių ir motociklų apklijavimas, reklama ant galinio stiklo.
 - **Vitrinų apklijavimas** – užrašai, logotipai, darbo laiko lentelės ant stiklo.
-- **Plačiaformatė spauda** – baneriai, stendai, reklaminės lentos.
+- **Plačiaformatė spauda** – baneriai ant pastatų, iškabos, meniu lentos, plakatai.
+- **Įrangos ir baldų apklijavimas** – pvz. degalų kolonėlių atnaujinimas nauja spausdinta plėvele, stalų paviršiai.
 
 Nesvarbu, ar tai mažas užsakymas, ar didelis projektas – įgyvendinsime jūsų idėją. Stiklo paviršiams taip pat siūlome [dekoratyvines plėveles](/stiklo-dekoravimas).

@@ -20,15 +20,15 @@ import whyImage1 from '@/assets/automobiliai/range-rover-sport-tamsinimas.jpg';
 import whyImage2 from '@/assets/pastatai/namo-lango-veidrodine-plevele.jpg';
 
 // Darbų pavyzdžiai iš skirtingų paslaugų
-import g1 from '@/assets/automobiliai/tesla-model-s-tamsinti-galiniai-stiklai.jpg';
+import g1 from '@/assets/automobiliai/audi-q7-tamsinti-galiniai-stiklai.jpg';
 import g2 from '@/assets/poliravimas/zibintu-poliravimas-pries-ir-po.jpg';
-import g3 from '@/assets/dekoravimas/dekoratyvine-plevele-geometrinis-rastas.jpg';
-import g4 from '@/assets/zibintai/mercedes-e-tamsinti-zibintai.jpg';
-import g5 from '@/assets/pastatai/veidrodine-plevele-langams.jpg';
-import g6 from '@/assets/automobiliai/skoda-superb-universalas-tamsinimas.jpg';
-import g7 from '@/assets/reklama/valties-apklijavimas.jpg';
-import g8 from '@/assets/pertvaros/loft-stiklo-pertvara-namuose.jpg';
-import g9 from '@/assets/priekiniai/chameleono-plevele-priekinis-stiklas.jpg';
+import g3 from '@/assets/priekiniai/chameleono-plevele-saulelydis.jpg';
+import g4 from '@/assets/zibintai/range-rover-tamsinti-galiniai-zibintai.jpg';
+import g5 from '@/assets/pastatai/namo-fasado-veidrodine-plevele.jpg';
+import g6 from '@/assets/automobiliai/tesla-model-s-tamsinti-langai.jpg';
+import g7 from '@/assets/reklama/pastato-reklaminis-baneris.jpg';
+import g8 from '@/assets/dekoravimas/laukiamojo-pertvaru-matinimas.jpg';
+import g9 from '@/assets/automobiliai/vw-transporter-langu-tamsinimas.jpg';
 
 const groups = await getServicesByCategory();
 const carTint = await getEntry('services', 'automobilio-stiklu-tamsinimas');
@@ -38,15 +38,15 @@ const autoGroup = groups.find((g) => g.key === 'automobiliams');
 const otherItems = groups.filter((g) => g.key !== 'automobiliams').flatMap((g) => g.items);
 
 const galleryImages = [
-  { src: g1, alt: 'Tesla Model S su tamsintais galiniais stiklais' },
+  { src: g1, alt: 'Baltas Audi Q7 su tamsintais galiniais stiklais' },
   { src: g2, alt: 'Žibintų poliravimas – prieš ir po' },
-  { src: g3, alt: 'Dekoratyvinė plėvelė ant biuro stiklo pertvaros' },
-  { src: g4, alt: 'Mercedes-Benz E klasė su tamsintais žibintais' },
-  { src: g5, alt: 'Namo langai, tamsinti veidrodine plėvele' },
-  { src: g6, alt: 'Skoda Superb universalas po stiklų tamsinimo' },
-  { src: g7, alt: 'Valties apklijavimas dizaino lipdukais' },
-  { src: g8, alt: 'Loft stiliaus stiklo pertvara namuose' },
-  { src: g9, alt: 'Chameleono efekto plėvelė ant priekinio stiklo' },
+  { src: g3, alt: 'Chameleono efekto plėvelė ant priekinio stiklo' },
+  { src: g4, alt: 'Range Rover galiniai žibintai po tamsinimo' },
+  { src: g5, alt: 'Pastato fasado langai su veidrodine plėvele' },
+  { src: g6, alt: 'Tesla Model S su tamsintais galiniais langais' },
+  { src: g7, alt: 'Reklaminis baneris ant pastato fasado' },
+  { src: g8, alt: 'Laukiamojo stiklinių pertvarų matinimas' },
+  { src: g9, alt: 'VW Transporter su tamsintais salono langais' },
 ];
 
 const reasons = [

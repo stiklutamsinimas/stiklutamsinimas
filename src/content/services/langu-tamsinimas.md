@@ -35,8 +35,14 @@ benefits:
     text: Mažiau karščio vasarą reiškia mažesnį kondicionavimo poreikį ir energijos sąnaudas.
 
 gallery:
+  - src: ../../assets/pastatai/namo-fasado-veidrodine-plevele.jpg
+    alt: Modernaus pastato fasado langai su veidrodine plėvele
+  - src: ../../assets/pastatai/dideli-langai-veidrodine-plevele.jpg
+    alt: Dideli langai su veidrodine plėvele – iš lauko matosi tik atspindys
   - src: ../../assets/pastatai/namo-lango-veidrodine-plevele.jpg
     alt: Namo langas su veidrodine plėvele
+  - src: ../../assets/pastatai/duru-stiklo-ruda-plevele.jpg
+    alt: Įėjimo durų stiklas su ruda Orocal plėvele
   - src: ../../assets/pastatai/veidrodine-plevele-langams.jpg
     alt: Veidrodine plėvele tamsinti namo langai
   - src: ../../assets/pastatai/erkerio-langu-tamsinimas.jpg

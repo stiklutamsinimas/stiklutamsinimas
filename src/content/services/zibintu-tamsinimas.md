@@ -11,8 +11,8 @@ h1: Žibintų tamsinimas
 lead: Tamsinta plėvelė ant galinių ar priekinių žibintų suteikia automobiliui modernesnę, vientisą išvaizdą ir apsaugo žibintų paviršių nuo smulkių įbrėžimų bei saulės poveikio.
 excerpt: Galinių ir priekinių žibintų tamsinimas plėvele – modernesnė išvaizda ir apsauga.
 
-cover: ../../assets/zibintai/tamsinti-galiniai-zibintai.jpg
-coverAlt: Tamsinta plėvele padengti automobilio galiniai žibintai
+cover: ../../assets/zibintai/range-rover-tamsinti-galiniai-zibintai.jpg
+coverAlt: Range Rover galiniai žibintai po tamsinimo plėvele
 
 highlights:
   - Galiniai ir priekiniai žibintai
@@ -35,6 +35,20 @@ benefits:
     text: Panorėjus plėvelę galima nuimti nepažeidžiant žibinto paviršiaus.
 
 gallery:
+  - src: ../../assets/zibintai/range-rover-tamsinti-galiniai-zibintai.jpg
+    alt: Range Rover galiniai žibintai po tamsinimo plėvele
+  - src: ../../assets/zibintai/mercedes-e-tamsinti-galiniai-zibintai.jpg
+    alt: Mercedes-Benz E klasė su tamsintais galiniais žibintais
+  - src: ../../assets/zibintai/toyota-galinio-zibinto-tamsinimas.jpg
+    alt: Toyota galinio žibinto tamsinimas plėvele
+  - src: ../../assets/zibintai/galinio-zibinto-tamsinimo-procesas.jpg
+    alt: Galinio žibinto tamsinimas – plėvelė prigludusi prie žibinto formos
+  - src: ../../assets/zibintai/plevele-klijuojama-ant-zibinto.jpg
+    alt: Tamsinimo plėvelė klijuojama ant galinio žibinto
+  - src: ../../assets/zibintai/toyota-galinis-zibintas-su-plevele.jpg
+    alt: Toyota galinis žibintas su tamsinimo plėvele
+  - src: ../../assets/zibintai/galinio-zibinto-plevele-formuojama.jpg
+    alt: Plėvelė formuojama ant galinio žibinto
   - src: ../../assets/zibintai/vw-golf-tamsinti-galiniai-zibintai.jpg
     alt: Volkswagen Golf su tamsintais galiniais žibintais
   - src: ../../assets/zibintai/mercedes-e-tamsinti-zibintai.jpg

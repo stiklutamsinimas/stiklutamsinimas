@@ -11,8 +11,8 @@ h1: Priekinių stiklų tamsinimas
 lead: Priekinį stiklą ir priekinius šoninius langus klijuojame skaidriomis aterminėmis plėvelėmis. Jos sulaiko dalį saulės šilumos ir UV spindulių, mažina akinimą, o matomumas išlieka geras.
 excerpt: Skaidrios aterminės plėvelės priekiniam stiklui ir šoniniams langams – mažiau karščio.
 
-cover: ../../assets/priekiniai/chameleono-plevele-priekinis-stiklas.jpg
-coverAlt: Priekinis automobilio stiklas su chameleono efekto atermine plėvele
+cover: ../../assets/priekiniai/chameleono-plevele-saulelydis.jpg
+coverAlt: Chameleono efekto aterminė plėvelė ant priekinio stiklo saulėlydžio šviesoje
 
 highlights:
   - Leidžiama patamsinti iki 30 % – parenkame tinkamą plėvelę
@@ -35,6 +35,24 @@ benefits:
     text: Norintiems išsiskirti – plėvelės su subtiliu spalvų atspindžiu, keičiančiu atspalvį priklausomai nuo kampo.
 
 gallery:
+  - src: ../../assets/priekiniai/chameleono-plevele-saulelydis.jpg
+    alt: Chameleono efekto plėvelė ant priekinio stiklo saulėlydžio šviesoje
+  - src: ../../assets/priekiniai/violetine-chameleono-plevele-priekinis-stiklas.jpg
+    alt: Violetinio atspalvio chameleono plėvelė ant priekinio stiklo
+  - src: ../../assets/priekiniai/melsva-chameleono-plevele-priekinis-stiklas.jpg
+    alt: Melsvo atspalvio chameleono plėvelė ant automobilio priekinio stiklo
+  - src: ../../assets/priekiniai/chameleono-plevele-dirbtuveje.jpg
+    alt: Chameleono plėvelė ant priekinio stiklo dirbtuvėse
+  - src: ../../assets/priekiniai/ultravision-ms93c-priekinis-stiklas.jpg
+    alt: Ultra Vision MS93C aterminė plėvelė ant priekinio stiklo
+  - src: ../../assets/priekiniai/ultravision-priekiniai-soniniai-langai.jpg
+    alt: Priekiniai šoniniai langai su Ultra Vision atermine plėvele
+  - src: ../../assets/priekiniai/atermine-plevele-priekinis-stiklas-2.jpg
+    alt: Aterminė plėvelė ant juodo automobilio priekinio stiklo
+  - src: ../../assets/priekiniai/melsva-atermine-plevele-universalas.jpg
+    alt: Melsva aterminė plėvelė ant universalo priekinio stiklo
+  - src: ../../assets/priekiniai/furgono-priekinio-stiklo-plevele.jpg
+    alt: Furgono priekinis stiklas su atermine plėvele
   - src: ../../assets/priekiniai/chameleono-plevele-priekinis-stiklas.jpg
     alt: Chameleono efekto plėvelė ant priekinio automobilio stiklo
   - src: ../../assets/priekiniai/atermine-plevele-priekinis-stiklas.jpg

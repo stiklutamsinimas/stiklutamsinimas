@@ -11,8 +11,8 @@ h1: Automobilių stiklų tamsinimas
 lead: Tamsiname automobilių stiklus kokybiškomis Solar Screen, Global Window Films ir Ultra Vision plėvelėmis. Vėsesnis salonas, apsauga nuo UV spindulių ir daugiau privatumo – tvarkingai, be burbulų ir su 5 metų ar ilgesne garantija.
 excerpt: Galiniai stiklai nuo 120 €. Kokybiškos plėvelės, darbas per 2–3 val., 5 m. garantija.
 
-cover: ../../assets/automobiliai/tesla-model-s-tamsinti-galiniai-stiklai.jpg
-coverAlt: Balta Tesla Model S su tamsintais galiniais stiklais
+cover: ../../assets/automobiliai/audi-q7-tamsinti-galiniai-stiklai.jpg
+coverAlt: Baltas Audi Q7 su tamsintais galiniais stiklais
 
 highlights:
   - Galinių stiklų tamsinimas nuo 120 €
@@ -45,30 +45,40 @@ prices:
 priceFrom: 120
 
 gallery:
+  - src: ../../assets/automobiliai/audi-q7-tamsinti-galiniai-stiklai.jpg
+    alt: Baltas Audi Q7 su tamsintais galiniais stiklais
+  - src: ../../assets/automobiliai/tesla-model-s-tamsinti-langai.jpg
+    alt: Tesla Model S su tamsintais galiniais langais
+  - src: ../../assets/automobiliai/bmw-ix1-tamsinti-stiklai.jpg
+    alt: BMW iX1 su tamsintais galiniais stiklais
+  - src: ../../assets/automobiliai/vw-transporter-langu-tamsinimas.jpg
+    alt: VW Transporter su tamsintais salono langais
+  - src: ../../assets/automobiliai/mercedes-glc-tamsinimas.jpg
+    alt: Mercedes-Benz GLC su tamsintais galiniais langais
+  - src: ../../assets/automobiliai/skoda-octavia-universalas-tamsinimas.jpg
+    alt: Raudona Škoda Octavia universalas su tamsintais stiklais
+  - src: ../../assets/automobiliai/range-rover-tamsinti-langai.jpg
+    alt: Range Rover su tamsintais galiniais langais
+  - src: ../../assets/automobiliai/tesla-model-3-tamsinimas.jpg
+    alt: Tesla Model 3 su tamsintais galiniais stiklais
+  - src: ../../assets/automobiliai/volvo-xc90-melynas-tamsinimas.jpg
+    alt: Mėlynas Volvo XC90 su tamsintais galiniais stiklais
+  - src: ../../assets/automobiliai/toyota-auris-universalas-tamsinimas.jpg
+    alt: Toyota Auris universalas su tamsintais langais
+  - src: ../../assets/automobiliai/ford-transit-custom-tamsinimas.jpg
+    alt: Ford Transit Custom su tamsintais salono langais
+  - src: ../../assets/automobiliai/bmw-7-e32-tamsinti-langai.jpg
+    alt: Klasikinis BMW 7 serijos (E32) su tamsintais langais
+  - src: ../../assets/automobiliai/volvo-xc90-juodas-tamsinimas.jpg
+    alt: Juodas Volvo XC90 su tamsintais langais
+  - src: ../../assets/automobiliai/bmw-3-touring-geltonas-tamsinimas.jpg
+    alt: Geltonas BMW 3 serijos universalas su tamsintais langais
   - src: ../../assets/automobiliai/tesla-model-s-tamsinti-galiniai-stiklai.jpg
-    alt: Tesla Model S su tamsintais galiniais stiklais
+    alt: Balta Tesla Model S su tamsintais galiniais stiklais
   - src: ../../assets/automobiliai/range-rover-sport-tamsinimas.jpg
     alt: Baltas Range Rover Sport su tamsintais galiniais langais
   - src: ../../assets/automobiliai/skoda-superb-universalas-tamsinimas.jpg
-    alt: Skoda Superb universalas po galinių stiklų tamsinimo
-  - src: ../../assets/automobiliai/volvo-s60-tamsinti-stiklai.jpg
-    alt: Baltas Volvo S60 su tamsintais stiklais
-  - src: ../../assets/automobiliai/range-rover-sport-pilkas-tamsinimas.jpg
-    alt: Pilkas Range Rover Sport su tamsintais langais
-  - src: ../../assets/automobiliai/ford-mondeo-tamsinti-langai.jpg
-    alt: Raudonas Ford Mondeo su tamsintais galiniais langais
-  - src: ../../assets/automobiliai/volvo-v60-tamsinimas.jpg
-    alt: Volvo V60 universalas po stiklų tamsinimo
-  - src: ../../assets/automobiliai/bmw-3-tamsinti-stiklai.jpg
-    alt: BMW 3 serijos sedanas su tamsintais stiklais
-  - src: ../../assets/automobiliai/jaguar-f-pace-tamsinimas.jpg
-    alt: Jaguar F-Pace su tamsintais galiniais stiklais
-  - src: ../../assets/automobiliai/range-rover-tamsinti-galiniai-stiklai.jpg
-    alt: Juodas Range Rover su tamsintu galiniu stiklu
-  - src: ../../assets/automobiliai/opel-astra-tamsinimas.jpg
-    alt: Mėlyna Opel Astra po galinių stiklų tamsinimo
-  - src: ../../assets/automobiliai/mikroautobuso-langu-tamsinimas.jpg
-    alt: Baltas mikroautobusas su tamsintais keleivių salono langais
+    alt: Škoda Superb universalas po galinių stiklų tamsinimo
 
 faq:
   - q: Kiek kainuoja automobilio stiklų tamsinimas?
