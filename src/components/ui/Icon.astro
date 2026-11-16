@@ -1,0 +1,71 @@
+---
+import {
+  BadgeCheck,
+  BuildingComplex,
+  Car,
+  Clock,
+  Droplets,
+  Euro,
+  EyeOff,
+  Gauge,
+  Hammer,
+  House,
+  Layers,
+  Lightbulb,
+  MapPin,
+  PanelsTopLeft,
+  Printer,
+  Ruler,
+  Scan,
+  Shield,
+  ShieldCheck,
+  Sparkles,
+  Sticker,
+  Store,
+  Sun,
+  ThermometerSun,
+  Truck,
+  Wrench,
+} from '@lucide/astro';
+import type { IconName } from '@/lib/icon-names';
+
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+}
+
+const map = {
+  car: Car,
+  truck: Truck,
+  building: BuildingComplex,
+  house: House,
+  sun: Sun,
+  thermometer: ThermometerSun,
+  'eye-off': EyeOff,
+  shield: Shield,
+  'shield-check': ShieldCheck,
+  sparkles: Sparkles,
+  lightbulb: Lightbulb,
+  wrench: Wrench,
+  layers: Layers,
+  sticker: Sticker,
+  printer: Printer,
+  panels: PanelsTopLeft,
+  clock: Clock,
+  'badge-check': BadgeCheck,
+  'map-pin': MapPin,
+  droplets: Droplets,
+  gauge: Gauge,
+  ruler: Ruler,
+  hammer: Hammer,
+  store: Store,
+  euro: Euro,
+  scan: Scan,
+} satisfies Record<IconName, unknown>;
+
+const { name, size = 24, class: className } = Astro.props;
+const Component = map[name];
+---
+
+<Component size={size} class={className} aria-hidden="true" />

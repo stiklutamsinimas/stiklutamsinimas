@@ -1,0 +1,181 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------
+   Dizaino sistema. Pagrindinė spalva – logotipo mėlyna #008dd2.
+   --------------------------------------------------------------- */
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Manrope Variable', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: #effaff;
+  --color-brand-100: #def3ff;
+  --color-brand-200: #b6e9ff;
+  --color-brand-300: #75daff;
+  --color-brand-400: #2cc8ff;
+  --color-brand-500: #00b0f0;
+  --color-brand-600: #008dd2;
+  --color-brand-700: #0070aa;
+  --color-brand-800: #025e8c;
+  --color-brand-900: #084e74;
+  --color-brand-950: #06324d;
+
+  --color-ink-50: #f5f7fa;
+  --color-ink-100: #eaeef3;
+  --color-ink-200: #d3dae3;
+  --color-ink-300: #aab6c4;
+  --color-ink-400: #7b8a9c;
+  --color-ink-500: #5b6a7c;
+  --color-ink-600: #455364;
+  --color-ink-700: #323e4d;
+  --color-ink-800: #1b2533;
+  --color-ink-900: #0e1621;
+  --color-ink-950: #070b12;
+
+  --radius-4xl: 2rem;
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: 6rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    @apply bg-white font-sans text-ink-700 antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-ink-950;
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    @apply bg-brand-500 text-ink-950;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-500;
+  }
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-brand-700 uppercase;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply h-px w-6 bg-current;
+  }
+  .on-dark .eyebrow,
+  .eyebrow.on-dark {
+    @apply text-brand-400;
+  }
+
+  /* Mygtukai: naudoti kartu, pvz. class="btn btn-primary" */
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 text-[0.95rem] font-semibold whitespace-nowrap transition duration-200 active:scale-[0.98];
+  }
+  .btn-primary {
+    @apply bg-brand-700 text-white shadow-lg shadow-brand-700/25 hover:bg-brand-800;
+  }
+  .btn-accent {
+    @apply bg-brand-500 text-ink-950 shadow-lg shadow-brand-500/25 hover:bg-brand-400;
+  }
+  .btn-ghost-dark {
+    @apply border border-white/20 bg-white/5 text-white backdrop-blur hover:border-white/40 hover:bg-white/10;
+  }
+  .btn-ghost {
+    @apply border border-ink-200 bg-white text-ink-900 hover:border-ink-300 hover:bg-ink-50;
+  }
+  .btn-whatsapp {
+    @apply bg-[#25d366] text-ink-950 hover:bg-[#3ee07a];
+  }
+
+  .card {
+    @apply rounded-3xl border border-ink-100 bg-white shadow-[0_1px_2px_rgb(7_11_18/0.04),0_8px_24px_-12px_rgb(7_11_18/0.12)];
+  }
+
+  /* Ilgo teksto (markdown) stilius */
+  .prose-site {
+    @apply max-w-none text-[1.05rem] leading-relaxed text-ink-600;
+  }
+  .prose-site > * + * {
+    @apply mt-5;
+  }
+  .prose-site h2 {
+    @apply mt-12 text-2xl font-bold sm:text-3xl;
+  }
+  .prose-site h3 {
+    @apply mt-8 text-xl font-bold;
+  }
+  .prose-site h2 + *,
+  .prose-site h3 + * {
+    @apply mt-3;
+  }
+  .prose-site a {
+    @apply font-medium text-brand-700 underline decoration-brand-300 underline-offset-4 hover:decoration-brand-700;
+  }
+  .prose-site strong {
+    @apply font-semibold text-ink-900;
+  }
+  .prose-site ul {
+    @apply space-y-2 pl-0;
+  }
+  .prose-site ul > li {
+    @apply relative pl-7;
+  }
+  .prose-site ul > li::before {
+    content: '';
+    @apply absolute top-[0.6em] left-1 size-2 rounded-full bg-brand-500;
+  }
+  .prose-site ol {
+    @apply list-decimal space-y-2 pl-6 marker:font-semibold marker:text-brand-700;
+  }
+  .prose-site blockquote {
+    @apply rounded-2xl border-l-4 border-brand-500 bg-brand-50 px-6 py-4 text-ink-700;
+  }
+}
+
+/* Lengvas pasirodymo efektas (be JavaScript) */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    @apply animate-fade-up;
+  }
+}
+
+/* Galerijos peržiūros langas */
+dialog.lightbox::backdrop {
+  background: rgb(7 11 18 / 0.92);
+  backdrop-filter: blur(6px);
+}

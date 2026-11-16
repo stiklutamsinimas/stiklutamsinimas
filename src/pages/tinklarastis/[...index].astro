@@ -1,0 +1,70 @@
+---
+/**
+ * Tinklaraščio sąrašas (/tinklarastis).
+ * Puslapis sugeneruojamas TIK tada, kai yra bent vienas publikuotas įrašas
+ * (draft: false). Iki tol jo nėra nei svetainėje, nei sitemap.xml.
+ */
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { getPublishedPosts } from '@/lib/services';
+import { breadcrumbSchema } from '@/lib/schema';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.length > 0 ? [{ params: { index: undefined } }] : [];
+}
+
+const posts = await getPublishedPosts();
+const crumbs = [
+  { name: 'Pradžia', url: '/' },
+  { name: 'Tinklaraštis', url: '/tinklarastis' },
+];
+const fmt = new Intl.DateTimeFormat('lt-LT', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout
+  title="Tinklaraštis – patarimai apie stiklų tamsinimą | stiklutamsinimas.eu"
+  description="Patarimai ir naujienos apie automobilių ir pastatų stiklų tamsinimą, plėveles, žibintų priežiūrą ir stiklo dekoravimą."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <section class="on-dark bg-ink-950">
+    <div class="container-site pt-8 pb-16 lg:pt-10 lg:pb-20">
+      <Breadcrumbs items={crumbs} />
+      <div class="mt-10">
+        <SectionHeading as="h1" eyebrow="Tinklaraštis" title="Patarimai ir naujienos" dark />
+      </div>
+    </div>
+  </section>
+
+  <section class="container-site py-16 lg:py-24">
+    <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        posts.map((post) => (
+          <li>
+            <a href={`/tinklarastis/${post.id}`} class="card group flex h-full flex-col overflow-hidden">
+              {post.data.cover && (
+                <Image
+                  src={post.data.cover}
+                  alt={post.data.coverAlt ?? ''}
+                  widths={[400, 640]}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  class="aspect-[16/10] w-full object-cover transition duration-500 group-hover:scale-105"
+                  layout="none"
+                />
+              )}
+              <div class="flex flex-1 flex-col p-6">
+                <time datetime={post.data.pubDate.toISOString()} class="text-sm text-ink-500">
+                  {fmt.format(post.data.pubDate)}
+                </time>
+                <h2 class="mt-2 text-xl font-bold group-hover:text-brand-700">{post.data.title}</h2>
+                <p class="mt-3 text-ink-500">{post.data.description}</p>
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>

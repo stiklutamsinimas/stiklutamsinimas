@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import logo from '@/assets/brand/logo-s.png';
+import { site } from '@/config/site';
+
+interface Props {
+  class?: string;
+  /** Tamsiame fone – baltas tekstas */
+  dark?: boolean;
+}
+
+const { class: className, dark = true } = Astro.props;
+---
+
+<a href="/" class:list={['group inline-flex items-center gap-3', className]} aria-label={`${site.name} – pradžia`}>
+  <span
+    class:list={[
+      'grid size-10 shrink-0 place-items-center rounded-full transition-transform duration-300 group-hover:rotate-[-8deg]',
+      dark ? 'bg-white' : 'bg-white ring-1 ring-ink-100',
+    ]}
+  >
+    <Image src={logo} alt="" width={40} height={40} layout="fixed" class="size-10" loading="eager" />
+  </span>
+  <span class="flex flex-col leading-none">
+    <span class:list={['font-display text-[1.05rem] font-extrabold tracking-tight', dark ? 'text-white' : 'text-ink-950']}>
+      Stiklų tamsinimas
+    </span>
+    <span class:list={['mt-1 text-[0.68rem] font-medium tracking-[0.16em] uppercase', dark ? 'text-ink-300' : 'text-ink-500']}>
+      {site.domain}
+    </span>
+  </span>
+</a>
