@@ -35,6 +35,13 @@ export const site = {
   appointmentNote: 'Darbai atliekami tik iš anksto susitarus',
   filmBrands: ['Solar Screen', 'Global Window Films', 'Ultra Vision'],
 
+  /**
+   * Socialiniai tinklai – rodomi poraštėje, kontaktuose ir schema.org `sameAs`.
+   * Tuščias sąrašas – niekas nerodoma. Pvz.: { name: 'Instagram', url: 'https://www.instagram.com/...' }
+   * (ženkliukai paruošti: Instagram, Pinterest – src/components/ui/SocialIcon.astro)
+   */
+  social: [] as { name: string; url: string }[],
+
   locations: [
     { city: 'Kupiškis', cityIn: 'Kupiškyje', street: 'Gedimino g. 67' },
     { city: 'Rokiškis', cityIn: 'Rokiškyje', street: 'Miškininkų g. 5c' },

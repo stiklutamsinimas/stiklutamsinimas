@@ -38,6 +38,7 @@ export function siteGraph() {
       telephone: site.phone,
       description: site.description,
       areaServed: { '@type': 'Country', name: 'Lietuva' },
+      ...(site.social.length > 0 && { sameAs: site.social.map((s) => s.url) }),
       contactPoint: {
         '@type': 'ContactPoint',
         telephone: site.phone,

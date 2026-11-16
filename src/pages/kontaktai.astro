@@ -5,6 +5,7 @@ import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
 import ContactForm from '@/components/ContactForm.astro';
 import Locations from '@/components/Locations.astro';
+import SocialIcon from '@/components/ui/SocialIcon.astro';
 import { mailHref, site, telHref } from '@/config/site';
 import { breadcrumbSchema } from '@/lib/schema';
 
@@ -65,6 +66,19 @@ const channels = [
         ))
       }
     </ul>
+    {
+      site.social.length > 0 && (
+        <p class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.95rem] text-ink-600">
+          Daugiau darbų nuotraukų:
+          {site.social.map((s) => (
+            <a href={s.url} target="_blank" rel="noopener me" class="inline-flex items-center gap-2 font-semibold text-ink-900 hover:text-brand-700">
+              <SocialIcon name={s.name} />
+              {s.name}
+            </a>
+          ))}
+        </p>
+      )
+    }
   </section>
 
   <section id="uzklausa" class="container-site py-20 lg:py-24">

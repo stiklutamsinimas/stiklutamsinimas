@@ -45,6 +45,8 @@ gallery:
     alt: Stiklo pertvara komercinėje patalpoje
   - src: ../../assets/pertvaros/stumdomos-stiklo-durys.jpg
     alt: Stumdomos matinio stiklo durys mansardoje
+  - src: ../../assets/pertvaros/spalvoto-stiklo-loft-pertvara.jpg
+    alt: Loft stiliaus pertvara su spalvoto stiklo intarpais montavimo metu
 
 faq:
   - q: Ar stiklo pertvarą galima derinti su matine plėvele?

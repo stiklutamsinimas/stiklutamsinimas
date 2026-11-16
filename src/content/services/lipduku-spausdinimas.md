@@ -47,8 +47,18 @@ gallery:
     alt: Kavinės reklaminė iškaba
   - src: ../../assets/reklama/spausdinta-meniu-lenta.jpg
     alt: Spausdinta kavinės meniu lenta
+  - src: ../../assets/reklama/mazda-galinio-stiklo-lipdukas-vytis.jpg
+    alt: Mazda 2 su Vyčio lipduku ant galinio stiklo
   - src: ../../assets/reklama/furgono-reklama-lipdukai.jpg
     alt: Furgonas su įmonės reklama
+  - src: ../../assets/reklama/spausdinti-reklaminiai-lipdukai.jpg
+    alt: Spausdinti automobilių plovyklos reklaminiai lipdukai
+  - src: ../../assets/reklama/sunkvezimio-reklama-lipdukai.jpg
+    alt: Sunkvežimio reklama – užrašai ant kabinos durų
+  - src: ../../assets/reklama/furgono-kapoto-logotipas.jpg
+    alt: Įmonės logotipas ant furgono kapoto
+  - src: ../../assets/reklama/mikroautobuso-lango-lipdukas-vytis.jpg
+    alt: Vyčio lipdukas ant mikroautobuso lango ir baidarių nuomos reklama
   - src: ../../assets/reklama/stalo-apklijavimas.jpg
     alt: Stalo paviršiaus apklijavimas spausdinta plėvele
   - src: ../../assets/reklama/valties-apklijavimas.jpg

@@ -39,10 +39,14 @@ gallery:
     alt: Range Rover galiniai žibintai po tamsinimo plėvele
   - src: ../../assets/zibintai/mercedes-e-tamsinti-galiniai-zibintai.jpg
     alt: Mercedes-Benz E klasė su tamsintais galiniais žibintais
+  - src: ../../assets/zibintai/mercedes-galiniai-zibintai-su-plevele.jpg
+    alt: Mercedes-Benz galiniai žibintai su tamsinimo plėvele
   - src: ../../assets/zibintai/toyota-galinio-zibinto-tamsinimas.jpg
     alt: Toyota galinio žibinto tamsinimas plėvele
   - src: ../../assets/zibintai/galinio-zibinto-tamsinimo-procesas.jpg
     alt: Galinio žibinto tamsinimas – plėvelė prigludusi prie žibinto formos
+  - src: ../../assets/zibintai/audi-galinis-zibintas-patamsintas.jpg
+    alt: Audi galinis žibintas po tamsinimo plėvele
   - src: ../../assets/zibintai/plevele-klijuojama-ant-zibinto.jpg
     alt: Tamsinimo plėvelė klijuojama ant galinio žibinto
   - src: ../../assets/zibintai/toyota-galinis-zibintas-su-plevele.jpg

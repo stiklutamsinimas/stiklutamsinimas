@@ -35,10 +35,14 @@ benefits:
     text: Mažiau karščio vasarą reiškia mažesnį kondicionavimo poreikį ir energijos sąnaudas.
 
 gallery:
+  - src: ../../assets/pastatai/fasado-stiklu-klijavimas-keltuvu.jpg
+    alt: Komercinio pastato stiklinio fasado klijavimas plėvele naudojant keltuvą
   - src: ../../assets/pastatai/namo-fasado-veidrodine-plevele.jpg
     alt: Modernaus pastato fasado langai su veidrodine plėvele
   - src: ../../assets/pastatai/dideli-langai-veidrodine-plevele.jpg
     alt: Dideli langai su veidrodine plėvele – iš lauko matosi tik atspindys
+  - src: ../../assets/pastatai/komercinio-pastato-fasado-plevele.jpg
+    alt: Komercinio pastato stiklinis fasadas – plėvelės klijavimo darbai
   - src: ../../assets/pastatai/namo-lango-veidrodine-plevele.jpg
     alt: Namo langas su veidrodine plėvele
   - src: ../../assets/pastatai/duru-stiklo-ruda-plevele.jpg
@@ -89,7 +93,7 @@ Langų plėvelė – greitas ir ekonomiškas būdas pagerinti patalpų komfortą
 
 ## Kur dažniausiai naudojama
 
-Langų plėveles klijuojame **privačiuose namuose, butuose, biuruose, parduotuvėse, sporto salėse** ir kitose komercinėse patalpose. Didelius stiklo plotus turintiems pastatams plėvelė ypač naudinga – patalpos vasarą perkaista gerokai mažiau.
+Langų plėveles klijuojame **privačiuose namuose, butuose, biuruose, parduotuvėse, sporto salėse** ir kitose komercinėse patalpose. Didelius stiklo plotus turintiems pastatams plėvelė ypač naudinga – patalpos vasarą perkaista gerokai mažiau. Aukštus stiklinius fasadus klijuojame naudodami keltuvą.
 
 ## Kaip vyksta darbas
 

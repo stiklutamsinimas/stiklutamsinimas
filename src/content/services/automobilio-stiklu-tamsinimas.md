@@ -45,14 +45,34 @@ prices:
 priceFrom: 120
 
 gallery:
+  - src: ../../assets/automobiliai/range-rover-velar-tamsinti-langai.jpg
+    alt: Range Rover Velar su tamsintais galiniais stiklais
   - src: ../../assets/automobiliai/audi-q7-tamsinti-galiniai-stiklai.jpg
     alt: Baltas Audi Q7 su tamsintais galiniais stiklais
   - src: ../../assets/automobiliai/tesla-model-s-tamsinti-langai.jpg
     alt: Tesla Model S su tamsintais galiniais langais
+  - src: ../../assets/automobiliai/audi-a7-sportback-tamsinti-langai.jpg
+    alt: Audi A7 Sportback su tamsintais galiniais stiklais
+  - src: ../../assets/automobiliai/dodge-challenger-tamsinti-langai.jpg
+    alt: Violetinis Dodge Challenger su tamsintais langais
+  - src: ../../assets/automobiliai/range-rover-vogue-tamsinti-langai.jpg
+    alt: Juodas Range Rover Vogue su tamsintais galiniais stiklais
   - src: ../../assets/automobiliai/bmw-ix1-tamsinti-stiklai.jpg
     alt: BMW iX1 su tamsintais galiniais stiklais
+  - src: ../../assets/automobiliai/jaguar-i-pace-tamsinti-langai.jpg
+    alt: Jaguar I-Pace su tamsintais galiniais langais
+  - src: ../../assets/automobiliai/audi-q5-tamsinti-galiniai-stiklai.jpg
+    alt: Baltas Audi Q5 su tamsintais galiniais stiklais
+  - src: ../../assets/automobiliai/land-rover-discovery-sport-tamsinimas.jpg
+    alt: Land Rover Discovery Sport su tamsintais galiniais stiklais
+  - src: ../../assets/automobiliai/ford-mondeo-tamsinti-langai.jpg
+    alt: Raudonas Ford Mondeo su tamsintais galiniais stiklais
   - src: ../../assets/automobiliai/vw-transporter-langu-tamsinimas.jpg
     alt: VW Transporter su tamsintais salono langais
+  - src: ../../assets/automobiliai/audi-a6-tamsinti-langai.jpg
+    alt: Audi A6 su tamsintais galiniais langais
+  - src: ../../assets/automobiliai/skoda-karoq-tamsinti-langai.jpg
+    alt: Škoda Karoq su tamsintais galiniais stiklais
   - src: ../../assets/automobiliai/mercedes-glc-tamsinimas.jpg
     alt: Mercedes-Benz GLC su tamsintais galiniais langais
   - src: ../../assets/automobiliai/skoda-octavia-universalas-tamsinimas.jpg
@@ -63,6 +83,8 @@ gallery:
     alt: Tesla Model 3 su tamsintais galiniais stiklais
   - src: ../../assets/automobiliai/volvo-xc90-melynas-tamsinimas.jpg
     alt: Mėlynas Volvo XC90 su tamsintais galiniais stiklais
+  - src: ../../assets/automobiliai/ford-tourneo-custom-tamsinimas.jpg
+    alt: Ford Tourneo Custom su tamsintais salono langais
   - src: ../../assets/automobiliai/toyota-auris-universalas-tamsinimas.jpg
     alt: Toyota Auris universalas su tamsintais langais
   - src: ../../assets/automobiliai/ford-transit-custom-tamsinimas.jpg
@@ -79,6 +101,8 @@ gallery:
     alt: Baltas Range Rover Sport su tamsintais galiniais langais
   - src: ../../assets/automobiliai/skoda-superb-universalas-tamsinimas.jpg
     alt: Škoda Superb universalas po galinių stiklų tamsinimo
+  - src: ../../assets/automobiliai/ekskavatoriaus-kabinos-stiklu-tamsinimas.jpg
+    alt: CAT ekskavatoriaus kabinos stiklų tamsinimas
 
 faq:
   - q: Kiek kainuoja automobilio stiklų tamsinimas?
@@ -121,6 +145,8 @@ Konsultacijos metu patarsime, kuri plėvelė geriausiai tiks jūsų automobiliui
 ## Kaip vyksta darbas
 
 Kiekvieną plėvelę išpjauname pagal konkretaus stiklo formą, stiklus kruopščiai nuvalome ir plėvelę klijuojame iš vidinės pusės. Galinių stiklų tamsinimas dažniausiai trunka **2–3 valandas**, todėl automobilį atsiimsite tą pačią dieną.
+
+Tamsiname ne tik lengvuosius automobilius, bet ir **mikroautobusus, furgonus bei specialiosios technikos kabinas** – pavyzdžiui, ekskavatorių.
 
 Galime dirbti ir pas jus – plačiau apie [mobilų stiklų tamsinimą](/mobilus-stiklu-tamsinimas). Jei norite tamsinti ir priekinius langus, skaitykite apie [priekinių stiklų tamsinimą](/priekiniu-stiklu-tamsinimas) ir taikomus reikalavimus.
 
