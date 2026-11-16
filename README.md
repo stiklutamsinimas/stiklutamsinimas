@@ -70,8 +70,8 @@ Architektūra tam paruošta:
 
 1. Įkelkite projektą į GitHub (saugykla jau prijungta: `origin`).
 2. [Cloudflare Dashboard](https://dash.cloudflare.com) → **Workers & Pages** → **Create** → **Pages** → prijunkite GitHub saugyklą.
-3. Nustatymai: **Build command** `npm run build`, **Output directory** `dist`, aplinkos kintamasis `NODE_VERSION` = `22`.
-4. **Custom domains** → pridėkite `stiklutamsinimas.eu` ir `www.stiklutamsinimas.eu` (www nukreipkite į pagrindinį).
+3. Nustatymai: **Framework preset** `Astro`, **Build command** `npm run build`, **Build output directory** `dist`. Node versija nurodyta faile `.node-version` (24).
+4. Kai svetainė bus galutinai baigta: **Custom domains** → pridėkite `stiklutamsinimas.eu` ir `www.stiklutamsinimas.eu` (www nukreipkite į pagrindinį).
 5. Kiekvienas `git push` automatiškai atnaujins svetainę.
 
 `public/_redirects` (301 peradresavimai) ir `public/_headers` (saugumo ir talpyklos antraštės) veikia Cloudflare Pages automatiškai.

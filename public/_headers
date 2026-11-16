@@ -10,3 +10,10 @@
 # Astro sugeneruoti failai turi unikalų pavadinimą – galima saugoti talpykloje visam laikui
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Laikini *.pages.dev adresai neindeksuojami – Google rodys tik stiklutamsinimas.eu
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex
