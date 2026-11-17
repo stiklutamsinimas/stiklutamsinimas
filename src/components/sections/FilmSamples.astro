@@ -1,0 +1,161 @@
+---
+/**
+ * Plėvelių pavyzdžiai, sugrupuoti pagal paskirtį (galiniai / priekiniai langai) ir tamsumą.
+ */
+import { Image, getImage } from 'astro:assets';
+import { Images, Info } from '@lucide/astro';
+import { films, filmUseLabels, type FilmUse } from '@/data/films';
+import { getFolder } from '@/data/galleries';
+
+interface Props {
+  show?: 'visi' | FilmUse;
+}
+const { show = 'visi' } = Astro.props;
+const uses: FilmUse[] = show === 'visi' ? ['galiniai', 'priekiniai'] : [show];
+
+const groups = await Promise.all(
+  uses.map(async (use) => ({
+    use,
+    ...filmUseLabels[use],
+    films: await Promise.all(
+      films
+        .filter((f) => f.use === use)
+        .map(async (f) => {
+          const images = getFolder(f.folder, `${f.name} plėvelė`);
+          const items = await Promise.all(
+            images.map(async (img) => ({ ...img, large: (await getImage({ src: img.src, width: 1600, format: 'webp', quality: 80 })).src })),
+          );
+          return { ...f, items };
+        }),
+    ),
+  })),
+);
+const uid = `f${Math.random().toString(36).slice(2, 7)}`;
+const percent = (d: number[]) => (d.length > 1 ? `${d[0]}–${d[d.length - 1]} %` : `${d[0]} %`);
+---
+
+<div class="film-samples" data-tabs>
+  {
+    groups.length > 1 && (
+      <div class="mb-8 flex flex-wrap gap-2" role="tablist" aria-label="Plėvelių paskirtis">
+        {groups.map((g, i) => (
+          <button type="button" role="tab" class="chip !px-5 !py-2.5" aria-selected={i === 0 ? 'true' : 'false'} data-tab={g.use} id={`${uid}-${g.use}`}>
+            {g.title}
+          </button>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    groups.map((g, gi) => (
+      <div data-panel={g.use} hidden={gi > 0} role={groups.length > 1 ? 'tabpanel' : undefined} aria-labelledby={`${uid}-${g.use}`}>
+        <p class="mb-8 flex max-w-3xl items-start gap-3 rounded-2xl border border-border bg-soft/60 px-5 py-4 text-[0.95rem] text-text">
+          <Info size={20} class="mt-0.5 shrink-0 text-link" aria-hidden="true" />
+          {g.note}
+        </p>
+
+        <ul class:list={['grid gap-5', g.use === 'galiniai' ? 'lg:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3']}>
+          {g.films.map((f) => (
+            <li class="card flex flex-col overflow-hidden" data-lb-root>
+              {f.darkness.length > 1 ? (
+                <div class="select-compare relative" data-compare>
+                  {f.items.map((img, i) => (
+                    <button type="button" class="block w-full" data-lb-open={i} data-step={i} hidden={i !== f.items.length - 1} aria-label={`Padidinti: ${img.alt}`}>
+                      <Image src={img.src} alt={img.alt} widths={[480, 760, 1100]} sizes="(min-width: 1024px) 580px, 100vw" class="aspect-[2.4/1] w-full object-cover" layout="none" />
+                    </button>
+                  ))}
+                  <div class="flex flex-wrap items-center gap-1.5 border-t border-border bg-bg-2 px-4 py-3" role="group" aria-label="Pasirinkite tamsumą">
+                    <span class="mr-1 text-xs font-bold tracking-wider text-muted uppercase">Tamsumas:</span>
+                    {f.darkness.map((d, i) => (
+                      <button type="button" class="chip !px-3 !py-1 !text-xs" data-step-btn={i} aria-pressed={i === f.darkness.length - 1 ? 'true' : 'false'}>
+                        {d} %
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <button type="button" class="group relative block overflow-hidden" data-lb-open="0" aria-label={`Žiūrėti ${f.name} pavyzdžius`}>
+                  {f.items[0] && (
+                    <Image
+                      src={f.items[0].src}
+                      alt={f.items[0].alt}
+                      widths={[420, 640, 900]}
+                      sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
+                      class="aspect-[16/10] w-full object-cover transition duration-500 group-hover:scale-105"
+                      layout="none"
+                    />
+                  )}
+                  <span class="absolute right-3 bottom-3 inline-flex items-center gap-1.5 rounded-full bg-[#030b11]/70 px-3 py-1.5 text-xs font-bold text-white backdrop-blur">
+                    <Images size={14} aria-hidden="true" />
+                    {f.items.length} nuotr.
+                  </span>
+                </button>
+              )}
+
+              <div class="flex flex-1 flex-col p-5 sm:p-6">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <h3 class="text-lg">{f.name}</h3>
+                    <p class="mt-0.5 text-sm text-muted">{f.tone}</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-2xl font-extrabold text-link">{percent(f.darkness)}</p>
+                    <p class="text-[0.65rem] font-bold tracking-[0.16em] text-muted uppercase">tamsumo</p>
+                  </div>
+                </div>
+
+                {/* Tamsumo skalė */}
+                <div class="relative mt-4 h-2 rounded-full bg-gradient-to-r from-[#ddeffa] via-[#4a6273] to-[#06111a] dark:from-[#1d3546]">
+                  {g.use === 'priekiniai' && (
+                    <span class="absolute -top-1 bottom-[-0.25rem] left-[30%] w-0.5 rounded bg-accent" title="Riba priekiniams langams – 30 %" />
+                  )}
+                  {f.darkness.map((d) => (
+                    <span class="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-card bg-primary shadow" style={`left:${d}%`} />
+                  ))}
+                </div>
+                <p class="mt-2 flex justify-between text-[0.7rem] font-semibold text-muted">
+                  <span>Skaidri</span>
+                  {g.use === 'priekiniai' && <span class="text-accent">riba 30 %</span>}
+                  <span>Tamsi</span>
+                </p>
+
+                <p class="mt-4 text-[0.95rem] leading-relaxed text-muted">{f.text}</p>
+                <p class="mt-3 text-sm font-semibold text-text">
+                  Praleidžia apie {f.darkness.length > 1 ? `${100 - f.darkness[f.darkness.length - 1]!}–${100 - f.darkness[0]!}` : 100 - f.darkness[0]!} % šviesos
+                </p>
+                {f.items.length > 1 && (
+                  <button type="button" class="btn btn-outline mt-5 self-start !px-4 !py-2 text-sm" data-lb-open="0">
+                    <Images size={16} aria-hidden="true" />
+                    Visi pavyzdžiai ({f.items.length})
+                  </button>
+                )}
+              </div>
+
+              <template data-lb-items>
+                {f.items.map((img) => (
+                  <span data-src={img.large} data-alt={img.alt} />
+                ))}
+              </template>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  import '@/scripts/tabs';
+  // Select serijos tamsumo perjungiklis
+  document.querySelectorAll<HTMLElement>('[data-compare]').forEach((root) => {
+    const steps = root.querySelectorAll<HTMLElement>('[data-step]');
+    const btns = root.querySelectorAll<HTMLButtonElement>('[data-step-btn]');
+    btns.forEach((b) =>
+      b.addEventListener('click', () => {
+        steps.forEach((s) => (s.hidden = s.dataset.step !== b.dataset.stepBtn));
+        btns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      }),
+    );
+  });
+</script>

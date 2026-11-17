@@ -1,0 +1,52 @@
+---
+import { Contrast, Moon, Sun } from '@lucide/astro';
+interface Props {
+  class?: string;
+}
+const { class: className = 'inline-flex' } = Astro.props;
+const options = [
+  { value: 'light', label: 'Šviesi tema', icon: Sun },
+  { value: 'auto', label: 'Automatinė tema (pagal saulėtekį ir saulėlydį)', icon: Contrast },
+  { value: 'dark', label: 'Tamsi tema', icon: Moon },
+] as const;
+---
+
+<div
+  class:list={['theme-toggle items-center gap-0.5 rounded-full border border-border bg-card/70 p-1', className]}
+  role="group"
+  aria-label="Svetainės tema"
+>
+  {
+    options.map((o) => (
+      <button
+        type="button"
+        data-theme-set={o.value}
+        aria-pressed={o.value === 'auto' ? 'true' : 'false'}
+        aria-label={o.label}
+        title={o.label}
+        class="grid size-8 place-items-center rounded-full text-muted transition hover:text-text aria-pressed:bg-soft aria-pressed:text-link aria-pressed:shadow-sm"
+      >
+        <o.icon size={15} aria-hidden="true" class:list={[o.value === 'light' && 'text-accent']} />
+      </button>
+    ))
+  }
+</div>
+
+<script>
+  type Tema = { set: (p: string) => string; pref: () => string };
+  const tema = (window as unknown as { stTema?: Tema }).stTema;
+  const sync = () => {
+    const pref = tema?.pref() ?? 'auto';
+    document.querySelectorAll<HTMLButtonElement>('[data-theme-set]').forEach((b) => {
+      b.setAttribute('aria-pressed', String(b.dataset.themeSet === pref));
+    });
+  };
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-set]').forEach((b) =>
+    b.addEventListener('click', () => {
+      tema?.set(b.dataset.themeSet ?? 'auto');
+      sync();
+    }),
+  );
+  window.addEventListener('tema', sync);
+  sync();
+</script>

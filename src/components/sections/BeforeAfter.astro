@@ -1,0 +1,46 @@
+---
+/** „Prieš ir po“ palyginimas su tempiamu slankikliu */
+import { Image } from 'astro:assets';
+import type { GalleryImage } from '@/data/galleries';
+
+interface Props {
+  items: { title: string; text?: string; before: GalleryImage; after: GalleryImage }[];
+}
+const { items } = Astro.props;
+---
+
+<ul class:list={['grid gap-6', items.length > 1 ? 'md:grid-cols-2' : 'mx-auto max-w-xl']}>
+  {
+    items.map((it) => (
+      <li class="card overflow-hidden">
+        <div class="ba relative aspect-[4/5] touch-pan-y overflow-hidden bg-bg-2 select-none" style="--pos:50%">
+          <Image src={it.after.src} alt={it.after.alt} widths={[420, 640, 900]} sizes="(min-width: 768px) 560px, 100vw" class="absolute inset-0 h-full w-full object-cover" layout="none" />
+          <div class="absolute inset-0 overflow-hidden" style="clip-path: inset(0 calc(100% - var(--pos)) 0 0)">
+            <Image src={it.before.src} alt={it.before.alt} widths={[420, 640, 900]} sizes="(min-width: 768px) 560px, 100vw" class="absolute inset-0 h-full w-full object-cover" layout="none" />
+          </div>
+          <span class="absolute top-4 left-4 rounded-full bg-[#030b11]/75 px-3 py-1 text-xs font-bold tracking-wider text-white uppercase backdrop-blur">Prieš</span>
+          <span class="absolute top-4 right-4 rounded-full bg-primary px-3 py-1 text-xs font-bold tracking-wider text-on-primary uppercase">Po</span>
+          <div class="pointer-events-none absolute inset-y-0 w-0.5 -translate-x-1/2 bg-white shadow-[0_0_0_1px_rgb(0_0_0/0.15)]" style="left:var(--pos)">
+            <span class="absolute top-1/2 left-1/2 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-[#0a2233] shadow-lg">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m9 6-6 6 6 6M15 6l6 6-6 6" />
+              </svg>
+            </span>
+          </div>
+          <input type="range" min="0" max="100" value="50" class="ba-range absolute inset-0 h-full w-full cursor-ew-resize opacity-0" aria-label={`${it.title}: palyginti prieš ir po`} />
+        </div>
+        <div class="p-5 sm:p-6">
+          <h3 class="text-lg">{it.title}</h3>
+          {it.text && <p class="mt-1.5 text-[0.95rem] text-muted">{it.text}</p>}
+        </div>
+      </li>
+    ))
+  }
+</ul>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.ba').forEach((el) => {
+    const range = el.querySelector<HTMLInputElement>('.ba-range');
+    range?.addEventListener('input', () => el.style.setProperty('--pos', `${range.value}%`));
+  });
+</script>

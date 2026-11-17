@@ -1,0 +1,55 @@
+---
+import { Rss } from '@lucide/astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import PostCard from '@/components/sections/PostCard.astro';
+import { getPosts } from '@/lib/content';
+import { breadcrumbSchema } from '@/lib/schema';
+
+const posts = await getPosts();
+const crumbs = [
+  { name: 'Pradžia', url: '/' },
+  { name: 'Naujienos', url: '/naujienos' },
+];
+---
+
+<BaseLayout
+  title="Naujienos ir patarimai apie stiklų tamsinimą | stiklutamsinimas.eu"
+  description="Straipsniai apie automobilių ir langų tamsinimo plėveles, jų skirtumus, priežiūrą, ABG žymėjimą ir taikomus reikalavimus Lietuvoje."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <section class="relative isolate overflow-hidden">
+    <div class="pointer-events-none absolute -top-48 -right-48 -z-10 size-[40rem] rounded-full border-[56px] border-logo/[0.06]"></div>
+    <div class="container-site pt-8 pb-12">
+      <Breadcrumbs items={crumbs} />
+      <div class="mt-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <SectionHeading
+          as="h1"
+          eyebrow="Naujienos"
+          title="Patarimai ir naujienos"
+          lead="Naudinga informacija apie plėveles, jų priežiūrą ir taikomus reikalavimus."
+        />
+        <a href="/rss.xml" class="btn btn-outline self-start lg:self-auto"><Rss size={17} aria-hidden="true" /> RSS</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-24">
+    <div class="container-site">
+      {
+        posts.length > 0 ? (
+          <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {posts.map((p) => (
+              <li class="reveal">
+                <PostCard post={p} headingLevel="h2" />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="text-muted">Straipsnių kol kas nėra.</p>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

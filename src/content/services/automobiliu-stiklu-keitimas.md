@@ -3,6 +3,7 @@ title: Automobilių stiklų keitimas
 category: automobiliams
 order: 6
 icon: wrench
+featured: false
 
 seoTitle: Automobilių stiklų keitimas ir remontas | stiklutamsinimas.eu
 seoDescription: Automobilių priekinių, galinių ir šoninių stiklų keitimas lengviesiems automobiliams, visureigiams ir komerciniam transportui. Daugiau nei 10 metų patirtis.
@@ -11,8 +12,8 @@ h1: Automobilių stiklų keitimas
 lead: Įskilęs ar sudužęs stiklas – ne tik nepatogumas, bet ir saugumo klausimas. Keičiame priekinius, galinius ir šoninius stiklus lengviesiems automobiliams, visureigiams ir komerciniam transportui.
 excerpt: Priekinių, galinių ir šoninių stiklų keitimas – nuo lengvųjų iki sunkvežimių.
 
-cover: ../../assets/keitimas/priekinio-stiklo-montavimas.jpg
-coverAlt: Meistrai montuoja naują priekinį automobilio stiklą
+cover: ../../assets/pleveles/sk-20/sk-20-dirbtuveje.jpg
+coverAlt: Automobilio priekinis stiklas dirbtuvėse
 
 highlights:
   - Priekiniai, galiniai ir šoniniai stiklai
@@ -33,16 +34,6 @@ benefits:
   - icon: shield-check
     title: Saugumas
     text: Naudojame kokybiškus stiklus ir tinkamus klijus, kad stiklas būtų patikimai pritvirtintas.
-
-gallery:
-  - src: ../../assets/keitimas/priekinio-stiklo-montavimas.jpg
-    alt: Naujo priekinio stiklo montavimas automobiliui
-  - src: ../../assets/keitimas/scania-priekinio-stiklo-keitimas.jpg
-    alt: Scania sunkvežimio priekinio stiklo keitimas
-  - src: ../../assets/keitimas/sunkvezimio-stiklo-keitimas.jpg
-    alt: Sunkvežimio kabinos stiklo keitimas dirbtuvėse
-  - src: ../../assets/keitimas/duzes-automobilio-stiklas.jpg
-    alt: Sudužęs automobilio stiklas prieš keitimą
 
 faq:
   - q: Ar įskilusį stiklą būtina keisti?

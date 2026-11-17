@@ -1,0 +1,97 @@
+# Sveltia CMS nustatymai – straipsnių (naujienų) rašymas per naršyklę: https://stiklutamsinimas.eu/admin
+# Prisijungimas: „Sign In Using Access Token“ + GitHub raktas (žr. README.md → „Naujo straipsnio rašymas“).
+# Išsaugojus straipsnį, jis įrašomas į GitHub, o Cloudflare per ~2 min. atnaujina svetainę.
+
+backend:
+  name: github
+  repo: stiklutamsinimas/stiklutamsinimas
+  branch: main
+  commit_messages:
+    create: 'Naujas straipsnis: {{slug}}'
+    update: 'Atnaujintas straipsnis: {{slug}}'
+    delete: 'Ištrintas straipsnis: {{slug}}'
+    uploadMedia: 'Įkelta nuotrauka: {{path}}'
+    deleteMedia: 'Ištrinta nuotrauka: {{path}}'
+
+site_url: https://stiklutamsinimas.eu
+display_url: https://stiklutamsinimas.eu
+logo_url: /icon-192.png
+
+# Nuotraukos saugomos šalia kitų svetainės nuotraukų ir automatiškai optimizuojamos
+media_folder: src/assets/naujienos
+public_folder: /src/assets/naujienos
+
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: '-'
+
+collections:
+  - name: naujienos
+    label: Naujienos (straipsniai)
+    label_singular: Straipsnis
+    description: Straipsnio adresas sudaromas iš pavadinimo (pvz. /kaip-priziureti-tamsintus-stiklus). Pažymėjus „Juodraštis“ straipsnis svetainėje nerodomas.
+    folder: src/content/naujienos
+    # Nuotraukų kelias straipsnyje – santykinis (../../assets/naujienos/...), kad Astro jas optimizuotų
+    media_folder: ../../assets/naujienos
+    public_folder: ../../assets/naujienos
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: '{{title}}'
+    summary: '{{title}}'
+    sortable_fields: [pubDate, title]
+    preview_path: '{{slug}}'
+    fields:
+      - label: Pavadinimas
+        name: title
+        widget: string
+        hint: Aiškus pavadinimas su raktažodžiais, pvz. „Kaip prižiūrėti tamsintus stiklus“. 5–120 simbolių.
+        pattern: ['^.{5,120}$', 'Pavadinimas turi būti nuo 5 iki 120 simbolių']
+      - label: Trumpas aprašymas
+        name: description
+        widget: text
+        hint: Rodomas Google paieškoje ir straipsnio kortelėje. Geriausia 120–160 simbolių (leidžiama 40–320).
+        pattern: ['^[\s\S]{40,320}$', 'Aprašymas turi būti nuo 40 iki 320 simbolių']
+      - label: Paskelbimo data
+        name: pubDate
+        widget: datetime
+        format: YYYY-MM-DD
+        time_format: false
+      - label: Viršelio nuotrauka
+        name: cover
+        widget: image
+        required: false
+        hint: Horizontali nuotrauka (pvz. 1600×900). Be automobilių numerių.
+      - label: Nuotraukos aprašymas
+        name: coverAlt
+        widget: string
+        required: false
+        hint: Kas nuotraukoje – svarbu Google ir neregiams, pvz. „Audi Q7 su tamsintais galiniais stiklais“.
+      - label: SEO pavadinimas (nebūtina)
+        name: seoTitle
+        widget: string
+        required: false
+        hint: Jei norite kitokio pavadinimo Google paieškai. Iki 70 simbolių.
+        pattern: ['^.{0,70}$', 'Iki 70 simbolių']
+      - label: Žymos
+        name: tags
+        widget: list
+        required: false
+        default: []
+        hint: Pvz. Automobiliams, Patarimai, Plėvelės
+      - label: Atnaujinta (nebūtina)
+        name: updatedDate
+        widget: datetime
+        format: YYYY-MM-DD
+        time_format: false
+        required: false
+      - label: Juodraštis (nerodomas svetainėje)
+        name: draft
+        widget: boolean
+        default: false
+      - label: Tekstas
+        name: body
+        widget: markdown
+        hint: Naudokite antraštes (H2, H3), sąrašus ir nuorodas į paslaugas, pvz. /automobilio-stiklu-tamsinimas

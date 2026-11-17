@@ -16,3 +16,6 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 *.log
+
+# Sveltia CMS kopijuojama automatiškai (scripts/copy-cms.mjs)
+public/admin/sveltia-cms.js

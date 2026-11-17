@@ -1,0 +1,270 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { getEntries, render } from 'astro:content';
+import { ArrowRight, CalendarCheck, CircleCheck, MessageCircle, Phone, ShieldCheck } from '@lucide/astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import Icon from '@/components/ui/Icon.astro';
+import Benefits from '@/components/sections/Benefits.astro';
+import Gallery from '@/components/sections/Gallery.astro';
+import FilmSamples from '@/components/sections/FilmSamples.astro';
+import BeforeAfter from '@/components/sections/BeforeAfter.astro';
+import Steps from '@/components/sections/Steps.astro';
+import CtaBand from '@/components/sections/CtaBand.astro';
+import Faq from '@/components/sections/Faq.astro';
+import ServiceCard from '@/components/sections/ServiceCard.astro';
+import ContactForm from '@/components/sections/ContactForm.astro';
+import ContactInfo from '@/components/sections/ContactInfo.astro';
+import { site, telHref } from '@/config/site';
+import { galleryTitles } from '@/data/gallery-folders';
+import { getFolder, image } from '@/data/galleries';
+import { categories, serviceUrl, type Service } from '@/lib/content';
+import { breadcrumbSchema, faqSchema, serviceSchema } from '@/lib/schema';
+
+interface Props {
+  entry: Service;
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+const related = await getEntries(d.related);
+const url = serviceUrl(entry.id);
+
+const crumbs = [
+  { name: 'Pradžia', url: '/' },
+  { name: 'Paslaugos', url: '/paslaugos' },
+  { name: d.title, url },
+];
+const galleryGroups = d.galleries.map((g) => ({
+  id: g.folder.replace(/\W+/g, '-'),
+  title: g.title ?? galleryTitles[g.folder],
+  text: g.text,
+  images: getFolder(g.folder),
+}));
+const beforeAfter = d.beforeAfter.map((b) => ({ title: b.title, text: b.text, before: image(b.before), after: image(b.after) }));
+const share = await getImage({ src: d.cover, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+
+const schema = [
+  serviceSchema({ name: d.title, description: d.seoDescription, url, image: new URL(share.src, site.url).href, priceFrom: d.priceFrom }),
+  breadcrumbSchema(crumbs),
+  ...(d.faq.length ? [faqSchema(d.faq)] : []),
+];
+---
+
+<BaseLayout title={d.seoTitle} description={d.seoDescription} image={d.cover} imageAlt={d.coverAlt} schema={schema}>
+  <!-- Įvadas -->
+  <section class="relative isolate overflow-hidden">
+    <div class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute -top-48 -right-48 size-[40rem] rounded-full border-[56px] border-logo/[0.06]"></div>
+      <div class="absolute top-1/3 -left-48 size-[28rem] rounded-full bg-logo/[0.07] blur-3xl"></div>
+    </div>
+    <div class="container-site pt-8 pb-16 lg:pt-10 lg:pb-24">
+      <Breadcrumbs items={crumbs} />
+      <div class="mt-10 grid items-center gap-12 lg:grid-cols-12">
+        <div class="animate-fade-up lg:col-span-6">
+          <p class="eyebrow">{categories[d.category].label}</p>
+          <h1 class="mt-5 text-4xl leading-[1.08] sm:text-5xl lg:text-[3.3rem]">{d.h1}</h1>
+          <p class="mt-6 text-lg leading-relaxed text-muted">{d.lead}</p>
+          {
+            d.highlights.length > 0 && (
+              <ul class="mt-7 grid gap-3 sm:grid-cols-2">
+                {d.highlights.map((h) => (
+                  <li class="flex items-start gap-2.5 font-semibold text-text">
+                    <CircleCheck size={19} class="mt-0.5 shrink-0 text-link" aria-hidden="true" />
+                    {h}
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href={telHref} class="btn btn-primary !px-6 !py-3.5"><Phone size={18} aria-hidden="true" /> {site.phoneDisplay}</a>
+            <a href={site.chat.messenger} class="btn btn-outline !px-6 !py-3.5" data-open-chat>
+              <MessageCircle size={18} aria-hidden="true" /> Rašyti žinutę
+            </a>
+          </div>
+          <p class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
+            <span class="inline-flex items-center gap-1.5"><ShieldCheck size={16} class="text-link" aria-hidden="true" /> Garantija nuo {site.warrantyYears} metų</span>
+            <span class="inline-flex items-center gap-1.5"><CalendarCheck size={16} class="text-link" aria-hidden="true" /> Tik iš anksto susitarus</span>
+          </p>
+        </div>
+        <div class="animate-fade-up relative [animation-delay:120ms] lg:col-span-6">
+          <div class="overflow-hidden rounded-[1.75rem] border border-border bg-bg-2 shadow-[0_30px_60px_-30px_rgb(var(--c-shadow)/0.45)]">
+            <Image
+              src={d.cover}
+              alt={d.coverAlt}
+              widths={[480, 720, 960, 1200]}
+              sizes="(min-width: 1024px) 580px, 100vw"
+              class="aspect-[4/3] w-full object-cover"
+              loading="eager"
+              fetchpriority="high"
+              layout="none"
+            />
+          </div>
+          {
+            d.priceFrom && (
+              <div class="card absolute -bottom-6 left-5 px-5 py-4 sm:left-8">
+                <p class="text-xs text-muted">{d.prices?.[0]?.label ?? 'Kaina'}</p>
+                <p class="mt-0.5 text-2xl font-extrabold text-text">nuo {d.priceFrom} €</p>
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kainos -->
+  {
+    d.prices && d.prices.length > 0 && (
+      <section id="kainos" class="pb-6">
+        <div class="container-site">
+          <ul class="grid gap-4 sm:grid-cols-3">
+            {d.prices.map((p) => (
+              <li class="card p-6">
+                <p class="text-sm text-muted">{p.label}</p>
+                <p class="mt-1 text-3xl font-extrabold text-text">{p.value}</p>
+              </li>
+            ))}
+          </ul>
+          {d.prices.find((p) => p.note) && <p class="mt-4 text-sm text-muted">{d.prices.find((p) => p.note)?.note}</p>}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Nauda -->
+  {
+    d.benefits.length > 0 && (
+      <section class="section">
+        <div class="container-site">
+          <SectionHeading eyebrow="Nauda" title={`Ką jums suteikia ${d.title.toLowerCase()}`} />
+          <div class="mt-10">
+            <Benefits items={d.benefits} cols={d.benefits.length === 3 ? 3 : 4} />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Plėvelių pavyzdžiai -->
+  {
+    d.films && (
+      <section id="pleveles" class="section bg-bg-2">
+        <div class="container-site">
+          <SectionHeading
+            eyebrow="Plėvelių pavyzdžiai"
+            title="Kaip atrodo skirtingo tamsumo plėvelės"
+            lead="Tikros nuotraukos su mūsų naudojamomis plėvelėmis. Procentai rodo, kiek plėvelė patamsina stiklą."
+          />
+          <div class="mt-10">
+            <FilmSamples show={d.films} />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Galerija -->
+  {
+    galleryGroups.length > 0 && (
+      <section id="darbai" class:list={['section', !d.films && 'bg-bg-2']}>
+        <div class="container-site">
+          <SectionHeading eyebrow="Atlikti darbai" title="Mūsų darbų nuotraukos" />
+          <div class="mt-10">
+            <Gallery groups={galleryGroups} />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Prieš ir po -->
+  {
+    beforeAfter.length > 0 && (
+      <section id="pries-po" class="section">
+        <div class="container-site">
+          <SectionHeading eyebrow="Prieš ir po" title="Palyginkite rezultatą" lead="Tempkite slankiklį į šonus." />
+          <div class="mt-10">
+            <BeforeAfter items={beforeAfter} />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Aprašymas -->
+  <section class="section bg-bg-2">
+    <div class="container-site grid gap-12 lg:grid-cols-12">
+      <article class="prose-site lg:col-span-7">
+        <Content />
+      </article>
+      <aside class="lg:col-span-5">
+        <div class="card sticky top-28 p-7">
+          <span class="icon-bubble"><Icon name={d.icon} /></span>
+          <p class="mt-5 text-xl font-extrabold text-text">Reikia konsultacijos?</p>
+          <p class="mt-2 text-muted">Paskambinkite arba parašykite – patarsime ir pasakysime kainą. {site.appointmentNote}.</p>
+          <div class="mt-6 grid gap-3">
+            <a href={telHref} class="btn btn-primary"><Phone size={18} aria-hidden="true" /> {site.phoneDisplay}</a>
+            <a href="#uzklausa" class="btn btn-outline">Užklausos forma <ArrowRight size={18} aria-hidden="true" /></a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Eiga -->
+  <section class="section">
+    <div class="container-site">
+      <SectionHeading eyebrow="Kaip dirbame" title="Nuo skambučio iki rezultato" />
+      <div class="mt-12"><Steps /></div>
+      <div class="mt-14"><CtaBand /></div>
+    </div>
+  </section>
+
+  <!-- DUK -->
+  {
+    d.faq.length > 0 && (
+      <section class="section bg-bg-2">
+        <div class="container-site grid gap-10 lg:grid-cols-12">
+          <div class="lg:col-span-5">
+            <SectionHeading eyebrow="DUK" title="Dažnai užduodami klausimai" />
+          </div>
+          <div class="lg:col-span-7">
+            <Faq items={d.faq} />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Susijusios -->
+  {
+    related.length > 0 && (
+      <section class="section">
+        <div class="container-site">
+          <SectionHeading eyebrow="Taip pat siūlome" title="Susijusios paslaugos" />
+          <ul class="mt-10 grid gap-5 md:grid-cols-3">
+            {related.map((s) => (
+              <li>
+                <ServiceCard service={s} photo />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Užklausa -->
+  <section id="uzklausa" class="section bg-bg-2">
+    <div class="container-site grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <SectionHeading eyebrow="Užklausa" title="Gaukite pasiūlymą" lead="Užpildykite formą – žinutė bus paruošta siųsti el. paštu arba per WhatsApp." />
+        <ContactInfo />
+      </div>
+      <div class="lg:col-span-7"><ContactForm selected={entry.id} /></div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,7 +1,6 @@
 /**
  * Ikonų pavadinimai, kuriuos galima naudoti turinio failuose (frontmatter `icon:`).
- * Naują ikoną pridėkite čia ir `src/components/ui/Icon.astro` žemėlapyje.
- * Visos ikonos: https://lucide.dev/icons
+ * Naują ikoną pridėkite čia ir src/components/ui/Icon.astro žemėlapyje. Visos ikonos: https://lucide.dev/icons
  */
 export const iconNames = [
   'car',
@@ -30,6 +29,9 @@ export const iconNames = [
   'store',
   'euro',
   'scan',
+  'blinds',
+  'window',
+  'paintbrush',
 ] as const;
 
 export type IconName = (typeof iconNames)[number];

@@ -1,18 +1,19 @@
 ---
-title: Reklama ir lipdukai
+title: Reklamos darbai
 category: reklama
 order: 1
 icon: sticker
+featured: true
 
-seoTitle: Lipdukų spausdinimas ir reklamos darbai | stiklutamsinimas.eu
-seoDescription: Lipdukų spausdinimas ir gamyba, automobilių ir vitrinų apklijavimas, plačiaformatė spauda, maketavimas. Individualūs užsakymai – nuo mažų iki didelių.
+seoTitle: Reklamos darbai – lipdukai ir spauda | stiklutamsinimas.eu
+seoDescription: Ploteriuoti lipdukai, automobilių ir vitrinų apklijavimas, plačiaformatė spauda, baneriai ir įrangos apklijavimas. Nuo maketo iki priklijuoto rezultato.
 
-h1: Lipdukų spausdinimas ir reklamos darbai
-lead: Spausdiname ir išpjauname lipdukus, apklijuojame automobilius, vitrinas ir valtis, gaminame reklamines lentas. Padėsime ir su maketu – nuo idėjos iki priklijuoto rezultato.
-excerpt: Lipdukai, transporto ir vitrinų apklijavimas, plačiaformatė spauda, maketavimas.
+h1: Reklamos darbai – lipdukai ir spauda
+lead: Išpjauname ir spausdiname lipdukus, apklijuojame automobilius, vitrinas ir valtis, gaminame banerius ir iškabas. Padėsime ir su maketu – nuo idėjos iki priklijuoto rezultato.
+excerpt: Ploteriuoti lipdukai, transporto ir vitrinų apklijavimas, plačiaformatė spauda.
 
-cover: ../../assets/reklama/galinio-stiklo-reklama.jpg
-coverAlt: Reklama ant automobilio galinio stiklo
+cover: ../../assets/reklama/spauda/pastato-reklaminis-baneris.jpg
+coverAlt: Reklaminis baneris ant pastato fasado
 
 highlights:
   - Lipdukų spauda ir ploteriavimas
@@ -34,59 +35,15 @@ benefits:
     title: Vitrinos ir iškabos
     text: Vitrinų apklijavimas, darbo laiko lentelės, užrašai ant stiklo durų.
 
-gallery:
-  - src: ../../assets/reklama/galinio-stiklo-reklama.jpg
-    alt: Reklama ant automobilio galinio stiklo
-  - src: ../../assets/reklama/pastato-reklaminis-baneris.jpg
-    alt: Reklaminis baneris ant pastato fasado
-  - src: ../../assets/reklama/degalu-kolonele-pries.jpg
-    alt: Degalų kolonėlė prieš apklijavimą – nusidėvėjusi plėvelė
-  - src: ../../assets/reklama/degalu-kolonele-po.jpg
-    alt: Degalų kolonėlė po apklijavimo nauja spausdinta plėvele
-  - src: ../../assets/reklama/reklamine-iskaba.jpg
-    alt: Kavinės reklaminė iškaba
-  - src: ../../assets/reklama/spausdinta-meniu-lenta.jpg
-    alt: Spausdinta kavinės meniu lenta
-  - src: ../../assets/reklama/mazda-galinio-stiklo-lipdukas-vytis.jpg
-    alt: Mazda 2 su Vyčio lipduku ant galinio stiklo
-  - src: ../../assets/reklama/furgono-reklama-lipdukai.jpg
-    alt: Furgonas su įmonės reklama
-  - src: ../../assets/reklama/spausdinti-reklaminiai-lipdukai.jpg
-    alt: Spausdinti automobilių plovyklos reklaminiai lipdukai
-  - src: ../../assets/reklama/sunkvezimio-reklama-lipdukai.jpg
-    alt: Sunkvežimio reklama – užrašai ant kabinos durų
-  - src: ../../assets/reklama/furgono-kapoto-logotipas.jpg
-    alt: Įmonės logotipas ant furgono kapoto
-  - src: ../../assets/reklama/mikroautobuso-lango-lipdukas-vytis.jpg
-    alt: Vyčio lipdukas ant mikroautobuso lango ir baidarių nuomos reklama
-  - src: ../../assets/reklama/stalo-apklijavimas.jpg
-    alt: Stalo paviršiaus apklijavimas spausdinta plėvele
-  - src: ../../assets/reklama/valties-apklijavimas.jpg
-    alt: Valties apklijavimas dizaino lipdukais
-  - src: ../../assets/reklama/degalu-kolonele-pries-2.jpg
-    alt: Degalų kolonėlė prieš apklijavimą – suplyšusi sena plėvelė
-  - src: ../../assets/reklama/degalu-kolonele-po-2.jpg
-    alt: Degalų kolonėlė po apklijavimo
-  - src: ../../assets/reklama/spausdintas-plakatas.jpg
-    alt: Spausdintas reklaminis plakatas
-  - src: ../../assets/reklama/lipdukas-ant-automobilio-lango.jpg
-    alt: Vyčio lipdukas ant automobilio lango
-  - src: ../../assets/reklama/valties-dizaino-lipdukai.jpg
-    alt: Valtis su oranžiniais dizaino lipdukais
-  - src: ../../assets/reklama/automobilio-dizaino-lipdukai.jpg
-    alt: Automobilio šono dizaino lipdukai
-  - src: ../../assets/reklama/mikroautobuso-reklama.jpg
-    alt: Mikroautobuso reklama ant lango
-  - src: ../../assets/reklama/mercedes-vito-lipdukai.jpg
-    alt: Mercedes-Benz Vito su dizaino lipdukais
-  - src: ../../assets/reklama/grozio-studijos-vitrina.jpg
-    alt: Grožio studijos vitrinos apklijavimas auksine plėvele
-  - src: ../../assets/reklama/salono-duru-lipdukai.jpg
-    alt: Grožio salono durų lipdukai
-  - src: ../../assets/reklama/vitrinos-apklijavimas.jpg
-    alt: Vitrinos apklijavimas užrašais
-  - src: ../../assets/reklama/vitrinos-plevele.jpg
-    alt: Vitrinos plėvelė su užrašais
+galleries:
+  - folder: reklama/lipdukai
+  - folder: reklama/spauda
+
+beforeAfter:
+  - title: Degalų kolonėlės apklijavimas
+    text: Nusidėvėjusi plėvelė pakeista nauja spausdinta plėvele.
+    before: reklama/pries-po/degalu-kolonele-pries
+    after: reklama/pries-po/degalu-kolonele-po
 
 faq:
   - q: Ar galite sukurti maketą?

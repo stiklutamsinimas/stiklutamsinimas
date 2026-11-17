@@ -3,6 +3,7 @@ title: Žibintų tamsinimas
 category: automobiliams
 order: 4
 icon: lightbulb
+featured: true
 
 seoTitle: Žibintų tamsinimas plėvele | stiklutamsinimas.eu
 seoDescription: Automobilių galinių ir priekinių žibintų tamsinimas specialia plėvele – modernesnė išvaizda ir apsauga nuo įbrėžimų. Plėvelę galima nuimti be pėdsakų.
@@ -34,41 +35,15 @@ benefits:
     title: Grįžtamas sprendimas
     text: Panorėjus plėvelę galima nuimti nepažeidžiant žibinto paviršiaus.
 
-gallery:
-  - src: ../../assets/zibintai/range-rover-tamsinti-galiniai-zibintai.jpg
-    alt: Range Rover galiniai žibintai po tamsinimo plėvele
-  - src: ../../assets/zibintai/mercedes-e-tamsinti-galiniai-zibintai.jpg
-    alt: Mercedes-Benz E klasė su tamsintais galiniais žibintais
-  - src: ../../assets/zibintai/mercedes-galiniai-zibintai-su-plevele.jpg
-    alt: Mercedes-Benz galiniai žibintai su tamsinimo plėvele
-  - src: ../../assets/zibintai/toyota-galinio-zibinto-tamsinimas.jpg
-    alt: Toyota galinio žibinto tamsinimas plėvele
-  - src: ../../assets/zibintai/galinio-zibinto-tamsinimo-procesas.jpg
-    alt: Galinio žibinto tamsinimas – plėvelė prigludusi prie žibinto formos
-  - src: ../../assets/zibintai/audi-galinis-zibintas-patamsintas.jpg
-    alt: Audi galinis žibintas po tamsinimo plėvele
-  - src: ../../assets/zibintai/plevele-klijuojama-ant-zibinto.jpg
-    alt: Tamsinimo plėvelė klijuojama ant galinio žibinto
-  - src: ../../assets/zibintai/toyota-galinis-zibintas-su-plevele.jpg
-    alt: Toyota galinis žibintas su tamsinimo plėvele
-  - src: ../../assets/zibintai/galinio-zibinto-plevele-formuojama.jpg
-    alt: Plėvelė formuojama ant galinio žibinto
-  - src: ../../assets/zibintai/vw-golf-tamsinti-galiniai-zibintai.jpg
-    alt: Volkswagen Golf su tamsintais galiniais žibintais
-  - src: ../../assets/zibintai/mercedes-e-tamsinti-zibintai.jpg
-    alt: Mercedes-Benz E klasė su tamsintais priekiniais žibintais
-  - src: ../../assets/zibintai/tamsinti-galiniai-zibintai.jpg
-    alt: Tamsinti automobilio galiniai žibintai iš arti
-  - src: ../../assets/zibintai/bmw-x5-tamsinti-priekiniai-zibintai.jpg
-    alt: BMW X5 su tamsintais priekiniais žibintais
-  - src: ../../assets/zibintai/galinio-zibinto-tamsinimas.jpg
-    alt: Galinio žibinto tamsinimas plėvele
-  - src: ../../assets/zibintai/bmw-x5-zibintu-tamsinimas.jpg
-    alt: BMW X5 žibintų tamsinimas
-  - src: ../../assets/zibintai/bmw-5-tamsinti-galiniai-zibintai.jpg
-    alt: BMW 5 serijos automobilis su tamsintais galiniais žibintais
-  - src: ../../assets/zibintai/vw-passat-zibintu-tamsinimas.jpg
-    alt: Volkswagen Passat su tamsintais priekiniais žibintais
+galleries:
+  - folder: zibintai
+    title: Atlikti darbai
+
+beforeAfter:
+  - title: Tesla Model S priekiniai žibintai
+    text: Kairėje – gamykliniai žibintai, dešinėje – po tamsinimo plėvele.
+    before: zibintai/pries-po/tesla-zibintai-pries-tamsinima
+    after: zibintai/pries-po/tesla-zibintai-po-tamsinimo
 
 faq:
   - q: Ar galima tamsinti žibintus?

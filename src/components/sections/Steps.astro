@@ -1,0 +1,31 @@
+---
+import { site } from '@/config/site';
+
+interface Props {
+  steps?: { title: string; text: string }[];
+}
+const defaultSteps = [
+  { title: 'Konsultacija', text: `Paskambinkite ar parašykite – aptarsime poreikius ir iškart pasakysime orientacinę kainą. ${site.appointmentNote}.` },
+  { title: 'Plėvelės parinkimas', text: 'Parodysime pavyzdžius, patarsime dėl tamsumo, spalvos ir taikomų reikalavimų.' },
+  { title: 'Klijavimas', text: 'Švarioje patalpoje plėvelę tiksliai iškerpame ir priklijuojame pagal kiekvieną stiklą.' },
+  { title: 'Garantija', text: `Paaiškiname, kaip prižiūrėti, ir suteikiame ${site.warrantyYears} metų ar ilgesnę garantiją.` },
+];
+const { steps = defaultSteps } = Astro.props;
+---
+
+<ol class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+  {
+    steps.map((s, i) => (
+      <li class="reveal relative" style={`transition-delay:${i * 90}ms`}>
+        <div class="flex items-center">
+          <span class="relative z-10 grid size-12 shrink-0 place-items-center rounded-full border-2 border-logo bg-bg text-lg font-extrabold text-link">
+            {i + 1}
+          </span>
+          {i < steps.length - 1 && <span class="ml-2 hidden h-0.5 flex-1 rounded-full bg-gradient-to-r from-logo to-logo/30 lg:block" />}
+        </div>
+        <h3 class="mt-5 text-lg">{s.title}</h3>
+        <p class="mt-2 text-[0.95rem] leading-relaxed text-muted">{s.text}</p>
+      </li>
+    ))
+  }
+</ol>

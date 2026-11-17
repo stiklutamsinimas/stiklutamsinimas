@@ -1,0 +1,46 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import { mailHref, site } from '@/config/site';
+
+const crumbs = [
+  { name: 'Pradžia', url: '/' },
+  { name: 'Privatumo politika', url: '/privatumo-politika' },
+];
+---
+
+<BaseLayout title="Privatumo politika | stiklutamsinimas.eu" description="Kaip svetainėje stiklutamsinimas.eu tvarkomi duomenys: slapukai, trečiųjų šalių paslaugos ir kontaktai.">
+  <div class="container-site max-w-3xl pt-8 pb-24">
+    <Breadcrumbs items={crumbs} />
+    <h1 class="mt-10 text-4xl">Privatumo politika</h1>
+    <div class="prose-site mt-8">
+      <p>
+        Svetainę <strong>{site.domain}</strong> administruoja {site.name}. Ši politika paaiškina, kokie duomenys tvarkomi jums lankantis
+        svetainėje.
+      </p>
+      <h2>Kokių duomenų nerenkame</h2>
+      <p>
+        Svetainė neturi vartotojų paskyrų, nenaudoja reklaminių ar sekimo slapukų ir nesaugo jūsų užklausų. Užpildžius užklausos formą,
+        žinutė tik paruošiama jūsų el. pašto programoje arba WhatsApp – ją išsiunčiate patys.
+      </p>
+      <h2>Naršyklėje saugoma informacija</h2>
+      <p>
+        Jei pasirenkate šviesią ar tamsią svetainės temą, šis pasirinkimas išsaugomas tik jūsų naršyklėje (localStorage) ir mums
+        neperduodamas.
+      </p>
+      <h2>Trečiųjų šalių paslaugos</h2>
+      <ul>
+        <li><strong>Google Maps</strong> – kontaktų puslapyje rodomi žemėlapiai. Juos atvaizduojant Google gali naudoti savo slapukus.</li>
+        <li>
+          <strong>Facebook Messenger, WhatsApp, Viber</strong> – paspaudus nuorodą atidaroma atitinkama programėlė; joje taikomos tų paslaugų
+          taisyklės.
+        </li>
+        <li><strong>Cloudflare</strong> – svetainės talpinimas ir apsauga; renkama tik techninė, anoniminė informacija.</li>
+      </ul>
+      <h2>Kontaktai</h2>
+      <p>
+        Klausimus dėl duomenų tvarkymo siųskite el. paštu <a href={mailHref}>{site.email}</a>.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

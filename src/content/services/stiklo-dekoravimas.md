@@ -3,6 +3,7 @@ title: Stiklų dekoravimas
 category: pastatams
 order: 3
 icon: layers
+featured: false
 
 seoTitle: Stiklo matinimas ir dekoravimas plėvelėmis | stiklutamsinimas.eu
 seoDescription: Stiklo matinimas ir dekoravimas plėvelėmis – matinės ir raštuotos plėvelės, logotipai ant stiklo durų, pertvarų matinimas biurams ir namams.
@@ -11,8 +12,8 @@ h1: Stiklų dekoravimas plėvelėmis
 lead: Matinės, raštuotos ir spalvotos plėvelės paverčia paprastą stiklą interjero akcentu. Jos suteikia privatumo neužtemdant patalpos, o įmonės logotipas ant stiklo durų sustiprina įvaizdį.
 excerpt: Matinės, raštuotos ir spalvotos plėvelės – privatumas ir stilius stiklui.
 
-cover: ../../assets/dekoravimas/dekoratyvine-plevele-geometrinis-rastas.jpg
-coverAlt: Stiklinė pertvara su geometrinio rašto dekoratyvine plėvele
+cover: ../../assets/dekoravimas/biuro-stiklo-dekoravimas.jpg
+coverAlt: Biuro stiklinės sienos dekoravimas plėvele
 
 highlights:
   - Stiklo pertvarų ir durų matinimas
@@ -34,43 +35,9 @@ benefits:
     title: Lengva atnaujinti
     text: Plėvelę galima nuimti ir pakeisti nauju dizainu, stiklo nepažeidžiant.
 
-gallery:
-  - src: ../../assets/dekoravimas/dekoratyvine-plevele-geometrinis-rastas.jpg
-    alt: Geometrinio rašto dekoratyvinė plėvelė ant stiklo pertvaros
-  - src: ../../assets/dekoravimas/laukiamojo-pertvaru-matinimas.jpg
-    alt: Laukiamojo stiklinių pertvarų ir durų matinimas plėvele
-  - src: ../../assets/dekoravimas/logotipas-ant-stiklo-duru.jpg
-    alt: Įmonės logotipas ant stiklo durų matine plėvele
-  - src: ../../assets/dekoravimas/stiklo-sienos-matinimas.jpg
-    alt: Biuro stiklo sienos matinimas plėvele
-  - src: ../../assets/dekoravimas/biuro-pertvaru-matinimas.jpg
-    alt: Biuro stiklinių pertvarų matinimas
-  - src: ../../assets/dekoravimas/biuro-stiklo-sienos-matine-juosta.jpg
-    alt: Matinė juosta ant biuro stiklo sienos
-  - src: ../../assets/dekoravimas/duru-matine-plevele.jpg
-    alt: Stiklinių durų matinė plėvelė
-  - src: ../../assets/dekoravimas/dekoratyvine-plevele-medis.jpg
-    alt: Dekoratyvinė plėvelė su medžio raštu ant lango
-  - src: ../../assets/dekoravimas/biuro-stiklo-dekoravimas.jpg
-    alt: Biuro stiklinės sienos dekoravimas plėvele
-  - src: ../../assets/dekoravimas/matines-juostos-stiklo-durims.jpg
-    alt: Matinės juostos ant biuro stiklo durų
-  - src: ../../assets/dekoravimas/spalvota-plevele-biuro-pertvarai.jpg
-    alt: Oranžinė spalvota plėvelė ant biuro pertvaros
-  - src: ../../assets/dekoravimas/spalvotos-plevele-stiklo-fasadas.jpg
-    alt: Spalvotos plėvelės ant stiklinio fasado
-  - src: ../../assets/dekoravimas/virtuves-stiklo-dekoravimas.jpg
-    alt: Biuro virtuvės stiklo sienos dekoravimas
-  - src: ../../assets/dekoravimas/duru-stiklo-dekoravimas.jpg
-    alt: Durų stiklo dekoravimas matine plėvele su raštu
-  - src: ../../assets/dekoravimas/lango-dekoratyvine-plevele.jpg
-    alt: Lango dekoratyvinė plėvelė su medžio motyvu
-  - src: ../../assets/dekoravimas/veidrodzio-dekoravimas.jpg
-    alt: Veidrodinės sienos dekoravimas plėvele
-  - src: ../../assets/dekoravimas/matine-plevele-langams.jpg
-    alt: Matinė plėvelė ant biuro langų
-  - src: ../../assets/dekoravimas/stiklo-plokstes-spauda.jpg
-    alt: Stiklo plokštė su spausdintu rožių motyvu
+galleries:
+  - folder: dekoravimas
+  - folder: matines
 
 faq:
   - q: Ar galite pagaminti plėvelę su mūsų logotipu?

@@ -1,330 +1,222 @@
 ---
-import { Image } from 'astro:assets';
-import { getEntry } from 'astro:content';
-import { ArrowRight, BadgeCheck, Layers, MapPin, MessageCircle, Phone, ShieldCheck, Sparkles, Wrench } from '@lucide/astro';
-
+import { ArrowRight, CircleCheck } from '@lucide/astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
-import ServiceCard from '@/components/ServiceCard.astro';
-import ProcessSteps from '@/components/ProcessSteps.astro';
-import Gallery from '@/components/Gallery.astro';
-import Locations from '@/components/Locations.astro';
-import Faq from '@/components/Faq.astro';
-import CtaBand from '@/components/CtaBand.astro';
-import { site, telHref } from '@/config/site';
-import { getServicesByCategory } from '@/lib/services';
+import TintSimulator from '@/components/sections/TintSimulator.astro';
+import Benefits from '@/components/sections/Benefits.astro';
+import ServiceCard from '@/components/sections/ServiceCard.astro';
+import Gallery from '@/components/sections/Gallery.astro';
+import Steps from '@/components/sections/Steps.astro';
+import CtaBand from '@/components/sections/CtaBand.astro';
+import Pricing from '@/components/sections/Pricing.astro';
+import GoogleReviews from '@/components/sections/GoogleReviews.astro';
+import InstagramFeed from '@/components/sections/InstagramFeed.astro';
+import PostCard from '@/components/sections/PostCard.astro';
+import Faq from '@/components/sections/Faq.astro';
+import ContactInfo from '@/components/sections/ContactInfo.astro';
+import ContactForm from '@/components/sections/ContactForm.astro';
+import { site } from '@/config/site';
+import { getFolder } from '@/data/galleries';
+import { getPosts, getServices, serviceUrl } from '@/lib/content';
 import { faqSchema } from '@/lib/schema';
 
-import heroImage from '@/assets/bendros/tamsinti-automobilio-langai-lietus.jpg';
-import whyImage1 from '@/assets/automobiliai/range-rover-sport-tamsinimas.jpg';
-import whyImage2 from '@/assets/pastatai/namo-lango-veidrodine-plevele.jpg';
+const services = await getServices();
+const featured = services.filter((s) => s.data.featured);
+const other = services.filter((s) => !s.data.featured);
+const posts = (await getPosts()).slice(0, 3);
 
-// Darbų pavyzdžiai iš skirtingų paslaugų
-import g1 from '@/assets/automobiliai/audi-q7-tamsinti-galiniai-stiklai.jpg';
-import g2 from '@/assets/poliravimas/zibintu-poliravimas-pries-ir-po.jpg';
-import g3 from '@/assets/priekiniai/chameleono-plevele-saulelydis.jpg';
-import g4 from '@/assets/zibintai/range-rover-tamsinti-galiniai-zibintai.jpg';
-import g5 from '@/assets/pastatai/namo-fasado-veidrodine-plevele.jpg';
-import g6 from '@/assets/automobiliai/tesla-model-s-tamsinti-langai.jpg';
-import g7 from '@/assets/reklama/pastato-reklaminis-baneris.jpg';
-import g8 from '@/assets/dekoravimas/laukiamojo-pertvaru-matinimas.jpg';
-import g9 from '@/assets/pastatai/fasado-stiklu-klijavimas-keltuvu.jpg';
+const benefits = [
+  { icon: 'sun', title: 'Iki 99 % UV apsaugos', text: 'Sulaiko žalingus UV spindulius – oda apsaugota, o salonas ir baldai neblunka.', accent: true },
+  { icon: 'thermometer', title: 'Iki 60 % mažiau šilumos', text: 'Vasarą viduje vėsiau, o kondicionierius dirba mažiau ir naudoja mažiau energijos.' },
+  { icon: 'eye-off', title: 'Daugiau privatumo', text: 'Iš lauko nesimato, kas viduje – nei keleivių, nei vertingų daiktų.' },
+  { icon: 'shield-check', title: 'Saugesnis stiklas', text: 'Sudužęs stiklas lieka ant plėvelės, todėl šukės nesubyra ir nesužeidžia.' },
+] as const;
 
-const groups = await getServicesByCategory();
-const carTint = await getEntry('services', 'automobilio-stiklu-tamsinimas');
-const carPrices = carTint?.data.prices ?? [];
-
-const autoGroup = groups.find((g) => g.key === 'automobiliams');
-const otherItems = groups.filter((g) => g.key !== 'automobiliams').flatMap((g) => g.items);
-
-const galleryImages = [
-  { src: g1, alt: 'Baltas Audi Q7 su tamsintais galiniais stiklais' },
-  { src: g2, alt: 'Žibintų poliravimas – prieš ir po' },
-  { src: g3, alt: 'Chameleono efekto plėvelė ant priekinio stiklo' },
-  { src: g4, alt: 'Range Rover galiniai žibintai po tamsinimo' },
-  { src: g5, alt: 'Pastato fasado langai su veidrodine plėvele' },
-  { src: g6, alt: 'Tesla Model S su tamsintais galiniais langais' },
-  { src: g7, alt: 'Reklaminis baneris ant pastato fasado' },
-  { src: g8, alt: 'Laukiamojo stiklinių pertvarų matinimas' },
-  { src: g9, alt: 'Komercinio pastato stiklinio fasado klijavimas plėvele naudojant keltuvą' },
-];
-
-const reasons = [
-  {
-    icon: BadgeCheck,
-    title: `${site.experienceYears}+ metų patirtis`,
-    text: 'Stiklų ir plėvelių srityje dirbame daugiau nei dešimtmetį – žinome, kaip pasiekti tvarkingą rezultatą.',
-  },
-  {
-    icon: Layers,
-    title: 'Kokybiškos plėvelės',
-    text: `Dirbame su ${site.filmBrands.join(', ')} plėvelėmis – parenkame pagal jūsų poreikius ir biudžetą.`,
-  },
-  {
-    icon: Sparkles,
-    title: 'Tvarkingas darbas',
-    text: 'Kiekvieną plėvelę pritaikome konkrečiam stiklui – be burbulų ir atšokusių kraštų.',
-  },
-  {
-    icon: ShieldCheck,
-    title: `${site.warrantyYears} metų garantija`,
-    text: `Visiems darbams – ne trumpesnė kaip ${site.warrantyYears} metų garantija, o priklausomai nuo medžiagų – ir ilgesnė.`,
-  },
-  {
-    icon: MapPin,
-    title: '4 miestai ir mobilus darbas',
-    text: 'Kupiškis, Rokiškis, Panevėžys, Vilnius – iš anksto susitarus, arba atvykstame pas jus.',
-  },
-  {
-    icon: Wrench,
-    title: 'Viskas vienoje vietoje',
-    text: 'Tamsinimas, žibintai, stiklų keitimas, dekoravimas ir reklama – vienas kontaktas visiems darbams.',
-  },
+const workGroups = [
+  { id: 'auto', title: 'Automobiliai', images: getFolder('darbai') },
+  { id: 'zibintai', title: 'Žibintai', images: [...getFolder('zibintai'), ...getFolder('poliravimas')] },
+  { id: 'veidrodines', title: 'Veidrodinės plėvelės', images: getFolder('veidrodines') },
+  { id: 'matines', title: 'Matinės plėvelės', images: getFolder('matines') },
+  { id: 'dekoravimas', title: 'Stiklų dekoravimas', images: getFolder('dekoravimas') },
+  { id: 'reklama', title: 'Reklama', images: [...getFolder('reklama/lipdukai'), ...getFolder('reklama/spauda')] },
 ];
 
 const faq = [
-  {
-    q: 'Kiek kainuoja automobilio stiklų tamsinimas?',
-    a: 'Sedano galinių stiklų tamsinimas kainuoja nuo 120 €, universalo – nuo 140 €. Tikslią kainą pasakysime iš anksto, kai žinosime automobilio modelį ir pasirinktą plėvelę.',
-  },
-  {
-    q: 'Kiek laiko trunka automobilio stiklų tamsinimas?',
-    a: 'Dažniausiai 2–3 valandas – automobilį atsiimsite tą pačią dieną.',
-  },
-  {
-    q: 'Ar galima tamsinti priekinius automobilio langus?',
-    a: 'Taip, bet ne daugiau kaip 30 % – priekinis stiklas ir priekiniai šoniniai langai turi praleisti ne mažiau kaip 70 % šviesos. Jiems siūlome skaidrias atermines plėveles. Galinius langus galima tamsinti laisvai.',
-  },
-  {
-    q: 'Kokia garantija suteikiama?',
-    a: `Visiems darbams suteikiame ne trumpesnę kaip ${site.warrantyYears} metų garantiją. Priklausomai nuo pasirinktų medžiagų garantija gali būti ir ilgesnė – tikslų terminą pasakysime prieš darbą.`,
-  },
-  {
-    q: 'Ar galima atvažiuoti be išankstinio susitarimo?',
-    a: 'Ne – visuose miestuose darbus atliekame tik iš anksto susitarus. Paskambinkite arba parašykite, ir suderinsime jums patogų laiką.',
-  },
-  {
-    q: 'Ar atvykstate pas klientą?',
-    a: 'Taip. Teikiame mobilaus stiklų tamsinimo paslaugą Vilniuje, Panevėžyje, Rokiškyje ir Kupiškyje – atvykstame į namus, biurą ar įmonę.',
-  },
-  {
-    q: 'Ar tamsinate ir pastatų langus?',
-    a: 'Taip. Klijuojame saulės kontrolės, veidrodines, matines, apsaugines ir dekoratyvines plėveles namams, biurams ir verslo patalpoms.',
-  },
-  {
-    q: 'Ar galima tamsinti stiklus žiemą?',
-    a: 'Taip. Plėvelė klijuojama patalpoje, todėl oras lauke darbui įtakos neturi.',
-  },
+  { q: 'Kiek laiko užtrunka tamsinimas?', a: 'Automobilio galinių langų tamsinimas dažniausiai trunka 2–3 valandas – automobilį atsiimsite tą pačią dieną. Pastatų langams laikas priklauso nuo ploto, dažniausiai pakanka vienos dienos.' },
+  { q: 'Ar galima tamsinti priekinius langus?', a: 'Taip, bet ribotai: priekinį stiklą ir priekinius šoninius langus leidžiama patamsinti ne daugiau kaip 30 % – jie turi praleisti ne mažiau kaip 70 % šviesos. Tam naudojame skaidrias atermines ir chameleono plėveles.' },
+  { q: 'Kada galima nuleisti langus ir juos plauti?', a: 'Kelias dienas po tamsinimo langų nenuleiskite – plėvelei reikia laiko visiškai prilipti. Pirmomis dienomis matomas lengvas drumstumas ar smulkūs lašeliai yra normalu – jie išnyksta plėvelei išdžiūvus. Valykite minkšta šluoste, be abrazyvinių priemonių.' },
+  { q: 'Ar plėvelė netrikdys GPS ir mobiliojo ryšio?', a: 'Metalo dalelių turinčios plėvelės gali silpninti radijo ir telefono signalą, todėl automobiliams siūlome plėveles be metalo – jos ryšio netrikdo.' },
+  { q: 'Ar suteikiate garantiją?', a: `Taip. Visiems darbams suteikiame ne trumpesnę kaip ${site.warrantyYears} metų garantiją, o priklausomai nuo pasirinktų medžiagų – ir ilgesnę.` },
+  { q: 'Ar galima tamsinti stiklus žiemą?', a: 'Taip. Plėvelė klijuojama šiltoje patalpoje, todėl oras lauke darbui įtakos neturi. Kokybiškos plėvelės atsparios šalčiui, karščiui ir drėgmei.' },
+  { q: 'Kur atliekate darbus?', a: `Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje. ${site.appointmentNote} – paskambinkite ar parašykite ir suderinsime patogų laiką. Pastatų langus klijuojame atvykę į objektą.` },
+  { q: 'Kiek kainuoja automobilio stiklų tamsinimas?', a: 'Sedano galinių stiklų tamsinimas – nuo 120 €, universalo ir visureigio – nuo 140 €. Tikslią kainą pasakysime iš anksto pagal automobilio modelį ir pasirinktą plėvelę.' },
 ];
 ---
 
 <BaseLayout
   title="Stiklų tamsinimas automobiliams ir pastatams | stiklutamsinimas.eu"
-  description="Automobilių ir pastatų stiklų tamsinimas nuo 120 €, žibintų tamsinimas ir poliravimas, stiklų keitimas, dekoravimas. Kupiškis, Rokiškis, Panevėžys, Vilnius."
+  description="Automobilių ir pastatų stiklų tamsinimas kokybiškomis plėvelėmis Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje. Galiniai stiklai nuo 120 €, 5 metų garantija."
   schema={[faqSchema(faq)]}
 >
-  <!-- HERO -->
-  <section class="on-dark relative isolate flex min-h-[calc(100svh-4.5rem)] items-center overflow-hidden bg-ink-950">
-    <Image
-      src={heroImage}
-      alt=""
-      widths={[640, 960, 1280, 1600, 1920]}
-      sizes="100vw"
-      class="absolute inset-0 -z-20 h-full w-full object-cover opacity-60"
-      layout="none"
-      priority
-    />
-    <div class="absolute inset-0 -z-10 bg-gradient-to-r from-ink-950 via-ink-950/85 to-ink-950/30"></div>
-    <div class="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-ink-950 to-transparent"></div>
-
-    <div class="container-site py-20 lg:py-28">
-      <div class="reveal max-w-3xl">
-        <p class="eyebrow on-dark">Kupiškis · Rokiškis · Panevėžys · Vilnius</p>
-        <h1 class="mt-6 text-[2.6rem] leading-[1.05] font-extrabold text-white sm:text-6xl lg:text-7xl">
-          Stiklų tamsinimas <span class="bg-gradient-to-r from-brand-300 to-brand-500 bg-clip-text text-transparent">automobiliams ir pastatams</span>
+  <!-- ===== Įvadas ===== -->
+  <section class="relative isolate overflow-hidden">
+    <div class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute -top-40 -right-40 size-[44rem] rounded-full border-[64px] border-logo/[0.06]"></div>
+      <div class="absolute top-1/2 -left-40 size-[30rem] rounded-full bg-logo/[0.07] blur-3xl"></div>
+      <div class="absolute bottom-0 left-1/3 size-[26rem] rounded-full bg-accent/[0.08] blur-3xl dark:bg-accent/[0.04]"></div>
+    </div>
+    <div class="container-site grid items-center gap-12 py-14 lg:grid-cols-12 lg:gap-10 lg:py-24">
+      <div class="animate-fade-up lg:col-span-6">
+        <p class="eyebrow">Profesionalus klijavimas</p>
+        <h1 class="mt-6 text-[2.75rem] leading-[1.02] sm:text-6xl lg:text-[4.1rem]">
+          Mažiau saulės.<br /><span class="text-link">Daugiau komforto.</span>
         </h1>
-        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-ink-200 sm:text-xl">
-          Tamsiname automobilių ir pastatų stiklus, tamsiname ir poliruojame žibintus, keičiame automobilių stiklus,
-          dekoruojame stiklą plėvelėmis. Visiems darbams – {site.warrantyYears} metų ar ilgesnė garantija.
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted">
+          Automobilių ir pastatų stiklų tamsinimas kokybiškomis plėvelėmis. Tvarkingas darbas, aiški kaina ir {site.warrantyYears} metų garantija
+          – Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje.
         </p>
-
-        <div class="mt-10 flex flex-col gap-3 sm:flex-row">
-          <a href="/kontaktai#uzklausa" class="btn btn-accent">
-            Gauti pasiūlymą
-            <ArrowRight size={18} aria-hidden="true" />
-          </a>
-          <a href={telHref} class="btn btn-ghost-dark">
-            <Phone size={18} aria-hidden="true" />
-            {site.phoneDisplay}
-          </a>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#kontaktai" class="btn btn-primary !px-7 !py-3.5">Gauti pasiūlymą <ArrowRight size={18} aria-hidden="true" /></a>
+          <a href="#kainos" class="btn btn-outline !px-7 !py-3.5">Peržiūrėti kainas</a>
         </div>
-
-        <dl class="mt-14 grid max-w-2xl grid-cols-2 gap-x-6 gap-y-6 border-t border-white/10 pt-8 sm:grid-cols-4">
-          <div>
-            <dt class="text-xs text-ink-400">Patirtis</dt>
-            <dd class="mt-1 font-display text-2xl font-extrabold text-white">{site.experienceYears}+ m.</dd>
-          </div>
-          <div>
-            <dt class="text-xs text-ink-400">Galiniai stiklai</dt>
-            <dd class="mt-1 font-display text-2xl font-extrabold text-white">nuo 120 €</dd>
-          </div>
-          <div>
-            <dt class="text-xs text-ink-400">Darbo trukmė</dt>
-            <dd class="mt-1 font-display text-2xl font-extrabold text-white">2–3 val.</dd>
-          </div>
-          <div>
-            <dt class="text-xs text-ink-400">Garantija</dt>
-            <dd class="mt-1 font-display text-2xl font-extrabold text-white">nuo {site.warrantyYears} m.</dd>
-          </div>
-        </dl>
-      </div>
-    </div>
-  </section>
-
-  <!-- PASLAUGOS AUTOMOBILIAMS -->
-  {
-    autoGroup && (
-      <section id="paslaugos" class="container-site py-20 lg:py-28">
-        <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-          <SectionHeading eyebrow="Automobiliams" title="Paslaugos automobiliams" lead="Nuo galinių stiklų tamsinimo iki žibintų atnaujinimo ir stiklų keitimo." />
-          <a href="/paslaugos" class="btn btn-ghost shrink-0 self-start lg:self-auto">
-            Visos paslaugos <ArrowRight size={18} aria-hidden="true" />
-          </a>
-        </div>
-        <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {autoGroup.items.map((s, i) => (
-            <div class:list={[i === 0 && 'sm:col-span-2 lg:row-span-2 [&>a]:h-full']}>
-              <ServiceCard service={s} featured={i === 0} />
-            </div>
-          ))}
-        </div>
-      </section>
-    )
-  }
-
-  <!-- KAINOS -->
-  <section class="bg-ink-50">
-    <div class="container-site grid gap-10 py-20 lg:grid-cols-12 lg:items-center lg:py-24">
-      <div class="lg:col-span-5">
-        <SectionHeading
-          eyebrow="Kainos"
-          title="Aiški kaina iš anksto"
-          lead="Galutinė kaina priklauso nuo automobilio modelio ir pasirinktos plėvelės. Parašykite modelį – kainą pasakysime iš karto."
-        />
-        <a href="/automobilio-stiklu-tamsinimas#kainos" class="mt-8 inline-flex items-center gap-2 font-semibold text-brand-700 hover:text-brand-800">
-          Plačiau apie automobilių stiklų tamsinimą <ArrowRight size={18} aria-hidden="true" />
-        </a>
-      </div>
-      <div class="grid gap-4 sm:grid-cols-3 lg:col-span-7">
-        {
-          carPrices.map((p, i) => (
-            <div class:list={['rounded-3xl p-7', i === 0 ? 'bg-ink-950 text-white' : 'card']}>
-              <p class:list={['text-sm font-medium', i === 0 ? 'text-ink-300' : 'text-ink-500']}>{p.label}</p>
-              <p class:list={['mt-2 font-display text-3xl font-extrabold', i === 0 ? 'text-white' : 'text-ink-950']}>{p.value}</p>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- PASLAUGOS NAMAMS IR VERSLUI -->
-  <section class="container-site py-20 lg:py-28">
-    <SectionHeading
-      eyebrow="Namams ir verslui"
-      title="Plėvelės pastatams, pertvaros ir reklama"
-      lead="Langų tamsinimas, apsauginės ir dekoratyvinės plėvelės, stiklo pertvaros ir reklamos darbai."
-    />
-    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-6">
-      {
-        otherItems.map((s, i) => (
-          <div class:list={[i < 2 ? 'lg:col-span-3' : 'lg:col-span-2', i === otherItems.length - 1 && otherItems.length % 2 === 1 && 'sm:col-span-2 lg:col-span-2', '[&>a]:h-full']}>
-            <ServiceCard service={s} featured={i < 2} />
-          </div>
-        ))
-      }
-    </div>
-  </section>
-
-  <!-- KODĖL MES -->
-  <section class="bg-ink-50 py-20 lg:py-28">
-    <div class="container-site grid gap-14 lg:grid-cols-12 lg:items-center">
-      <div class="relative hidden lg:col-span-5 lg:block">
-        <Image src={whyImage1} alt="Range Rover Sport su tamsintais galiniais stiklais" widths={[480, 720]} sizes="30vw" class="aspect-[4/5] w-4/5 rounded-4xl object-cover shadow-xl" layout="none" />
-        <Image src={whyImage2} alt="Namo langas su veidrodine plėvele" widths={[360, 540]} sizes="20vw" class="absolute -right-2 -bottom-10 aspect-square w-1/2 rounded-3xl object-cover shadow-2xl ring-8 ring-ink-50" layout="none" />
-      </div>
-      <div class="lg:col-span-7">
-        <SectionHeading eyebrow="Kodėl mes" title="Kokybė, kurią matote kiekvieną dieną" />
-        <ul class="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+        <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-[0.95rem] text-muted">
           {
-            reasons.map((r) => (
-              <li class="flex gap-4">
-                <span class="grid size-11 shrink-0 place-items-center rounded-2xl bg-white text-brand-700 shadow-sm ring-1 ring-ink-100">
-                  <r.icon size={20} aria-hidden="true" />
-                </span>
-                <div>
-                  <h3 class="font-bold">{r.title}</h3>
-                  <p class="mt-1.5 text-[0.95rem] leading-relaxed text-ink-500">{r.text}</p>
-                </div>
+            ['UV apsauga iki 99 %', 'Automobiliui – per 2–3 val.', `Garantija nuo ${site.warrantyYears} metų`].map((t) => (
+              <li class="inline-flex items-center gap-2">
+                <CircleCheck size={18} class="text-link" aria-hidden="true" />
+                {t}
               </li>
             ))
           }
         </ul>
       </div>
+      <div class="animate-fade-up [animation-delay:150ms] lg:col-span-6 lg:pl-6">
+        <TintSimulator />
+      </div>
     </div>
   </section>
 
-  <!-- DARBO EIGA -->
-  <section class="on-dark bg-ink-950 py-20 lg:py-28">
+  <!-- ===== Nauda ===== -->
+  <section id="nauda" class="section bg-bg-2">
     <div class="container-site">
-      <SectionHeading eyebrow="Darbo eiga" title="Nuo skambučio iki rezultato" dark />
-      <div class="mt-12">
-        <ProcessSteps />
-      </div>
+      <SectionHeading eyebrow="Nauda" title="Kodėl verta tamsinti stiklus" lead="Kokybiška plėvelė – tai ne tik išvaizda. Ji saugo, vėsina ir suteikia ramybės kiekvieną dieną." />
+      <div class="mt-12"><Benefits items={[...benefits]} /></div>
     </div>
   </section>
 
-  <!-- DARBAI -->
-  <section class="container-site py-20 lg:py-28">
-    <SectionHeading
-      eyebrow="Atlikti darbai"
-      title="Mūsų darbai"
-      lead="Tikros nuotraukos iš mūsų atliktų darbų. Daugiau pavyzdžių rasite kiekvienos paslaugos puslapyje."
-    />
-    <div class="mt-12">
-      <Gallery images={galleryImages} id="pagrindinis" />
-    </div>
-  </section>
-
-  <!-- ADRESAI -->
-  <section class="bg-ink-50 py-20 lg:py-28">
+  <!-- ===== Paslaugos ===== -->
+  <section id="paslaugos" class="section">
     <div class="container-site">
-      <SectionHeading
-        eyebrow="Kur mus rasti"
-        title="Keturi miestai – ir mobilus darbas"
-        lead="Visuose miestuose darbus atliekame tik iš anksto susitarus – paskambinkite, ir suderinsime laiką. Galime atvykti ir pas jus."
-      />
-      <div class="mt-12">
-        <Locations />
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <SectionHeading eyebrow="Paslaugos" title="Ką klijuojame" lead="Dirbame su automobiliais, namais, biurais ir komercinėmis patalpomis. Padėsime išsirinkti plėvelę, kuri tinka būtent jums." />
+        <a href="/paslaugos" class="btn btn-outline self-start lg:self-auto">Visos paslaugos <ArrowRight size={18} aria-hidden="true" /></a>
       </div>
+      <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          featured.map((s, i) => (
+            <li class="reveal" style={`transition-delay:${(i % 3) * 80}ms`}>
+              <ServiceCard service={s} photo />
+            </li>
+          ))
+        }
+      </ul>
+      {
+        other.length > 0 && (
+          <div class="mt-8 flex flex-wrap items-center gap-2.5">
+            <span class="mr-2 text-sm font-bold text-muted">Taip pat:</span>
+            {other.map((s) => (
+              <a href={serviceUrl(s.id)} class="chip">
+                {s.data.title}
+              </a>
+            ))}
+          </div>
+        )
+      }
     </div>
   </section>
 
-  <!-- DUK -->
-  <section class="container-site py-20 lg:py-28">
-    <div class="grid gap-12 lg:grid-cols-12">
-      <div class="lg:col-span-4">
-        <SectionHeading eyebrow="DUK" title="Dažniausi klausimai" />
-        <a href={site.whatsapp} target="_blank" rel="noopener" class="btn btn-whatsapp mt-8">
-          <MessageCircle size={18} aria-hidden="true" />
-          Užduoti klausimą
-        </a>
-      </div>
-      <div class="lg:col-span-8">
-        <Faq items={faq} />
-      </div>
+  <!-- ===== Atlikti darbai ===== -->
+  <section id="darbai" class="section bg-bg-2">
+    <div class="container-site">
+      <SectionHeading eyebrow="Atlikti darbai" title="Mūsų darbai" lead="Tikros nuotraukos iš mūsų dirbtuvių ir objektų – automobiliai, žibintai, namai, biurai ir reklama." />
+      <div class="mt-10"><Gallery groups={workGroups} limit={9} /></div>
     </div>
   </section>
 
-  <CtaBand />
+  <!-- ===== Kaip dirbame ===== -->
+  <section id="kaip-dirbame" class="section">
+    <div class="container-site">
+      <SectionHeading eyebrow="Kaip dirbame" title="Nuo skambučio iki rezultato – 4 žingsniai" />
+      <div class="mt-12"><Steps /></div>
+      <div class="mt-14"><CtaBand /></div>
+    </div>
+  </section>
+
+  <!-- ===== Kainos ===== -->
+  <section id="kainos" class="section bg-bg-2">
+    <div class="container-site">
+      <SectionHeading eyebrow="Kainos" title="Orientacinės kainos" lead="Galutinė kaina priklauso nuo automobilio modelio, stiklų ploto ir pasirinktos plėvelės." />
+      <div class="mt-12"><Pricing /></div>
+    </div>
+  </section>
+
+  <!-- ===== Atsiliepimai ===== -->
+  <section id="atsiliepimai" class="section">
+    <div class="container-site">
+      <SectionHeading eyebrow="Atsiliepimai" title="Klientų atsiliepimai Google" />
+      <div class="mt-10"><GoogleReviews /></div>
+    </div>
+  </section>
+
+  <!-- ===== Instagram ===== -->
+  <section id="instagram" class="section bg-bg-2">
+    <div class="container-site">
+      <SectionHeading eyebrow="Sekite mus" title="Naujausi darbai socialiniuose tinkluose" class="mb-10" />
+      <InstagramFeed />
+    </div>
+  </section>
+
+  <!-- ===== Naujienos ===== -->
+  {
+    posts.length > 0 && (
+      <section id="naujienos" class="section">
+        <div class="container-site">
+          <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <SectionHeading eyebrow="Naujienos" title="Patarimai ir naujienos" lead="Naudinga informacija apie plėveles, jų priežiūrą ir taikomus reikalavimus." />
+            <a href="/naujienos" class="btn btn-outline self-start lg:self-auto">
+              Visi straipsniai <ArrowRight size={18} aria-hidden="true" />
+            </a>
+          </div>
+          <ul class="mt-12 grid gap-5 md:grid-cols-3">
+            {posts.map((p) => (
+              <li class="reveal">
+                <PostCard post={p} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ===== DUK ===== -->
+  <section id="duk" class="section bg-bg-2">
+    <div class="container-site grid gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <SectionHeading eyebrow="DUK" title="Dažnai užduodami klausimai" lead="Neradote atsakymo? Paskambinkite – mielai patarsime." />
+      </div>
+      <div class="lg:col-span-7"><Faq items={faq} /></div>
+    </div>
+  </section>
+
+  <!-- ===== Kontaktai ===== -->
+  <section id="kontaktai" class="section">
+    <div class="container-site grid gap-12 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <SectionHeading eyebrow="Kontaktai" title="Susisiekite" lead="Paskambinkite, parašykite arba užpildykite formą – pateiksime pasiūlymą ir suderinsime laiką." />
+        <ContactInfo />
+      </div>
+      <div class="lg:col-span-7"><ContactForm /></div>
+    </div>
+  </section>
 </BaseLayout>

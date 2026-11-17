@@ -1,0 +1,24 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import type { IconName } from '@/lib/icon-names';
+
+interface Props {
+  items: { icon: IconName; title: string; text: string; accent?: boolean }[];
+  cols?: 3 | 4;
+}
+const { items, cols = 4 } = Astro.props;
+---
+
+<ul class:list={['grid gap-4 sm:grid-cols-2', cols === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3']}>
+  {
+    items.map((b, i) => (
+      <li class="card reveal p-6" style={`transition-delay:${i * 70}ms`}>
+        <span class:list={['icon-bubble', b.accent && '!text-accent']}>
+          <Icon name={b.icon} />
+        </span>
+        <h3 class="mt-5 text-lg">{b.title}</h3>
+        <p class="mt-2 text-[0.95rem] leading-relaxed text-muted">{b.text}</p>
+      </li>
+    ))
+  }
+</ul>

@@ -1,6 +1,6 @@
 /**
  * schema.org (JSON-LD) struktūriniai duomenys – padeda Google suprasti,
- * kas esate, kur esate ir ką siūlote (Google Maps, rich results).
+ * kas esate, kur esate ir ką siūlote (Google Maps, išplėstiniai paieškos rezultatai).
  */
 import { site } from '@/config/site';
 
@@ -16,13 +16,6 @@ const slug = (s: string) =>
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-');
 
-const postalAddress = (street: string, city: string) => ({
-  '@type': 'PostalAddress',
-  streetAddress: street,
-  addressLocality: city,
-  addressCountry: 'LT',
-});
-
 /** Organizacija + 4 padaliniai (LocalBusiness) + svetainė. Įdedama į kiekvieną puslapį. */
 export function siteGraph() {
   return [
@@ -37,8 +30,9 @@ export function siteGraph() {
       email: site.email,
       telephone: site.phone,
       description: site.description,
+      slogan: site.tagline,
       areaServed: { '@type': 'Country', name: 'Lietuva' },
-      ...(site.social.length > 0 && { sameAs: site.social.map((s) => s.url) }),
+      sameAs: site.social.map((s) => s.url),
       contactPoint: {
         '@type': 'ContactPoint',
         telephone: site.phone,
@@ -58,7 +52,8 @@ export function siteGraph() {
       telephone: site.phone,
       email: site.email,
       priceRange: '€€',
-      address: postalAddress(loc.street, loc.city),
+      address: { '@type': 'PostalAddress', streetAddress: loc.street, addressLocality: loc.city, addressCountry: 'LT' },
+      ...('lat' in loc && loc.lat ? { geo: { '@type': 'GeoCoordinates', latitude: loc.lat, longitude: loc.lng } } : {}),
       areaServed: { '@type': 'City', name: loc.city },
       parentOrganization: { '@id': ORG_ID },
     })),
@@ -88,21 +83,11 @@ export function breadcrumbSchema(items: { name: string; url: string }[]) {
 export function faqSchema(faq: { q: string; a: string }[]) {
   return {
     '@type': 'FAQPage',
-    mainEntity: faq.map(({ q, a }) => ({
-      '@type': 'Question',
-      name: q,
-      acceptedAnswer: { '@type': 'Answer', text: a },
-    })),
+    mainEntity: faq.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
   };
 }
 
-export function serviceSchema(opts: {
-  name: string;
-  description: string;
-  url: string;
-  image?: string;
-  priceFrom?: number;
-}) {
+export function serviceSchema(opts: { name: string; description: string; url: string; image?: string; priceFrom?: number }) {
   return {
     '@type': 'Service',
     name: opts.name,
@@ -111,24 +96,42 @@ export function serviceSchema(opts: {
     url: new URL(opts.url, site.url).href,
     image: opts.image ?? DEFAULT_IMAGE,
     provider: { '@id': ORG_ID },
-    areaServed: [
-      { '@type': 'Country', name: 'Lietuva' },
-      ...site.locations.map((l) => ({ '@type': 'City', name: l.city })),
-    ],
+    areaServed: [{ '@type': 'Country', name: 'Lietuva' }, ...site.locations.map((l) => ({ '@type': 'City', name: l.city }))],
     ...(opts.priceFrom
       ? {
           offers: {
             '@type': 'Offer',
             priceCurrency: 'EUR',
             price: opts.priceFrom,
-            priceSpecification: {
-              '@type': 'PriceSpecification',
-              minPrice: opts.priceFrom,
-              priceCurrency: 'EUR',
-            },
+            priceSpecification: { '@type': 'PriceSpecification', minPrice: opts.priceFrom, priceCurrency: 'EUR' },
             availability: 'https://schema.org/InStock',
           },
         }
       : {}),
+  };
+}
+
+export function articleSchema(opts: {
+  title: string;
+  description: string;
+  url: string;
+  image?: string;
+  published: Date;
+  modified?: Date;
+}) {
+  const url = new URL(opts.url, site.url).href;
+  return {
+    '@type': 'BlogPosting',
+    '@id': `${url}#article`,
+    headline: opts.title,
+    description: opts.description,
+    url,
+    mainEntityOfPage: url,
+    image: opts.image ?? DEFAULT_IMAGE,
+    datePublished: opts.published.toISOString(),
+    dateModified: (opts.modified ?? opts.published).toISOString(),
+    inLanguage: 'lt-LT',
+    author: { '@id': ORG_ID },
+    publisher: { '@id': ORG_ID },
   };
 }

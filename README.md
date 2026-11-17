@@ -1,85 +1,97 @@
 # stiklutamsinimas.eu
 
-Stiklų tamsinimo verslo svetainė. Sukurta su **Astro 7** + **Tailwind CSS 4**: statiniai HTML puslapiai, minimalus JavaScript, automatiškai optimizuoti paveikslėliai (AVIF/WebP), pilni SEO duomenys (schema.org, sitemap, Open Graph).
+Stiklų tamsinimo verslo svetainė. **Astro 7** + **Tailwind CSS 4**: statiniai HTML puslapiai (nėra serverio ir duomenų bazės, kurių būtų galima nulaužti), automatiškai optimizuotos nuotraukos (AVIF/WebP), pilni SEO duomenys (schema.org, sitemap, RSS, Open Graph), šviesi / tamsi tema pagal paros laiką.
 
-## Paleidimas savo kompiuteryje
+## Paleidimas kompiuteryje
 
-Reikia [Node.js](https://nodejs.org) (22 ar naujesnės versijos).
+Reikia [Node.js](https://nodejs.org) 22.23 ar naujesnės versijos.
 
 ```bash
-npm install        # vieną kartą – įdiegia priklausomybes
-npm run dev        # kūrimo režimas: http://localhost:4321 (pakeitimai matomi iš karto)
-npm run build      # patikrina klaidas ir sukuria galutinę svetainę į dist/
-npm run preview    # peržiūrėti galutinę (dist/) versiją
+npm install        # vieną kartą
+npm run dev        # http://localhost:4321 – pakeitimai matomi iš karto
+npm run build      # patikrina klaidas ir sukuria svetainę į dist/
+npm run preview    # peržiūrėti dist/ versiją
 ```
 
-`npm run build` pirmiausia paleidžia `astro check`, todėl jei turinyje ar kode yra klaida (pvz. per ilgas SEO aprašymas, neegzistuojanti nuotrauka ar nuoroda į neegzistuojančią paslaugą), svetainė **nesusikompiliuos** ir parodys, kur klaida. Taip klaidos nepatenka į gyvą svetainę.
+`npm run build` pirmiausia paleidžia `astro check` – jei turinyje ar kode yra klaida (per ilgas aprašymas, neegzistuojanti nuotrauka ir pan.), svetainė **nesusikompiliuos**, todėl klaidos nepatenka į internetą.
 
 ## Kur kas yra
 
 | Ką keisti | Failas |
 |---|---|
-| Telefonas, el. paštas, adresai, WhatsApp/Viber | `src/config/site.ts` |
-| Paslaugų tekstai, kainos, DUK, galerijos | `src/content/services/*.md` |
-| Pagrindinis puslapis | `src/pages/index.astro` |
-| Kontaktų puslapis | `src/pages/kontaktai.astro` |
-| Spalvos ir šriftai | `src/styles/global.css` (`@theme`) |
-| Nuotraukos | `src/assets/<kategorija>/` |
-| Meniu ir poraštė | `src/components/layout/` |
-| Seni adresai → nauji (301) | `public/_redirects` |
-| Logotipas ir ikonos | `src/assets/brand/logo-s.png` → `npm run icons` |
+| Telefonas, el. paštas, adresai, socialiniai tinklai, Messenger | `src/config/site.ts` |
+| Paslaugų tekstai, kainos, DUK, kurios galerijos rodomos | `src/content/services/*.md` |
+| Straipsniai (naujienos) | `src/content/naujienos/*.md` arba **/admin** |
+| Plėvelių pavyzdžiai (pavadinimai, tamsumo %) | `src/data/films.ts` |
+| Nuotraukų aprašymai (alt tekstai) | `src/data/galleries.ts` |
+| Pagrindinio puslapio kainos | `src/components/sections/Pricing.astro` |
+| Spalvos (šviesi ir tamsi tema) | `src/styles/global.css` |
+| Logotipas ir ikonos | `src/assets/brand/` → `npm run icons` |
+| Saugumo antraštės, peradresavimai | `public/_headers`, `public/_redirects` |
 
-## Kaip redaguoti paslaugą
+## Nuotraukos ir galerijos
 
-Atidarykite `src/content/services/<paslauga>.md`. Viršuje (tarp `---`) yra struktūriniai duomenys:
+Galerijos sudaromos **automatiškai iš aplankų** `src/assets/`:
 
-- `seoTitle` / `seoDescription` – ką Google rodo paieškoje (iki 65 / 165 simbolių);
-- `h1`, `lead` – puslapio antraštė ir įžanga;
-- `prices` – kainos (rodomos ir pagrindiniame puslapyje, jei tai automobilių tamsinimas);
-- `gallery` – nuotraukos su aprašymais (`alt` – svarbu SEO);
-- `faq` – klausimai ir atsakymai (Google gali juos rodyti paieškoje);
-- `related` – susijusios paslaugos apačioje.
+| Aplankas | Kur rodoma |
+|---|---|
+| `darbai/` | Automobilių stiklų tamsinimas, pradžia |
+| `pleveles/<plėvelė>/` | Plėvelių pavyzdžiai (sugrupuoti pagal tamsumą) |
+| `zibintai/`, `zibintai/pries-po/` | Žibintų tamsinimas (+ prieš / po) |
+| `poliravimas/` | Žibintų poliravimas |
+| `matines/`, `veidrodines/`, `dekoravimas/` | Biurams ir namams, Stiklų dekoravimas |
+| `reklama/lipdukai/`, `reklama/spauda/`, `reklama/pries-po/` | Reklamos darbai |
 
-Po `---` rašomas ilgesnis tekstas (Markdown formatu): `## Antraštė`, `**paryškinta**`, `[nuoroda](/kontaktai)`, `- sąrašas`.
+Nauja nuotrauka: įkelkite `.jpg` į aplanką (pavadinimas mažosiomis raidėmis, be lietuviškų raidžių, pvz. `audi-a4-tamsinti-stiklai.jpg`) ir įrašykite aprašymą `src/data/galleries.ts`. **Prieš įkeliant uždenkite automobilių numerius.**
 
-### Nauja paslauga
+## Naujo straipsnio rašymas (/admin)
 
-1. Nukopijuokite esamą `.md` failą ir pervadinkite. **Failo pavadinimas = URL adresas** (pvz. `ppf-plevele.md` → `stiklutamsinimas.eu/ppf-plevele`).
-2. Įkelkite nuotraukas į `src/assets/...` ir nurodykite kelią `cover` bei `gallery` laukuose.
-3. Paslauga automatiškai atsiras meniu, poraštėje, paslaugų puslapyje, užklausos formoje ir sitemap.xml.
+1. Atidarykite **https://stiklutamsinimas.eu/admin** (arba `…pages.dev/admin`).
+2. Pirmą kartą: GitHub → *Settings → Developer settings → Fine-grained tokens → Generate new token*, pasirinkite saugyklą `stiklutamsinimas`, leidimas **Contents: Read and write**. Nukopijuotą raktą įklijuokite į „Sign In Using Access Token“.
+3. **Naujienos → New**: pavadinimas, aprašymas, nuotrauka, tekstas → **Save**.
+4. Straipsnis įrašomas į GitHub, o Cloudflare per ~2 min. paskelbia jį svetainėje adresu `/straipsnio-pavadinimas`. Kiekviename straipsnyje automatiškai atsiranda dalinimosi mygtukai (Facebook, WhatsApp, Viber, X, el. paštas, nuorodos kopijavimas).
 
-## Tinklaraštis (paruoštas ateičiai)
+## Google atsiliepimai ir Instagram įrašai
 
-Tinklaraštis jau suprogramuotas, bet kol nėra publikuotų įrašų, jo nesimato.
+Be papildomų nustatymų rodoma nuoroda į Google atsiliepimus ir jūsų darbų nuotraukos su nuoroda į Instagram. Kad būtų rodomi **tikri atsiliepimai ir naujausi Instagram įrašai**, Cloudflare Pages → projektas → **Settings → Variables and Secrets** pridėkite (tipas *Secret*):
 
-1. Nukopijuokite `src/content/blog/pavyzdinis-irasas.md`, pervadinkite (failo pavadinimas = URL).
-2. Parašykite turinį ir nustatykite `draft: false`.
-3. Po `npm run build` automatiškai atsiras `/tinklarastis` puslapis, nuoroda meniu ir įrašai sitemap.xml.
+| Kintamasis | Kur gauti |
+|---|---|
+| `GOOGLE_PLACES_API_KEY` | Google Cloud Console → įjungti *Places API (New)* → Credentials → API key |
+| `GOOGLE_PLACE_ID` | [Place ID Finder](https://developers.google.com/maps/documentation/places/web-service/place-id) – susiraskite savo verslą |
+| `INSTAGRAM_ACCESS_TOKEN` | Meta for Developers → Instagram API (Instagram Login) → ilgalaikis raktas (galioja 60 d., reikia atnaujinti) |
 
-Senos svetainės straipsnių tekstai išsaugoti `docs/senos-svetaines-tekstai.txt` – juos galima perrašyti ir publikuoti kaip naujus įrašus (tada atnaujinkite `public/_redirects`, kad senas adresas vestų į naują įrašą).
+Duomenys paimami kiekvieno svetainės atnaujinimo metu; raktai į naršyklę nepatenka.
 
-## E. parduotuvė (ateityje)
+## Tiesioginis susirašinėjimas
 
-Architektūra tam paruošta:
+Mygtukas „Parašykite mums“ atidaro **Messenger** (m.me nuoroda į Facebook puslapį), **WhatsApp**, **Viber**, skambutį ir el. paštą. Facebook „Customer Chat“ įskiepis Meta buvo išjungtas 2024 m., todėl naudojamos tiesioginės nuorodos – pokalbis iškart atsidaro Messenger programėlėje.
 
-- Prekės bus atskira turinio kolekcija (`src/content.config.ts` → `products`) ir puslapiai `/parduotuve/...`.
-- Mokėjimams rekomenduojama **Stripe Checkout** arba **Shopify Storefront** – krepšelis ir mokėjimai vyksta jų pusėje, svetainė lieka greita ir saugi.
-- Serveriui reikalingoms funkcijoms (užsakymų patvirtinimas, formų siuntimas) pridedamas `@astrojs/cloudflare` adapteris – likę puslapiai lieka statiniai.
+## Šviesi / tamsi tema
 
-## Įkėlimas į internetą (Cloudflare Pages – nemokamai)
+Automatiškai: **šviesi nuo saulėtekio iki saulėlydžio** (skaičiuojama Lietuvai), vakare – tamsi. Lankytojas gali pasirinkti ir pats (☀ / ◐ / ☾ viršuje) – pasirinkimas įsimenamas naršyklėje.
 
-1. Įkelkite projektą į GitHub (saugykla jau prijungta: `origin`).
-2. [Cloudflare Dashboard](https://dash.cloudflare.com) → **Workers & Pages** → **Create** → **Pages** → prijunkite GitHub saugyklą.
-3. Nustatymai: **Framework preset** `Astro`, **Build command** `npm run build`, **Build output directory** `dist`. Node versija nurodyta faile `.node-version` (24).
-4. Kai svetainė bus galutinai baigta: **Custom domains** → pridėkite `stiklutamsinimas.eu` ir `www.stiklutamsinimas.eu` (www nukreipkite į pagrindinį).
-5. Kiekvienas `git push` automatiškai atnaujins svetainę.
+## Internetinė parduotuvė (paslėpta)
 
-`public/_redirects` (301 peradresavimai) ir `public/_headers` (saugumo ir talpyklos antraštės) veikia Cloudflare Pages automatiškai.
+Paruošta, bet išjungta – nėra nei puslapių, nei nuorodų. Įjungimas: `src/config/site.ts` → `features.shop = true`, produktai `src/content/produktai/*.md` (`draft: false`). Krepšelį ir apmokėjimą (Stripe, Paysera) galima pridėti vėliau.
 
-## Po paleidimo – SEO darbai
+## Saugumas
 
-- [ ] **Google Search Console**: pridėkite domeną, pateikite `https://stiklutamsinimas.eu/sitemap-index.xml`.
-- [ ] **Google Business Profile** kiekvienam adresui (Kupiškis, Rokiškis, Panevėžys, Vilnius) – svarbiausia vietinei paieškai ir Google Maps. Nuoroda į svetainę – `https://stiklutamsinimas.eu/kontaktai`.
-- [ ] Paprašykite klientų atsiliepimų Google – vėliau juos galima rodyti svetainėje.
-- [ ] Patikrinkite struktūrinius duomenis: [Rich Results Test](https://search.google.com/test/rich-results).
-- [ ] Patikrinkite greitį: [PageSpeed Insights](https://pagespeed.web.dev).
+- Statinė svetainė: nėra serverio kodo, duomenų bazės ar slaptažodžių svetainėje.
+- **SSL (HTTPS)** – Cloudflare suteikia ir atnaujina automatiškai; HSTS įjungtas.
+- Griežta turinio saugumo politika (CSP), apsauga nuo įterpimo į svetimus puslapius, `security.txt`.
+- /admin neindeksuojamas; redaguoti gali tik turintys GitHub raktą.
+- Rekomenduojama: GitHub paskyroje įjungti dviejų žingsnių patvirtinimą (2FA).
+
+## Įkėlimas į internetą (Cloudflare Pages)
+
+Kiekvienas `git push` į `main` šaką automatiškai atnaujina svetainę (~2–3 min.). Nustatymai: Framework `Astro`, Build `npm run build`, Output `dist`, Node versija – `.node-version`.
+
+Kai svetainė bus baigta: Cloudflare → **Custom domains** → `stiklutamsinimas.eu` ir `www.stiklutamsinimas.eu`.
+
+## Po paleidimo – SEO
+
+- [ ] **Google Search Console**: pridėti domeną, pateikti `https://stiklutamsinimas.eu/sitemap-index.xml`.
+- [ ] **Google Business Profile** kiekvienam adresui, nuoroda į `/kontaktai`.
+- [ ] Prašyti klientų atsiliepimų Google.
+- [ ] Patikrinti [Rich Results Test](https://search.google.com/test/rich-results) ir [PageSpeed Insights](https://pagespeed.web.dev).

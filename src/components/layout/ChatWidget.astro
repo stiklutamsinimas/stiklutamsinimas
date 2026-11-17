@@ -1,0 +1,117 @@
+---
+/**
+ * Tiesioginis susirašinėjimas: Messenger, WhatsApp, Viber, skambutis.
+ * (Facebook „Customer Chat“ įskiepis Meta buvo išjungtas 2024 m., todėl naudojamos tiesioginės m.me nuorodos –
+ * paspaudus iškart atsidaro pokalbis su jūsų Facebook puslapiu Messenger programėlėje.)
+ */
+import { Mail, MessageCircle, Phone, X } from '@lucide/astro';
+import SocialIcon from '@/components/ui/SocialIcon.astro';
+import { mailHref, site, telHref } from '@/config/site';
+
+const channels = [
+  { label: 'Messenger', sub: 'Rašykite per Facebook', href: site.chat.messenger, icon: 'Messenger', color: '#0866FF', external: true },
+  { label: 'WhatsApp', sub: site.phoneDisplay, href: site.chat.whatsapp, icon: 'WhatsApp', color: '#25D366', external: true },
+  { label: 'Viber', sub: site.phoneDisplay, href: site.chat.viber, icon: 'Viber', color: '#7360F2', external: false },
+];
+---
+
+<div class="chat-widget fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6">
+  <div
+    id="chat-panel"
+    class="chat-panel card invisible absolute right-0 bottom-[4.5rem] w-[min(21rem,calc(100vw-2rem))] origin-bottom-right translate-y-2 scale-95 overflow-hidden opacity-0 transition duration-200"
+    role="dialog"
+    aria-label="Parašykite mums"
+  >
+    <div class="bg-primary px-5 py-4 text-on-primary">
+      <p class="text-base font-extrabold">Parašykite mums tiesiogiai</p>
+      <p class="mt-0.5 text-sm opacity-90">Atsakome kuo greičiau – dažniausiai tą pačią dieną.</p>
+    </div>
+    <ul class="divide-y divide-border">
+      {
+        channels.map((c) => (
+          <li>
+            <a
+              href={c.href}
+              target={c.external ? '_blank' : undefined}
+              rel={c.external ? 'noopener' : undefined}
+              class="flex items-center gap-3.5 px-5 py-3.5 transition hover:bg-soft"
+              data-chat-channel={c.label}
+            >
+              <span class="grid size-10 shrink-0 place-items-center rounded-full text-white" style={`background:${c.color}`}>
+                <SocialIcon name={c.icon} size={20} />
+              </span>
+              <span class="min-w-0">
+                <span class="block font-bold text-text">{c.label}</span>
+                <span class="block truncate text-sm text-muted">{c.sub}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href={telHref} class="flex items-center gap-3.5 px-5 py-3.5 transition hover:bg-soft">
+          <span class="grid size-10 shrink-0 place-items-center rounded-full bg-soft text-link"><Phone size={18} aria-hidden="true" /></span>
+          <span>
+            <span class="block font-bold text-text">Skambinti</span>
+            <span class="block text-sm text-muted">{site.phoneDisplay}</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href={mailHref} class="flex items-center gap-3.5 px-5 py-3.5 transition hover:bg-soft">
+          <span class="grid size-10 shrink-0 place-items-center rounded-full bg-soft text-link"><Mail size={18} aria-hidden="true" /></span>
+          <span class="min-w-0">
+            <span class="block font-bold text-text">El. paštas</span>
+            <span class="block truncate text-sm text-muted">{site.email}</span>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <button
+    type="button"
+    class="chat-toggle group relative flex h-14 items-center gap-2.5 rounded-full bg-primary pr-5 pl-4 font-bold text-on-primary shadow-[0_14px_30px_-10px_var(--c-primary)] transition hover:-translate-y-0.5 hover:bg-primary-hover max-sm:w-14 max-sm:justify-center max-sm:px-0"
+    aria-expanded="false"
+    aria-controls="chat-panel"
+    aria-label="Parašykite mums: Messenger, WhatsApp, Viber"
+  >
+    <span class="absolute inset-0 -z-10 animate-ring rounded-full bg-primary/40 group-aria-expanded:hidden"></span>
+    <MessageCircle size={24} class="icon-open" aria-hidden="true" />
+    <X size={24} class="icon-close hidden" aria-hidden="true" />
+    <span class="max-sm:hidden">Parašykite mums</span>
+  </button>
+</div>
+
+<style>
+  .chat-widget[data-open] .chat-panel {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('.chat-widget');
+  const btn = root?.querySelector<HTMLButtonElement>('.chat-toggle');
+  const setOpen = (open: boolean) => {
+    if (!root || !btn) return;
+    root.toggleAttribute('data-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.querySelector('.icon-open')?.classList.toggle('hidden', open);
+    btn.querySelector('.icon-close')?.classList.toggle('hidden', !open);
+  };
+  btn?.addEventListener('click', () => setOpen(!root?.hasAttribute('data-open')));
+  document.addEventListener('click', (e) => {
+    if (root && !root.contains(e.target as Node)) setOpen(false);
+  });
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
+  // Kitur puslapyje esantys mygtukai „data-open-chat“ atidaro šį langą
+  document.querySelectorAll('[data-open-chat]').forEach((el) =>
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setOpen(true);
+    }),
+  );
+</script>

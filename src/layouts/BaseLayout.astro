@@ -1,5 +1,4 @@
 ---
-import '@fontsource-variable/inter';
 import '@fontsource-variable/manrope';
 import '@/styles/global.css';
 
@@ -9,7 +8,8 @@ import { site } from '@/config/site';
 import { siteGraph } from '@/lib/schema';
 import Header from '@/components/layout/Header.astro';
 import Footer from '@/components/layout/Footer.astro';
-import MobileContactBar from '@/components/layout/MobileContactBar.astro';
+import ChatWidget from '@/components/layout/ChatWidget.astro';
+import Lightbox from '@/components/layout/Lightbox.astro';
 
 interface Props {
   /** Pilnas <title> tekstas */
@@ -22,43 +22,45 @@ interface Props {
   type?: 'website' | 'article';
   /** Papildomi schema.org mazgai šiam puslapiui */
   schema?: Record<string, unknown>[];
+  /** Straipsnio datos (og:article) */
+  published?: Date;
+  modified?: Date;
 }
 
-const { title, description, image, imageAlt, noindex = false, type = 'website', schema = [] } = Astro.props;
+const { title, description, image, imageAlt, noindex = false, type = 'website', schema = [], published, modified } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname.replace(/\.html$/, ''), Astro.site).href;
+const canonical = new URL(Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/'), Astro.site).href;
 
 let ogImage = new URL('/og-default.jpg', Astro.site).href;
-let ogWidth = 1200;
-let ogHeight = 630;
 if (image) {
   const og = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg', quality: 80 });
   ogImage = new URL(og.src, Astro.site).href;
 }
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [...siteGraph(), ...schema],
-};
+const jsonLd = { '@context': 'https://schema.org', '@graph': [...siteGraph(), ...schema] };
 ---
 
 <!doctype html>
-<html lang="lt">
+<html lang="lt" class="no-js" data-theme="light">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!-- Tema nustatoma prieš atvaizduojant puslapį (be mirgėjimo) -->
+    <script is:inline src="/tema.js"></script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
 
-    <meta name="theme-color" content="#070b12" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f3f8fc" />
     <meta name="format-detection" content="telephone=no" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title="Naujienos – stiklutamsinimas.eu" href="/rss.xml" />
 
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={site.name} />
@@ -67,25 +69,47 @@ const jsonLd = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content={String(ogWidth)} />
-    <meta property="og:image:height" content={String(ogHeight)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+    {published && <meta property="article:published_time" content={published.toISOString()} />}
+    {modified && <meta property="article:modified_time" content={modified.toISOString()} />}
     <meta name="twitter:card" content="summary_large_image" />
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
-  <body class="flex min-h-dvh flex-col pb-[4.5rem] lg:pb-0">
+  <body class="flex min-h-dvh flex-col">
     <a
       href="#turinys"
-      class="sr-only z-[100] rounded-full bg-brand-500 px-5 py-3 font-semibold text-ink-950 focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+      class="sr-only z-[100] rounded-full bg-primary px-5 py-3 font-bold text-on-primary focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+      >Pereiti prie turinio</a
     >
-      Pereiti prie turinio
-    </a>
     <Header />
     <main id="turinys" class="flex-1">
       <slot />
     </main>
     <Footer />
-    <MobileContactBar />
+    <ChatWidget />
+    <Lightbox />
+
+    <script>
+      // Elementų atsiradimas slenkant
+      const els = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) =>
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add('is-visible');
+                io.unobserve(e.target);
+              }
+            }),
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+        );
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
   </body>
 </html>

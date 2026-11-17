@@ -3,6 +3,7 @@ title: Apsauginės plėvelės
 category: pastatams
 order: 2
 icon: shield
+featured: false
 
 seoTitle: Apsauginė plėvelė stiklams – šarvavimas | stiklutamsinimas.eu
 seoDescription: Stiklų šarvavimas apsaugine plėvele – sudužęs stiklas nesubyra į šukes, sunkiau įsilaužti. Langams, vitrinoms, durims ir stiklo pertvaroms.
@@ -11,8 +12,8 @@ h1: Apsauginė plėvelė stiklams (šarvavimas)
 lead: Skaidri apsauginė plėvelė sutvirtina stiklą – sudužęs jis lieka laikytis ant plėvelės ir nesubyra pavojingomis šukėmis. Tai papildoma apsauga nuo įsilaužimų, nelaimingų atsitikimų ir UV spindulių.
 excerpt: Skaidri plėvelė, kuri sulaiko šukes ir apsunkina įsilaužimą. Langams ir vitrinoms.
 
-cover: ../../assets/apsaugine/apsaugine-plevele-sulaiko-duzusi-stikla.jpg
-coverAlt: Sudužęs stiklas su apsaugine plėvele – šukės lieka vietoje
+cover: ../../assets/veidrodines/stiklinio-fasado-klijavimas.jpg
+coverAlt: Stiklinio fasado klijavimas plėvele
 
 highlights:
   - Sudužęs stiklas lieka vietoje

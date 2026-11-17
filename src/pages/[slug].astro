@@ -1,270 +1,32 @@
 ---
 /**
- * Paslaugos puslapis. Sugeneruojamas kiekvienam failui iš src/content/services.
- * URL = failo pavadinimas, pvz. /automobilio-stiklu-tamsinimas
+ * Paslaugų ir straipsnių puslapiai – visi šakniniame lygyje, kaip senoje svetainėje
+ * (pvz. /langu-tamsinimas, /kaip-tamsinti-automobilio-stiklus), kad nebūtų prarastos Google pozicijos.
  */
-import { Image, getImage } from 'astro:assets';
-import { getEntries, render } from 'astro:content';
-import { CalendarCheck, CircleCheck, MessageCircle, Phone, ShieldCheck } from '@lucide/astro';
+import type { GetStaticPaths } from 'astro';
+import ServicePage from '@/components/pages/ServicePage.astro';
+import ArticlePage from '@/components/pages/ArticlePage.astro';
+import { getPosts, getServices, type Post, type Service } from '@/lib/content';
 
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
-import SectionHeading from '@/components/ui/SectionHeading.astro';
-import Icon from '@/components/ui/Icon.astro';
-import ProcessSteps from '@/components/ProcessSteps.astro';
-import Gallery from '@/components/Gallery.astro';
-import Faq from '@/components/Faq.astro';
-import ServiceCard from '@/components/ServiceCard.astro';
-import ContactForm from '@/components/ContactForm.astro';
-import { site, telHref } from '@/config/site';
-import { categories, getServices, type Service } from '@/lib/services';
-import { breadcrumbSchema, faqSchema, serviceSchema } from '@/lib/schema';
-
-export async function getStaticPaths() {
+export const getStaticPaths = (async () => {
   const services = await getServices();
-  return services.map((service) => ({ params: { slug: service.id }, props: { service } }));
-}
+  const posts = await getPosts();
+  const reserved = new Set(['paslaugos', 'kontaktai', 'naujienos', 'parduotuve', 'admin', 'privatumo-politika', '404', 'rss']);
+  const seen = new Set<string>();
+  for (const id of [...services.map((s) => s.id), ...posts.map((p) => p.id)]) {
+    if (reserved.has(id) || seen.has(id)) {
+      throw new Error(`Adresas „/${id}“ jau užimtas – pervadinkite failą src/content/.../${id}.md`);
+    }
+    seen.add(id);
+  }
+  return [
+    ...services.map((entry) => ({ params: { slug: entry.id }, props: { kind: 'service' as const, entry } })),
+    ...posts.map((entry) => ({ params: { slug: entry.id }, props: { kind: 'post' as const, entry } })),
+  ];
+}) satisfies GetStaticPaths;
 
-interface Props {
-  service: Service;
-}
-
-const { service } = Astro.props;
-const { data } = service;
-const { Content } = await render(service);
-const related = await getEntries(data.related);
-const category = categories[data.category];
-
-const url = `/${service.id}`;
-const crumbs = [
-  { name: 'Pradžia', url: '/' },
-  { name: 'Paslaugos', url: '/paslaugos' },
-  { name: data.title, url },
-];
-
-// Tie patys parametrai kaip BaseLayout og:image – failas sugeneruojamas vieną kartą
-const shareImage = await getImage({ src: data.cover, width: 1200, height: 630, fit: 'cover', format: 'jpg', quality: 80 });
-
-const schema = [
-  serviceSchema({
-    name: data.title,
-    description: data.seoDescription,
-    url,
-    image: new URL(shareImage.src, site.url).href,
-    priceFrom: data.priceFrom,
-  }),
-  breadcrumbSchema(crumbs),
-  ...(data.faq.length ? [faqSchema(data.faq)] : []),
-];
+type Props = { kind: 'service'; entry: Service } | { kind: 'post'; entry: Post };
+const props = Astro.props as Props;
 ---
 
-<BaseLayout title={data.seoTitle} description={data.seoDescription} image={data.cover} imageAlt={data.coverAlt} schema={schema}>
-  <!-- Viršus -->
-  <section class="on-dark relative isolate overflow-hidden bg-ink-950">
-    <div class="absolute -top-40 -right-40 -z-10 size-[36rem] rounded-full bg-brand-600/20 blur-3xl"></div>
-    <div class="container-site grid gap-12 pt-8 pb-16 lg:grid-cols-2 lg:items-center lg:gap-16 lg:pt-10 lg:pb-24">
-      <div class="reveal">
-        <Breadcrumbs items={crumbs} />
-        <p class="eyebrow on-dark mt-10">{category.short}</p>
-        <h1 class="mt-4 text-4xl font-extrabold text-white sm:text-5xl lg:text-[3.4rem] lg:leading-[1.05]">{data.h1}</h1>
-        <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-300">{data.lead}</p>
-
-        {
-          data.highlights.length > 0 && (
-            <ul class="mt-8 grid gap-3 sm:grid-cols-2">
-              {data.highlights.map((h) => (
-                <li class="flex items-start gap-2.5 text-[0.95rem] text-ink-100">
-                  <CircleCheck size={19} class="mt-0.5 shrink-0 text-brand-400" aria-hidden="true" />
-                  {h}
-                </li>
-              ))}
-            </ul>
-          )
-        }
-
-        <div class="mt-10 flex flex-col gap-3 sm:flex-row">
-          <a href={telHref} class="btn btn-accent">
-            <Phone size={18} aria-hidden="true" />
-            {site.phoneDisplay}
-          </a>
-          <a href={site.whatsapp} target="_blank" rel="noopener" class="btn btn-ghost-dark">
-            <MessageCircle size={18} class="text-[#25d366]" aria-hidden="true" />
-            Rašyti per WhatsApp
-          </a>
-        </div>
-        <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink-300">
-          <li class="inline-flex items-center gap-2">
-            <ShieldCheck size={16} class="text-brand-400" aria-hidden="true" />
-            Garantija nuo {site.warrantyYears} metų
-          </li>
-          <li class="inline-flex items-center gap-2">
-            <CalendarCheck size={16} class="text-brand-400" aria-hidden="true" />
-            Tik iš anksto susitarus
-          </li>
-        </ul>
-      </div>
-
-      <div class="reveal relative [animation-delay:120ms]">
-        <div class="absolute -inset-4 -z-10 rounded-[2.5rem] bg-gradient-to-br from-brand-500/30 to-transparent blur-2xl"></div>
-        <Image
-          src={data.cover}
-          alt={data.coverAlt}
-          widths={[480, 720, 960, 1280]}
-          sizes="(min-width: 1024px) 50vw, 100vw"
-          class="aspect-[4/3] w-full rounded-4xl object-cover shadow-2xl shadow-black/50 ring-1 ring-white/10"
-          layout="none"
-          priority
-        />
-        {
-          data.prices && data.prices[0] && (
-            <div class="absolute -bottom-6 left-6 rounded-2xl bg-white px-5 py-4 shadow-xl sm:left-8">
-              <p class="text-xs font-medium text-ink-500">{data.prices[0].label}</p>
-              <p class="font-display text-2xl font-extrabold text-ink-950">{data.prices[0].value}</p>
-            </div>
-          )
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- Kainos -->
-  {
-    data.prices && data.prices.length > 0 && (
-      <section id="kainos" class="border-b border-ink-100 bg-ink-50">
-        <div class="container-site py-14">
-          <div class="grid gap-4 sm:grid-cols-3">
-            {data.prices.map((p) => (
-              <div class="card p-6">
-                <p class="text-sm font-medium text-ink-500">{p.label}</p>
-                <p class="mt-1 font-display text-3xl font-extrabold text-ink-950">{p.value}</p>
-              </div>
-            ))}
-          </div>
-          {data.prices.some((p) => p.note) && (
-            <p class="mt-5 text-sm text-ink-500">{data.prices.find((p) => p.note)?.note}</p>
-          )}
-        </div>
-      </section>
-    )
-  }
-
-  <!-- Privalumai -->
-  {
-    data.benefits.length > 0 && (
-      <section class="container-site py-20 lg:py-28">
-        <SectionHeading eyebrow="Privalumai" title={`Ką jums suteikia ${data.title.toLowerCase()}`} />
-        <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {data.benefits.map((b) => (
-            <li class="card p-7">
-              <span class="grid size-12 place-items-center rounded-2xl bg-brand-50 text-brand-700">
-                <Icon name={b.icon} size={22} />
-              </span>
-              <h3 class="mt-6 text-lg font-bold">{b.title}</h3>
-              <p class="mt-2 leading-relaxed text-ink-500">{b.text}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )
-  }
-
-  <!-- Aprašymas -->
-  <section class="container-site pb-20 lg:pb-28">
-    <div class="grid gap-12 lg:grid-cols-12">
-      <article class="prose-site lg:col-span-7">
-        <Content />
-      </article>
-      <aside class="lg:col-span-4 lg:col-start-9">
-        <div class="card sticky top-28 p-7">
-          <p class="eyebrow">Konsultacija</p>
-          <h2 class="mt-3 text-2xl font-bold">Turite klausimų?</h2>
-          <p class="mt-3 text-ink-500">
-            Paskambinkite arba parašykite – patarsime ir iš anksto pasakysime kainą.
-          </p>
-          <div class="mt-6 flex flex-col gap-3">
-            <a href={telHref} class="btn btn-primary">
-              <Phone size={18} aria-hidden="true" />
-              {site.phoneDisplay}
-            </a>
-            <a href={site.whatsapp} target="_blank" rel="noopener" class="btn btn-whatsapp">
-              <MessageCircle size={18} aria-hidden="true" />
-              WhatsApp
-            </a>
-            <a href="#uzklausa" class="btn btn-ghost">Užpildyti užklausą</a>
-          </div>
-          <p class="mt-6 border-t border-ink-100 pt-5 text-sm text-ink-500">
-            {site.locations.map((l) => l.city).join(' · ')}
-          </p>
-        </div>
-      </aside>
-    </div>
-  </section>
-
-  <!-- Darbo eiga -->
-  <section class="on-dark bg-ink-950 py-20 lg:py-28">
-    <div class="container-site">
-      <SectionHeading eyebrow="Darbo eiga" title="Kaip viskas vyksta" dark />
-      <div class="mt-12">
-        <ProcessSteps steps={data.steps} />
-      </div>
-    </div>
-  </section>
-
-  <!-- Galerija -->
-  {
-    data.gallery.length > 0 && (
-      <section class="container-site py-20 lg:py-28">
-        <SectionHeading eyebrow="Atlikti darbai" title="Mūsų darbų pavyzdžiai" lead="Visos nuotraukos – mūsų pačių atlikti darbai. Paspauskite nuotrauką, kad padidintumėte." />
-        <div class="mt-12">
-          <Gallery images={data.gallery} limit={13} />
-        </div>
-      </section>
-    )
-  }
-
-  <!-- DUK -->
-  {
-    data.faq.length > 0 && (
-      <section class="bg-ink-50 py-20 lg:py-28">
-        <div class="container-site grid gap-12 lg:grid-cols-12">
-          <div class="lg:col-span-4">
-            <SectionHeading eyebrow="DUK" title="Dažniausi klausimai" lead="Neradote atsakymo? Paskambinkite – mielai patarsime." />
-          </div>
-          <div class="lg:col-span-8">
-            <Faq items={data.faq} />
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  <!-- Susijusios paslaugos -->
-  {
-    related.length > 0 && (
-      <section class="container-site py-20 lg:py-28">
-        <SectionHeading eyebrow="Taip pat siūlome" title="Susijusios paslaugos" />
-        <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {related.map((s) => (
-            <ServiceCard service={s} />
-          ))}
-        </div>
-      </section>
-    )
-  }
-
-  <!-- Užklausa -->
-  <section id="uzklausa" class="bg-ink-50 py-20 lg:py-28">
-    <div class="container-site grid gap-12 lg:grid-cols-12">
-      <div class="lg:col-span-5">
-        <SectionHeading
-          eyebrow="Užklausa"
-          title="Gaukite pasiūlymą"
-          lead="Parašykite automobilio modelį ar trumpai aprašykite darbą – atsakysime ir pasiūlysime tinkamiausią sprendimą."
-        />
-      </div>
-      <div class="lg:col-span-7">
-        <ContactForm selected={service.id} />
-      </div>
-    </div>
-  </section>
-</BaseLayout>
+{props.kind === 'service' ? <ServicePage entry={props.entry} /> : <ArticlePage entry={props.entry} />}

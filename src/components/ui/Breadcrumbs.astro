@@ -1,0 +1,28 @@
+---
+import { ChevronRight } from '@lucide/astro';
+interface Props {
+  items: { name: string; url: string }[];
+}
+const { items } = Astro.props;
+---
+
+<nav aria-label="Naršymo kelias" class="text-sm">
+  <ol class="flex flex-wrap items-center gap-1.5 text-muted">
+    {
+      items.map((item, i) => (
+        <li class="inline-flex items-center gap-1.5">
+          {i > 0 && <ChevronRight size={14} aria-hidden="true" class="opacity-60" />}
+          {i < items.length - 1 ? (
+            <a href={item.url} class="transition hover:text-link">
+              {item.name}
+            </a>
+          ) : (
+            <span class="font-semibold text-text" aria-current="page">
+              {item.name}
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>

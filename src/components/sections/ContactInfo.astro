@@ -1,0 +1,63 @@
+---
+import { CalendarCheck, Mail, MapPin, Phone } from '@lucide/astro';
+import SocialIcon from '@/components/ui/SocialIcon.astro';
+import { mailHref, site, telHref } from '@/config/site';
+
+const items = [
+  { icon: Phone, label: 'Telefonas', value: site.phoneDisplay, href: telHref },
+  { icon: Mail, label: 'El. paštas', value: site.email, href: mailHref },
+  { icon: MapPin, label: 'Adresai', value: site.locations.map((l) => l.city).join(' · '), href: '/kontaktai#adresai' },
+  { icon: CalendarCheck, label: 'Darbo laikas', value: 'Tik iš anksto susitarus', href: undefined },
+];
+---
+
+<ul class="mt-8 space-y-4">
+  {
+    items.map((it) => (
+      <li>
+        {it.href ? (
+          <a href={it.href} class="group flex items-center gap-4">
+            <span class="icon-bubble">
+              <it.icon size={20} aria-hidden="true" />
+            </span>
+            <span>
+              <span class="block text-sm text-muted">{it.label}</span>
+              <span class="block font-bold text-text group-hover:text-link">{it.value}</span>
+            </span>
+          </a>
+        ) : (
+          <div class="flex items-center gap-4">
+            <span class="icon-bubble">
+              <it.icon size={20} aria-hidden="true" />
+            </span>
+            <span>
+              <span class="block text-sm text-muted">{it.label}</span>
+              <span class="block font-bold text-text">{it.value}</span>
+            </span>
+          </div>
+        )}
+      </li>
+    ))
+  }
+</ul>
+
+<div class="mt-8 flex flex-wrap gap-2">
+  {
+    [
+      { name: 'Messenger', url: site.chat.messenger, color: '#0866FF' },
+      { name: 'WhatsApp', url: site.chat.whatsapp, color: '#25D366' },
+      { name: 'Viber', url: site.chat.viber, color: '#7360F2' },
+    ].map((c) => (
+      <a
+        href={c.url}
+        target={c.name === 'Viber' ? undefined : '_blank'}
+        rel="noopener"
+        class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-px hover:opacity-90"
+        style={`background:${c.color}`}
+      >
+        <SocialIcon name={c.name} size={16} />
+        {c.name}
+      </a>
+    ))
+  }
+</div>

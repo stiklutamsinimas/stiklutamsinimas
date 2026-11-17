@@ -1,0 +1,92 @@
+---
+/**
+ * Instagram įrašai. Su raktu (INSTAGRAM_ACCESS_TOKEN) – tikri naujausi įrašai,
+ * be jo – mūsų darbų nuotraukos su nuoroda į Instagram profilį.
+ */
+import { Image, getImage } from 'astro:assets';
+import SocialIcon from '@/components/ui/SocialIcon.astro';
+import { site } from '@/config/site';
+import { image } from '@/data/galleries';
+import { getInstagramPosts } from '@/lib/instagram';
+
+const igUrl = site.social.find((s) => s.name === 'Instagram')!.url;
+const posts = await getInstagramPosts(8);
+
+const live = (
+  await Promise.all(
+    posts.map(async (p) => {
+      try {
+        const img = await getImage({ src: p.image, inferSize: true, width: 480, height: 480, fit: 'cover', format: 'webp', quality: 75 });
+        return { ...p, src: img.src };
+      } catch {
+        return null;
+      }
+    }),
+  )
+).filter((p): p is NonNullable<typeof p> => p !== null);
+
+const fallback = [
+  'darbai/audi-q7-tamsinti-galiniai-stiklai',
+  'pleveles/sk-20/sk-20-saulelydis',
+  'veidrodines/fasado-stiklu-klijavimas-keltuvu',
+  'zibintai/range-rover-tamsinti-galiniai-zibintai',
+  'darbai/jaguar-f-pace-raudonas',
+  'matines/laukiamojo-pertvaru-matinimas',
+  'reklama/spauda/pastato-reklaminis-baneris',
+  'darbai/dodge-challenger-tamsinti-langai',
+].map(image);
+const others = site.social.filter((s) => s.name !== 'Instagram');
+---
+
+<div>
+  <div class="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+    <a href={igUrl} target="_blank" rel="noopener me" class="group inline-flex items-center gap-4">
+      <span class="grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-[#feda75] via-[#d62976] to-[#4f5bd5] text-white shadow-lg">
+        <SocialIcon name="Instagram" size={28} />
+      </span>
+      <span>
+        <span class="block text-xl font-extrabold text-text group-hover:text-link">@{site.instagramHandle}</span>
+        <span class="block text-sm text-muted">Naujausi darbai – Instagram</span>
+      </span>
+    </a>
+    <div class="flex flex-wrap gap-2">
+      <a href={igUrl} target="_blank" rel="noopener me" class="btn btn-primary">
+        <SocialIcon name="Instagram" size={17} /> Sekti
+      </a>
+      {
+        others.map((s) => (
+          <a href={s.url} target="_blank" rel="noopener me" class="btn btn-outline !px-4" aria-label={s.name} title={s.name}>
+            <SocialIcon name={s.name} size={17} />
+            <span class="max-sm:sr-only">{s.name}</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+
+  <ul class="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
+    {
+      live.length > 0
+        ? live.map((p) => (
+            <li>
+              <a href={p.permalink} target="_blank" rel="noopener" class="group relative block aspect-square overflow-hidden rounded-2xl bg-bg-2">
+                <img src={p.src} alt={p.caption || 'Instagram įrašas'} width="480" height="480" loading="lazy" decoding="async" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                <span class="absolute inset-0 grid place-items-center bg-[#030b11]/0 text-white opacity-0 transition group-hover:bg-[#030b11]/40 group-hover:opacity-100">
+                  <SocialIcon name="Instagram" size={28} />
+                </span>
+              </a>
+            </li>
+          ))
+        : fallback.map((img) => (
+            <li>
+              <a href={igUrl} target="_blank" rel="noopener" class="group relative block aspect-square overflow-hidden rounded-2xl bg-bg-2" aria-label={`${img.alt} – daugiau Instagram`}>
+                <Image src={img.src} alt={img.alt} widths={[300, 480]} sizes="(min-width: 640px) 25vw, 50vw" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" layout="none" />
+                <span class="absolute inset-0 grid place-items-center bg-[#030b11]/0 text-white opacity-0 transition group-hover:bg-[#030b11]/40 group-hover:opacity-100">
+                  <SocialIcon name="Instagram" size={28} />
+                </span>
+              </a>
+            </li>
+          ))
+    }
+  </ul>
+</div>

@@ -1,0 +1,120 @@
+---
+/**
+ * Darbų galerija. Kelios grupės → skirtukai (pvz. Matinės / Veidrodinės / Dekoravimas).
+ * Paspaudus nuotrauką atsidaro bendra peržiūra (Lightbox.astro).
+ */
+import { Image, getImage } from 'astro:assets';
+import { Images, ZoomIn } from '@lucide/astro';
+import type { GalleryImage } from '@/data/galleries';
+
+interface Group {
+  id: string;
+  title: string;
+  text?: string;
+  images: GalleryImage[];
+}
+interface Props {
+  groups: Group[];
+  /** Kiek nuotraukų rodyti iš karto kiekvienoje grupėje */
+  limit?: number;
+}
+const { groups: rawGroups, limit = 13 } = Astro.props;
+
+// Kompiuteryje 4 stulpeliai, pirma nuotrauka 2×2 – rodome tiek, kad eilutės būtų pilnos
+const fitRows = (n: number) => (n >= 5 ? n - ((n - 1) % 4) : n);
+
+const groups = await Promise.all(
+  rawGroups
+    .filter((g) => g.images.length > 0)
+    .map(async (g) => {
+      const items = await Promise.all(
+        g.images.map(async (img) => ({
+          ...img,
+          large: (await getImage({ src: img.src, width: 1600, format: 'webp', quality: 80 })).src,
+        })),
+      );
+      const count = Math.min(limit, fitRows(items.length));
+      return { ...g, items, visible: items.slice(0, count), featured: count >= 5 };
+    }),
+);
+const uid = `g${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="gallery-tabs" data-tabs>
+  {
+    groups.length > 1 && (
+      <div class="mb-8 flex flex-wrap gap-2" role="tablist" aria-label="Darbų kategorijos">
+        {groups.map((g, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`${uid}-tab-${g.id}`}
+            aria-controls={`${uid}-panel-${g.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            class="chip"
+            data-tab={g.id}
+          >
+            {g.title}
+            <span class="rounded-full bg-black/10 px-2 py-0.5 text-xs dark:bg-white/10">{g.items.length}</span>
+          </button>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    groups.map((g, gi) => (
+      <div
+        id={`${uid}-panel-${g.id}`}
+        role={groups.length > 1 ? 'tabpanel' : undefined}
+        aria-labelledby={groups.length > 1 ? `${uid}-tab-${g.id}` : undefined}
+        data-panel={g.id}
+        data-lb-root
+        hidden={gi > 0}
+      >
+        {g.text && <p class="mb-6 max-w-3xl text-muted">{g.text}</p>}
+        <ul class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
+          {g.visible.map((img, i) => (
+            <li class:list={[i === 0 && g.featured && 'col-span-2 row-span-2']}>
+              <button
+                type="button"
+                class="group relative block aspect-[4/3] h-full w-full overflow-hidden rounded-2xl bg-bg-2"
+                data-lb-open={i}
+                aria-label={`Padidinti: ${img.alt}`}
+              >
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  widths={[360, 540, 820]}
+                  sizes={i === 0 && g.featured ? '(min-width: 1024px) 600px, 100vw' : '(min-width: 1024px) 290px, (min-width: 768px) 33vw, 50vw'}
+                  class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  layout="none"
+                />
+                <span class="absolute inset-0 grid place-items-center bg-[#030b11]/0 opacity-0 transition group-hover:bg-[#030b11]/35 group-hover:opacity-100">
+                  <ZoomIn size={28} class="text-white drop-shadow" aria-hidden="true" />
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+        {g.items.length > g.visible.length && (
+          <div class="mt-7 flex justify-center">
+            <button type="button" class="btn btn-outline" data-lb-open={g.visible.length}>
+              <Images size={18} aria-hidden="true" />
+              Žiūrėti visas nuotraukas ({g.items.length})
+            </button>
+          </div>
+        )}
+        <template data-lb-items>
+          {g.items.map((img) => (
+            <span data-src={img.large} data-alt={img.alt} />
+          ))}
+        </template>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  import '@/scripts/tabs';
+</script>

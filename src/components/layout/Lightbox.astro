@@ -1,0 +1,80 @@
+---
+/**
+ * Vienas bendras nuotraukų peržiūros langas visai svetainei.
+ * Galerija: elementas su [data-lb-root], jo viduje <template data-lb-items> su <span data-src data-alt>
+ * ir mygtukai [data-lb-open="indeksas"].
+ */
+import { ChevronLeft, ChevronRight, X } from '@lucide/astro';
+---
+
+<dialog id="lightbox" class="lightbox m-auto max-h-none max-w-none bg-transparent p-0" aria-label="Nuotraukų peržiūra">
+  <div class="lightbox-stage relative flex h-dvh w-screen items-center justify-center p-4 sm:p-12">
+    <figure class="flex max-h-full max-w-6xl flex-col items-center">
+      <img class="lightbox-img max-h-[78dvh] w-auto rounded-2xl object-contain shadow-2xl" src="data:," alt="" decoding="async" />
+      <figcaption class="lightbox-caption mt-4 max-w-2xl text-center text-sm text-[#cfe0ec]"></figcaption>
+    </figure>
+    <button type="button" class="lightbox-close absolute top-4 right-4 grid size-12 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20" aria-label="Uždaryti">
+      <X size={22} aria-hidden="true" />
+    </button>
+    <button type="button" class="lightbox-prev absolute top-1/2 left-2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20 sm:left-6" aria-label="Ankstesnė nuotrauka">
+      <ChevronLeft size={24} aria-hidden="true" />
+    </button>
+    <button type="button" class="lightbox-next absolute top-1/2 right-2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20 sm:right-6" aria-label="Kita nuotrauka">
+      <ChevronRight size={24} aria-hidden="true" />
+    </button>
+    <p class="lightbox-counter absolute bottom-4 left-1/2 -translate-x-1/2 text-xs font-bold tracking-[0.2em] text-[#94acbd]"></p>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
+  const img = dialog?.querySelector<HTMLImageElement>('.lightbox-img');
+  const caption = dialog?.querySelector('.lightbox-caption');
+  const counter = dialog?.querySelector('.lightbox-counter');
+  let items: { src: string; alt: string }[] = [];
+  let current = 0;
+
+  const show = (i: number) => {
+    if (!img || !caption || !counter || items.length === 0) return;
+    current = (i + items.length) % items.length;
+    const item = items[current]!;
+    img.src = item.src;
+    img.alt = item.alt;
+    caption.textContent = item.alt;
+    counter.textContent = items.length > 1 ? `${current + 1} / ${items.length}` : '';
+    dialog?.querySelectorAll<HTMLElement>('.lightbox-prev, .lightbox-next').forEach((b) => (b.hidden = items.length < 2));
+  };
+
+  document.addEventListener('click', (e) => {
+    const trigger = (e.target as Element).closest<HTMLElement>('[data-lb-open]');
+    if (!trigger || !dialog) return;
+    const root = trigger.closest<HTMLElement>('[data-lb-root]');
+    const tpl = root?.querySelector<HTMLTemplateElement>('template[data-lb-items]');
+    if (!tpl) return;
+    e.preventDefault();
+    items = Array.from(tpl.content.querySelectorAll<HTMLElement>('span')).map((s) => ({
+      src: s.dataset.src ?? '',
+      alt: s.dataset.alt ?? '',
+    }));
+    show(Number(trigger.dataset.lbOpen ?? 0));
+    dialog.showModal();
+  });
+
+  dialog?.querySelector('.lightbox-close')?.addEventListener('click', () => dialog.close());
+  dialog?.querySelector('.lightbox-prev')?.addEventListener('click', () => show(current - 1));
+  dialog?.querySelector('.lightbox-next')?.addEventListener('click', () => show(current + 1));
+  dialog?.addEventListener('click', (e) => {
+    const t = e.target as Element;
+    if (t === dialog || t.classList.contains('lightbox-stage')) dialog.close();
+  });
+  dialog?.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
+  });
+  let startX = 0;
+  dialog?.addEventListener('touchstart', (e) => (startX = e.touches[0]?.clientX ?? 0), { passive: true });
+  dialog?.addEventListener('touchend', (e) => {
+    const dx = (e.changedTouches[0]?.clientX ?? 0) - startX;
+    if (Math.abs(dx) > 50) show(current + (dx < 0 ? 1 : -1));
+  });
+</script>

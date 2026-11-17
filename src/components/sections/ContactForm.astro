@@ -1,0 +1,110 @@
+---
+/**
+ * Užklausos forma be serverio: paspaudus atidaromas WhatsApp arba el. pašto langas su jau surašyta žinute.
+ * Svetainėje niekas nesaugoma – nėra ką nulaužti ir nėra šlamšto. Ateityje galima prijungti serverinį siuntimą.
+ */
+import { ArrowRight } from '@lucide/astro';
+import SocialIcon from '@/components/ui/SocialIcon.astro';
+import { site } from '@/config/site';
+import { getServices } from '@/lib/content';
+
+interface Props {
+  /** Iš anksto pasirinkta paslauga */
+  selected?: string;
+}
+const { selected } = Astro.props;
+const services = await getServices();
+
+const field =
+  'mt-2 block w-full rounded-xl border border-border bg-bg px-4 py-3 text-text placeholder:text-muted/70 transition focus:border-primary focus:ring-4 focus:ring-primary/15 focus:outline-none';
+const label = 'text-sm font-bold text-text';
+---
+
+<form
+  class="contact-form card grid gap-5 p-6 sm:grid-cols-2 sm:p-8"
+  data-phone={site.phone.replace('+', '')}
+  data-email={site.email}
+  novalidate
+>
+  <div>
+    <label for="f-name" class={label}>Vardas *</label>
+    <input id="f-name" name="vardas" type="text" autocomplete="name" required maxlength="80" class={field} placeholder="Jūsų vardas" />
+  </div>
+  <div>
+    <label for="f-contact" class={label}>Telefonas arba el. paštas *</label>
+    <input id="f-contact" name="kontaktas" type="text" autocomplete="tel" required maxlength="120" class={field} placeholder="+370 …" />
+  </div>
+  <div>
+    <label for="f-service" class={label}>Paslauga</label>
+    <select id="f-service" name="paslauga" class={field}>
+      {
+        services.map((s) => (
+          <option value={s.data.title} selected={selected ? s.id === selected : s.id === 'automobilio-stiklu-tamsinimas'}>
+            {s.data.title}
+          </option>
+        ))
+      }
+      <option value="Kita">Kita</option>
+    </select>
+  </div>
+  <div>
+    <label for="f-city" class={label}>Miestas</label>
+    <select id="f-city" name="miestas" class={field}>
+      {site.locations.map((l) => <option value={l.city}>{l.city}</option>)}
+      <option value="Kitas miestas (mobilus tamsinimas)">Kitas miestas</option>
+    </select>
+  </div>
+  <div class="sm:col-span-2">
+    <label for="f-message" class={label}>Žinutė *</label>
+    <textarea id="f-message" name="zinute" rows="4" required maxlength="2000" class={field} placeholder="Pvz., VW Passat 2018 – norėčiau tamsinti galinius langus"></textarea>
+  </div>
+
+  <p class="form-error hidden text-sm font-semibold text-red-600 sm:col-span-2 dark:text-red-400" role="alert">
+    Užpildykite vardą, kontaktą ir žinutę.
+  </p>
+
+  <div class="flex flex-col gap-3 sm:col-span-2 sm:flex-row">
+    <button type="submit" value="email" class="btn btn-primary">
+      Siųsti užklausą <ArrowRight size={18} aria-hidden="true" />
+    </button>
+    <button type="submit" value="whatsapp" class="btn border border-[#25d366]/50 text-[#128c4a] hover:bg-[#25d366]/10 dark:text-[#4ade80]">
+      <SocialIcon name="WhatsApp" size={18} /> Siųsti per WhatsApp
+    </button>
+  </div>
+  <p class="text-xs leading-relaxed text-muted sm:col-span-2">
+    Paspaudus atsidarys jūsų el. pašto programa arba WhatsApp su jau parašyta žinute – liks tik ją išsiųsti. Duomenys svetainėje
+    nesaugomi.
+  </p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('.contact-form').forEach((form) => {
+    const error = form.querySelector('.form-error');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const get = (k: string) => String(data.get(k) ?? '').trim();
+      if (!get('vardas') || !get('kontaktas') || !get('zinute')) {
+        error?.classList.remove('hidden');
+        form.querySelector<HTMLElement>(':invalid')?.focus();
+        return;
+      }
+      error?.classList.add('hidden');
+      const text = [
+        `Sveiki, mano vardas ${get('vardas')}.`,
+        `Paslauga: ${get('paslauga')}`,
+        `Miestas: ${get('miestas')}`,
+        `Kontaktas: ${get('kontaktas')}`,
+        '',
+        get('zinute'),
+      ].join('\n');
+      const via = (e.submitter as HTMLButtonElement | null)?.value ?? 'email';
+      if (via === 'whatsapp') {
+        window.open(`https://wa.me/${form.dataset.phone}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+      } else {
+        const subject = `Užklausa: ${get('paslauga')} – ${get('vardas')}`;
+        window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
+      }
+    });
+  });
+</script>

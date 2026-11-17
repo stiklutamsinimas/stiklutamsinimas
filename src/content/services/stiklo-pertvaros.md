@@ -3,6 +3,7 @@ title: Stiklo pertvaros
 category: pastatams
 order: 4
 icon: panels
+featured: false
 
 seoTitle: Stiklo pertvaros ir stumdomos durys | stiklutamsinimas.eu
 seoDescription: Metalo ir stiklo (loft) pertvaros ir stumdomos stiklo durys – modernūs sprendimai namams, biurams ir verslo patalpoms. Daugiau šviesos ir erdvės.
@@ -11,8 +12,8 @@ h1: Stiklo pertvaros
 lead: Metalo ir stiklo (loft) pertvaros bei stumdomos stiklo durys padalija erdvę neprarandant šviesos. Pritaikome pagal jūsų erdvę ir įrengiame visoje Lietuvoje.
 excerpt: Loft tipo metalo ir stiklo pertvaros bei stumdomos stiklo durys namams ir biurams.
 
-cover: ../../assets/pertvaros/metalo-stiklo-pertvara-biure.jpg
-coverAlt: Metalo ir stiklo pertvara, atskirianti biuro laukiamąjį
+cover: ../../assets/matines/mansardos-pertvaros-matinimas.jpg
+coverAlt: Mansardos stiklinė pertvara su matine plėvele
 
 highlights:
   - Metalo ir stiklo (loft) pertvaros
@@ -33,20 +34,6 @@ benefits:
   - icon: ruler
     title: Pagal išmatavimus
     text: Kiekvieną sprendimą pritaikome konkrečiai erdvei ir jūsų pageidavimams.
-
-gallery:
-  - src: ../../assets/pertvaros/metalo-stiklo-pertvara-biure.jpg
-    alt: Metalo ir stiklo pertvara biure
-  - src: ../../assets/pertvaros/loft-stiklo-pertvara-namuose.jpg
-    alt: Loft stiliaus stiklo pertvara namuose prie laiptų
-  - src: ../../assets/pertvaros/stiklo-pertvaru-montavimas.jpg
-    alt: Biuro stiklo pertvarų montavimas
-  - src: ../../assets/pertvaros/stiklo-pertvara-parduotuveje.jpg
-    alt: Stiklo pertvara komercinėje patalpoje
-  - src: ../../assets/pertvaros/stumdomos-stiklo-durys.jpg
-    alt: Stumdomos matinio stiklo durys mansardoje
-  - src: ../../assets/pertvaros/spalvoto-stiklo-loft-pertvara.jpg
-    alt: Loft stiliaus pertvara su spalvoto stiklo intarpais montavimo metu
 
 faq:
   - q: Ar stiklo pertvarą galima derinti su matine plėvele?

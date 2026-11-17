@@ -1,0 +1,36 @@
+---
+/** Keturi adresai su Google Maps žemėlapiais */
+import { CalendarCheck, Navigation } from '@lucide/astro';
+import { mapsEmbedUrl, mapsUrl, site } from '@/config/site';
+---
+
+<ul class="grid gap-5 md:grid-cols-2">
+  {
+    site.locations.map((loc, i) => (
+      <li class="card reveal flex flex-col overflow-hidden" style={`transition-delay:${i * 70}ms`}>
+        <div class="relative aspect-[16/9] bg-bg-2">
+          <iframe
+            src={mapsEmbedUrl(loc)}
+            title={`Žemėlapis: ${loc.street}, ${loc.city}`}
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            class="absolute inset-0 h-full w-full border-0 dark:[filter:invert(0.9)_hue-rotate(180deg)_brightness(0.95)_contrast(0.9)]"
+            allowfullscreen
+          />
+        </div>
+        <div class="flex flex-1 flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div>
+            <h3 class="text-xl">{loc.city}</h3>
+            <p class="mt-1 text-muted">{loc.street}</p>
+            <p class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-link">
+              <CalendarCheck size={15} aria-hidden="true" /> Tik iš anksto susitarus
+            </p>
+          </div>
+          <a href={mapsUrl(loc)} target="_blank" rel="noopener" class="btn btn-outline shrink-0 !px-4 !py-2.5 text-sm">
+            <Navigation size={16} aria-hidden="true" /> Maršrutas
+          </a>
+        </div>
+      </li>
+    ))
+  }
+</ul>

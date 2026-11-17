@@ -3,6 +3,7 @@ title: Žibintų poliravimas
 category: automobiliams
 order: 5
 icon: sparkles
+featured: true
 
 seoTitle: Žibintų poliravimas – skaidrūs žibintai | stiklutamsinimas.eu
 seoDescription: Profesionalus automobilių žibintų poliravimas – pašaliname pageltimą, matiškumą ir smulkius įbrėžimus. Šviesesnis kelias naktį ir tvarkinga išvaizda.
@@ -12,7 +13,7 @@ lead: Laikui bėgant plastikiniai žibintų gaubtai pagelsta ir tampa matiniai �
 excerpt: Pageltusių ir matinių žibintų atnaujinimas – geresnis matomumas naktį.
 
 cover: ../../assets/poliravimas/bmw-5-nupoliruoti-zibintai.jpg
-coverAlt: BMW 5 serijos automobilis su nupoliruotais priekiniais žibintais
+coverAlt: BMW 5 serijos nupoliruoti priekiniai žibintai
 
 highlights:
   - Pašaliname pageltimą ir matiškumą
@@ -44,21 +45,9 @@ steps:
   - title: Rezultatas
     text: Žibintai vėl skaidrūs – šviesa kelyje stipresnė ir tolygesnė.
 
-gallery:
-  - src: ../../assets/poliravimas/zibintu-poliravimas-pries-ir-po.jpg
-    alt: Žibintų poliravimas – pageltęs žibintas prieš ir skaidrus po poliravimo
-  - src: ../../assets/poliravimas/pageltes-zibintas-pries-poliravima.jpg
-    alt: Pageltęs, matinis žibintas prieš poliravimą
-  - src: ../../assets/poliravimas/honda-zibintu-poliravimas.jpg
-    alt: Honda žibintų poliravimas
-  - src: ../../assets/poliravimas/nupoliruoti-zibintai.jpg
-    alt: Nupoliruoti skaidrūs automobilio žibintai
-  - src: ../../assets/poliravimas/bmw-5-zibintai-pries-poliravima.jpg
-    alt: BMW 5 serijos žibintai prieš poliravimą
-  - src: ../../assets/poliravimas/bmw-5-nupoliruoti-zibintai.jpg
-    alt: BMW 5 serijos žibintai po poliravimo
-  - src: ../../assets/poliravimas/bmw-zibinto-poliravimas.jpg
-    alt: BMW žibinto poliravimo rezultatas iš arti
+galleries:
+  - folder: poliravimas
+    title: Atlikti darbai
 
 faq:
   - q: Kodėl žibintai pagelsta?

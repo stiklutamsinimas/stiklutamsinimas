@@ -2,74 +2,93 @@ import { defineCollection, reference } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { iconNames } from './lib/icon-names';
+import { galleryFolders } from './data/gallery-folders';
 
 /**
- * PASLAUGOS – kiekvienas failas src/content/services/*.md yra atskiras puslapis.
- * Failo pavadinimas = URL adresas (pvz. langu-tamsinimas.md → /langu-tamsinimas).
- * Jei laukas neteisingas ar per ilgas – svetainė nesusikompiliuos ir parodys klaidą,
- * todėl klaidos nepateks į gyvą svetainę.
+ * PASLAUGOS – src/content/services/*.md. Failo pavadinimas = URL (langu-tamsinimas.md → /langu-tamsinimas).
+ * Jei laukas neteisingas – svetainė nesusikompiliuos ir parodys klaidą, todėl klaidos nepateks į internetą.
  */
 const services = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/services' }),
   schema: ({ image }) =>
     z.object({
-      /** Trumpas pavadinimas (meniu, kortelės) */
       title: z.string(),
       category: z.enum(['automobiliams', 'pastatams', 'reklama']),
-      /** Rikiavimas kategorijos viduje */
       order: z.number(),
       icon: z.enum(iconNames),
+      /** Pagrindinė paslauga – rodoma didesne kortele */
+      featured: z.boolean().default(false),
 
-      /** <title> – rekomenduojama iki 60 simbolių */
       seoTitle: z.string().min(20).max(65),
-      /** Meta aprašymas – rekomenduojama 120–160 simbolių */
       seoDescription: z.string().min(80).max(165),
 
       h1: z.string(),
       lead: z.string(),
-      /** Trumpas aprašymas paslaugų kortelėms */
-      excerpt: z.string().max(140),
+      excerpt: z.string().max(150),
 
       cover: image(),
       coverAlt: z.string(),
 
       highlights: z.array(z.string()).default([]),
-      benefits: z
-        .array(z.object({ title: z.string(), text: z.string(), icon: z.enum(iconNames) }))
-        .default([]),
-      steps: z.array(z.object({ title: z.string(), text: z.string() })).optional(),
+      benefits: z.array(z.object({ title: z.string(), text: z.string(), icon: z.enum(iconNames) })).default([]),
 
-      prices: z
-        .array(z.object({ label: z.string(), value: z.string(), note: z.string().optional() }))
-        .optional(),
-      /** Mažiausia kaina eurais – schema.org Offer duomenims */
+      prices: z.array(z.object({ label: z.string(), value: z.string(), note: z.string().optional() })).optional(),
       priceFrom: z.number().optional(),
 
-      gallery: z.array(z.object({ src: image(), alt: z.string() })).default([]),
+      /** Galerijos – nuotraukos imamos iš src/assets/<folder> */
+      galleries: z
+        .array(z.object({ title: z.string().optional(), folder: z.enum(galleryFolders), text: z.string().optional() }))
+        .default([]),
+      /** Plėvelių pavyzdžiai (automobiliams) */
+      films: z.enum(['visi', 'priekiniai', 'galiniai']).optional(),
+      /** Prieš ir po palyginimai */
+      beforeAfter: z
+        .array(z.object({ title: z.string(), text: z.string().optional(), before: z.string(), after: z.string() }))
+        .default([]),
+
       faq: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
       related: z.array(reference('services')).default([]),
     }),
 });
 
 /**
- * TINKLARAŠTIS – paruoštas ateičiai. Įrašai su `draft: true` nepublikuojami.
- * Kai atsiras bent vienas publikuotas įrašas, automatiškai atsiras
- * /tinklarastis puslapis ir nuoroda meniu.
+ * NAUJIENOS (straipsniai) – src/content/naujienos/*.md.
+ * Rašomi per administravimo puslapį /admin arba tiesiog sukuriant .md failą.
+ * Straipsnio adresas = failo pavadinimas (kaip senoje svetainėje, pvz. /kaip-tamsinti-automobilio-stiklus).
  */
-const blog = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
+const naujienos = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/naujienos' }),
   schema: ({ image }) =>
     z.object({
-      title: z.string(),
-      seoTitle: z.string().max(65).optional(),
-      description: z.string().min(80).max(165),
+      title: z.string().min(5).max(120),
+      seoTitle: z.string().max(70).optional(),
+      description: z.string().min(40).max(320),
       pubDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
       cover: image().optional(),
       coverAlt: z.string().optional(),
+      tags: z.array(z.string()).default([]),
       draft: z.boolean().default(false),
-      services: z.array(reference('services')).default([]),
     }),
 });
 
-export const collections = { services, blog };
+/**
+ * PARDUOTUVĖ – paruošta ateičiai (įjungiama src/config/site.ts → features.shop).
+ */
+const produktai = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/produktai' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string().max(320),
+      price: z.number().nonnegative(),
+      oldPrice: z.number().nonnegative().optional(),
+      category: z.string(),
+      images: z.array(image()).min(1),
+      inStock: z.boolean().default(true),
+      sku: z.string().optional(),
+      draft: z.boolean().default(true),
+    }),
+});
+
+export const collections = { services, naujienos, produktai };

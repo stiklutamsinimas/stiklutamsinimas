@@ -1,0 +1,82 @@
+---
+import { Check } from '@lucide/astro';
+import { site } from '@/config/site';
+
+/**
+ * Orientacinės kainos. Automobilių kainos – iš senos svetainės (nuo 120 € / 140 €).
+ * Pakeitus kainas čia, pakeiskite jas ir src/content/services/automobilio-stiklu-tamsinimas.md
+ */
+const plans = [
+  {
+    name: 'Sedanas, hečbekas',
+    sub: 'Lengvasis automobilis',
+    price: '120 €',
+    prefix: 'nuo',
+    features: ['Galinis ir galiniai šoniniai langai', 'Tamsumas pagal jūsų pageidavimą', 'Atlikimas per 2–3 valandas', `${site.warrantyYears} metų ar ilgesnė garantija`],
+    href: '/automobilio-stiklu-tamsinimas',
+    highlight: false,
+  },
+  {
+    name: 'Universalas, visureigis',
+    sub: 'Universalai, SUV, mikroautobusai',
+    price: '140 €',
+    prefix: 'nuo',
+    badge: 'Universalams ir SUV',
+    features: ['Galinis ir galiniai šoniniai langai', 'Solar Screen, Global, Ultra Vision plėvelės', 'Tvarkingas darbas – be burbulų', `${site.warrantyYears} metų ar ilgesnė garantija`],
+    href: '/automobilio-stiklu-tamsinimas',
+    highlight: true,
+  },
+  {
+    name: 'Pastatams',
+    sub: 'Namai, biurai, vitrinos',
+    price: 'pagal plotą',
+    prefix: '',
+    features: ['Saulės kontrolės ir veidrodinės plėvelės', 'Matinės ir dekoratyvinės plėvelės', 'Atvykstame ir klijuojame vietoje', 'Tvarkingas darbas be remonto'],
+    href: '/langu-tamsinimas',
+    highlight: false,
+  },
+];
+---
+
+<ul class="grid items-stretch gap-5 lg:grid-cols-3">
+  {
+    plans.map((p, i) => (
+      <li
+        class:list={[
+          'card reveal relative flex flex-col p-7',
+          p.highlight && 'border-2 !border-primary shadow-[0_24px_50px_-28px_var(--c-primary)] lg:-translate-y-2',
+        ]}
+        style={`transition-delay:${i * 80}ms`}
+      >
+        {p.badge && (
+          <span class="absolute -top-3.5 left-7 rounded-full bg-primary px-3 py-1 text-xs font-bold text-on-primary">{p.badge}</span>
+        )}
+        <h3 class="text-xl">{p.name}</h3>
+        <p class="mt-1 text-sm text-muted">{p.sub}</p>
+        <p class="mt-6 flex items-baseline gap-2">
+          {p.prefix && <span class="text-muted">{p.prefix}</span>}
+          <span class:list={['font-extrabold tracking-tight text-text', p.prefix ? 'text-5xl' : 'text-3xl']}>{p.price}</span>
+        </p>
+        <ul class="mt-6 flex-1 space-y-3">
+          {p.features.map((f) => (
+            <li class="flex gap-3 text-[0.95rem] text-text">
+              <Check size={19} class="mt-0.5 shrink-0 text-link" aria-hidden="true" />
+              {f}
+            </li>
+          ))}
+        </ul>
+        <div class="mt-8 grid gap-2">
+          <a href="#kontaktai" class:list={['btn w-full', p.highlight ? 'btn-primary' : 'btn-outline']}>
+            Užsakyti
+          </a>
+          <a href={p.href} class="text-center text-sm font-semibold text-link hover:underline">
+            Plačiau apie paslaugą
+          </a>
+        </div>
+      </li>
+    ))
+  }
+</ul>
+<p class="mt-6 text-sm text-muted">
+  Galutinė kaina priklauso nuo automobilio modelio, stiklų ploto ir pasirinktos plėvelės – tikslią kainą pasakysime iš anksto.
+</p>

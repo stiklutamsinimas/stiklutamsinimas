@@ -1,107 +1,67 @@
 ---
-import { Mail, MessageCircle, Phone } from '@lucide/astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
-import ContactForm from '@/components/ContactForm.astro';
-import Locations from '@/components/Locations.astro';
+import ContactInfo from '@/components/sections/ContactInfo.astro';
+import ContactForm from '@/components/sections/ContactForm.astro';
+import Locations from '@/components/sections/Locations.astro';
+import GoogleReviews from '@/components/sections/GoogleReviews.astro';
 import SocialIcon from '@/components/ui/SocialIcon.astro';
-import { mailHref, site, telHref } from '@/config/site';
+import { site } from '@/config/site';
 import { breadcrumbSchema } from '@/lib/schema';
 
 const crumbs = [
   { name: 'Pradžia', url: '/' },
   { name: 'Kontaktai', url: '/kontaktai' },
 ];
-
-const channels = [
-  { icon: Phone, label: 'Telefonas', value: site.phoneDisplay, href: telHref, external: false, color: 'text-brand-700 bg-brand-50' },
-  { icon: MessageCircle, label: 'WhatsApp', value: 'Rašyti žinutę', href: site.whatsapp, external: true, color: 'text-[#128c4a] bg-[#25d366]/10' },
-  { icon: MessageCircle, label: 'Viber', value: 'Rašyti žinutę', href: site.viber, external: false, color: 'text-[#7360f2] bg-[#7360f2]/10' },
-  { icon: Mail, label: 'El. paštas', value: site.email, href: mailHref, external: false, color: 'text-brand-700 bg-brand-50' },
-];
 ---
 
 <BaseLayout
   title="Kontaktai – stiklų tamsinimas | stiklutamsinimas.eu"
-  description={`Susisiekite: ${site.phoneDisplay}, ${site.email}, WhatsApp ar Viber. Adresai Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje.`}
+  description={`Susisiekite: ${site.phoneDisplay}, ${site.email}, Messenger, WhatsApp ar Viber. Adresai Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje.`}
   schema={[breadcrumbSchema(crumbs)]}
 >
-  <section class="on-dark relative isolate overflow-hidden bg-ink-950">
-    <div class="absolute -top-40 -right-40 -z-10 size-[36rem] rounded-full bg-brand-600/20 blur-3xl"></div>
-    <div class="container-site pt-8 pb-16 lg:pt-10 lg:pb-20">
+  <section class="relative isolate overflow-hidden">
+    <div class="pointer-events-none absolute -top-48 -right-48 -z-10 size-[40rem] rounded-full border-[56px] border-logo/[0.06]"></div>
+    <div class="container-site pt-8 pb-20">
       <Breadcrumbs items={crumbs} />
-      <div class="reveal mt-10">
-        <SectionHeading
-          as="h1"
-          eyebrow="Kontaktai"
-          title="Susisiekite su mumis"
-          lead="Greičiausia – paskambinti arba parašyti per WhatsApp. Atsiųskite automobilio modelį ar langų nuotrauką ir gausite pasiūlymą."
-          dark
-        />
+      <div class="mt-10 grid gap-12 lg:grid-cols-12">
+        <div class="lg:col-span-5">
+          <SectionHeading
+            as="h1"
+            eyebrow="Kontaktai"
+            title="Susisiekite"
+            lead="Paskambinkite, parašykite arba užpildykite formą – pateiksime pasiūlymą ir suderinsime laiką. Darbai atliekami tik iš anksto susitarus."
+          />
+          <ContactInfo />
+          <ul class="mt-6 flex flex-wrap gap-2" aria-label="Socialiniai tinklai">
+            {
+              site.social.map((s) => (
+                <li>
+                  <a href={s.url} target="_blank" rel="noopener me" class="chip">
+                    <SocialIcon name={s.name} size={16} /> {s.name}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div id="uzklausa" class="lg:col-span-7"><ContactForm /></div>
       </div>
     </div>
   </section>
 
-  <section class="container-site -mt-8 pb-4">
-    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {
-        channels.map((c) => (
-          <li>
-            <a
-              href={c.href}
-              target={c.external ? '_blank' : undefined}
-              rel={c.external ? 'noopener' : undefined}
-              class="card group flex h-full items-center gap-4 p-5 transition hover:-translate-y-0.5 hover:shadow-lg"
-            >
-              <span class:list={['grid size-12 shrink-0 place-items-center rounded-2xl', c.color]}>
-                <c.icon size={22} aria-hidden="true" />
-              </span>
-              <span class="min-w-0">
-                <span class="block text-sm text-ink-500">{c.label}</span>
-                <span class="block truncate font-semibold text-ink-950 group-hover:text-brand-700">{c.value}</span>
-              </span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-    {
-      site.social.length > 0 && (
-        <p class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.95rem] text-ink-600">
-          Daugiau darbų nuotraukų:
-          {site.social.map((s) => (
-            <a href={s.url} target="_blank" rel="noopener me" class="inline-flex items-center gap-2 font-semibold text-ink-900 hover:text-brand-700">
-              <SocialIcon name={s.name} />
-              {s.name}
-            </a>
-          ))}
-        </p>
-      )
-    }
-  </section>
-
-  <section id="uzklausa" class="container-site py-20 lg:py-24">
-    <div class="grid gap-12 lg:grid-cols-12">
-      <div class="lg:col-span-5">
-        <SectionHeading
-          eyebrow="Užklausa"
-          title="Gaukite pasiūlymą"
-          lead="Užpildykite formą – žinutė bus paruošta siųsti per WhatsApp arba el. paštu. Atsakysime kuo greičiau."
-        />
-      </div>
-      <div class="lg:col-span-7">
-        <ContactForm />
-      </div>
-    </div>
-  </section>
-
-  <section class="bg-ink-50 py-20 lg:py-24">
+  <section id="adresai" class="section bg-bg-2">
     <div class="container-site">
-      <SectionHeading eyebrow="Adresai" title="Kur mus rasti" lead="Visuose miestuose darbus atliekame tik iš anksto susitarus – paskambinkite arba parašykite, ir suderinsime jums patogų laiką. Taip pat galime atvykti pas jus." />
-      <div class="mt-12">
-        <Locations />
-      </div>
+      <SectionHeading eyebrow="Adresai" title="Kur mus rasti" lead="Keturi miestai – darbus atliekame tik iš anksto susitarus, todėl prieš atvykdami paskambinkite." />
+      <div class="mt-10"><Locations /></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container-site">
+      <SectionHeading eyebrow="Atsiliepimai" title="Klientų atsiliepimai Google" />
+      <div class="mt-10"><GoogleReviews /></div>
     </div>
   </section>
 </BaseLayout>

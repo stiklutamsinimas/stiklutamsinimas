@@ -1,0 +1,43 @@
+---
+import { ArrowRight } from '@lucide/astro';
+import { Image } from 'astro:assets';
+import Icon from '@/components/ui/Icon.astro';
+import { serviceUrl, type Service } from '@/lib/content';
+
+interface Props {
+  service: Service;
+  /** Su nuotrauka (pagrindinės paslaugos) */
+  photo?: boolean;
+}
+const { service, photo = false } = Astro.props;
+const d = service.data;
+---
+
+<a href={serviceUrl(service.id)} class="card card-hover group flex h-full flex-col overflow-hidden">
+  {
+    photo && (
+      <div class="relative aspect-[16/10] overflow-hidden bg-bg-2">
+        <Image
+          src={d.cover}
+          alt={d.coverAlt}
+          widths={[400, 600, 800]}
+          sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
+          class="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+          layout="none"
+        />
+        {d.priceFrom && (
+          <span class="absolute top-3 left-3 rounded-full bg-card/90 px-3 py-1 text-xs font-bold text-text backdrop-blur">nuo {d.priceFrom} €</span>
+        )}
+      </div>
+    )
+  }
+  <div class="flex flex-1 flex-col p-6 sm:p-7">
+    <span class:list={['icon-bubble', photo && 'relative -mt-12 ring-4 ring-card']}><Icon name={d.icon} /></span>
+    <h3 class="mt-5 text-xl leading-snug">{d.title}</h3>
+    <p class="mt-2.5 flex-1 leading-relaxed text-muted">{d.excerpt}</p>
+    <span class="mt-5 inline-flex items-center gap-1.5 text-[0.95rem] font-bold text-link">
+      {d.priceFrom ? 'Plačiau ir kainos' : 'Teirautis kainos'}
+      <ArrowRight size={17} aria-hidden="true" class="transition group-hover:translate-x-1" />
+    </span>
+  </div>
+</a>

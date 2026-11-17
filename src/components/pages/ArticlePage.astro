@@ -1,0 +1,134 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import { CalendarDays, Clock, MessageCircle, Phone } from '@lucide/astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import ShareButtons from '@/components/sections/ShareButtons.astro';
+import PostCard from '@/components/sections/PostCard.astro';
+import { site, telHref } from '@/config/site';
+import { formatDate, getPosts, postUrl, readingTime, type Post } from '@/lib/content';
+import { articleSchema, breadcrumbSchema } from '@/lib/schema';
+
+interface Props {
+  entry: Post;
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+const url = postUrl(entry.id);
+const absUrl = new URL(url, site.url).href;
+const more = (await getPosts()).filter((p) => p.id !== entry.id).slice(0, 3);
+
+const crumbs = [
+  { name: 'Pradžia', url: '/' },
+  { name: 'Naujienos', url: '/naujienos' },
+  { name: d.title, url },
+];
+const share = d.cover ? await getImage({ src: d.cover, width: 1200, height: 630, fit: 'cover', format: 'jpg' }) : undefined;
+const schema = [
+  articleSchema({
+    title: d.title,
+    description: d.description,
+    url,
+    image: share ? new URL(share.src, site.url).href : undefined,
+    published: d.pubDate,
+    modified: d.updatedDate,
+  }),
+  breadcrumbSchema(crumbs),
+];
+---
+
+<BaseLayout
+  title={`${d.seoTitle ?? d.title} | stiklutamsinimas.eu`}
+  description={d.description}
+  image={d.cover}
+  imageAlt={d.coverAlt}
+  type="article"
+  published={d.pubDate}
+  modified={d.updatedDate}
+  schema={schema}
+  noindex={d.draft}
+>
+  <article>
+    <header class="relative isolate overflow-hidden">
+      <div class="pointer-events-none absolute -top-40 -right-40 -z-10 size-[36rem] rounded-full border-[52px] border-logo/[0.06]"></div>
+      <div class="container-site max-w-4xl pt-8 pb-10">
+        <Breadcrumbs items={crumbs} />
+        <p class="eyebrow mt-10">Naujienos</p>
+        <h1 class="mt-5 text-3xl leading-[1.12] sm:text-4xl lg:text-5xl">{d.title}</h1>
+        <p class="mt-5 text-lg leading-relaxed text-muted">{d.description}</p>
+        <p class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
+          <span class="inline-flex items-center gap-1.5">
+            <CalendarDays size={16} class="text-link" aria-hidden="true" />
+            <time datetime={d.pubDate.toISOString()}>{formatDate(d.pubDate)}</time>
+          </span>
+          {
+            d.updatedDate && (
+              <span>
+                Atnaujinta <time datetime={d.updatedDate.toISOString()}>{formatDate(d.updatedDate)}</time>
+              </span>
+            )
+          }
+          <span class="inline-flex items-center gap-1.5"><Clock size={16} class="text-link" aria-hidden="true" /> {readingTime(entry.body ?? '')} min. skaitymo</span>
+        </p>
+        <div class="mt-6"><ShareButtons url={absUrl} title={d.title} /></div>
+      </div>
+      {
+        d.cover && (
+          <div class="container-site max-w-5xl">
+            <Image
+              src={d.cover}
+              alt={d.coverAlt ?? d.title}
+              widths={[640, 960, 1280, 1600]}
+              sizes="(min-width: 1024px) 1000px, 100vw"
+              class="aspect-[16/8] w-full rounded-[1.75rem] border border-border object-cover"
+              loading="eager"
+              fetchpriority="high"
+              layout="none"
+            />
+          </div>
+        )
+      }
+    </header>
+
+    <div class="container-site max-w-3xl py-14">
+      <div class="prose-site">
+        <Content />
+      </div>
+
+      <div class="mt-12 border-t border-border pt-8">
+        <ShareButtons url={absUrl} title={d.title} />
+      </div>
+
+      <div class="card mt-10 flex flex-col gap-5 p-7 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-lg font-extrabold text-text">Turite klausimų?</p>
+          <p class="mt-1 text-muted">Patarsime, kokia plėvelė jums tinka, ir pasakysime kainą.</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a href={telHref} class="btn btn-primary"><Phone size={18} aria-hidden="true" /> Skambinti</a>
+          <a href={site.chat.messenger} class="btn btn-outline" data-open-chat><MessageCircle size={18} aria-hidden="true" /> Rašyti</a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  {
+    more.length > 0 && (
+      <section class="section bg-bg-2">
+        <div class="container-site">
+          <SectionHeading eyebrow="Daugiau" title="Kiti straipsniai" />
+          <ul class="mt-10 grid gap-5 md:grid-cols-3">
+            {more.map((p) => (
+              <li>
+                <PostCard post={p} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

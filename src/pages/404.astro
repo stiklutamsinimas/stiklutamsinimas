@@ -1,36 +1,29 @@
 ---
-import { ArrowRight } from '@lucide/astro';
+import { ArrowRight, Phone } from '@lucide/astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getServices, serviceUrl } from '@/lib/services';
+import ServiceCard from '@/components/sections/ServiceCard.astro';
+import { site, telHref } from '@/config/site';
+import { getServices } from '@/lib/content';
 
-const services = await getServices();
+const featured = (await getServices()).filter((s) => s.data.featured).slice(0, 3);
 ---
 
-<BaseLayout title="Puslapis nerastas | stiklutamsinimas.eu" description="Tokio puslapio nėra. Peržiūrėkite mūsų paslaugas arba susisiekite." noindex>
-  <section class="on-dark relative isolate overflow-hidden bg-ink-950">
-    <div class="absolute -top-40 -right-40 -z-10 size-[36rem] rounded-full bg-brand-600/20 blur-3xl"></div>
-    <div class="container-site py-24 lg:py-32">
-      <p class="font-display text-8xl font-extrabold text-brand-500/40">404</p>
-      <h1 class="mt-4 text-4xl font-extrabold text-white sm:text-5xl">Puslapis nerastas</h1>
-      <p class="mt-5 max-w-xl text-lg text-ink-300">
-        Galbūt puslapis buvo perkeltas. Pasirinkite paslaugą žemiau arba grįžkite į pradžią.
-      </p>
-      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-        <a href="/" class="btn btn-accent">Į pradžią</a>
-        <a href="/kontaktai" class="btn btn-ghost-dark">Kontaktai</a>
-      </div>
+<BaseLayout title="Puslapis nerastas | stiklutamsinimas.eu" description="Tokio puslapio nėra. Grįžkite į pradžią arba peržiūrėkite mūsų paslaugas." noindex>
+  <section class="container-site py-20 text-center lg:py-28">
+    <p class="text-7xl font-extrabold text-link">404</p>
+    <h1 class="mt-4 text-3xl sm:text-4xl">Puslapis nerastas</h1>
+    <p class="mx-auto mt-4 max-w-lg text-lg text-muted">Galbūt adresas pasikeitė. Pažiūrėkite mūsų paslaugas arba susisiekite.</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href="/" class="btn btn-primary">Į pradžią <ArrowRight size={18} aria-hidden="true" /></a>
+      <a href={telHref} class="btn btn-outline"><Phone size={18} aria-hidden="true" /> {site.phoneDisplay}</a>
     </div>
   </section>
-  <section class="container-site py-16">
-    <h2 class="text-2xl font-bold">Mūsų paslaugos</h2>
-    <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+  <section class="container-site pb-24">
+    <ul class="grid gap-5 md:grid-cols-3">
       {
-        services.map((s) => (
+        featured.map((s) => (
           <li>
-            <a href={serviceUrl(s.id)} class="card flex items-center justify-between gap-4 p-5 font-semibold text-ink-900 hover:text-brand-700">
-              {s.data.title}
-              <ArrowRight size={18} aria-hidden="true" />
-            </a>
+            <ServiceCard service={s} photo />
           </li>
         ))
       }

@@ -1,18 +1,19 @@
 ---
-title: Pastatų langų tamsinimas
+title: Biurams ir namams
 category: pastatams
 order: 1
 icon: building
+featured: true
 
-seoTitle: Langų tamsinimas namams ir biurams | stiklutamsinimas.eu
-seoDescription: Pastatų langų tamsinimas plėvelėmis – apsauga nuo karščio ir UV spindulių, privatumas. Veidrodinės ir matinės plėvelės namams, biurams ir verslui.
+seoTitle: Langų tamsinimas biurams ir namams | stiklutamsinimas.eu
+seoDescription: Pastatų langų tamsinimas plėvelėmis – veidrodinės, matinės ir dekoratyvinės plėvelės namams, biurams ir verslui. Mažiau karščio, daugiau privatumo.
 
-h1: Pastatų langų tamsinimas
-lead: Saulės kontrolės, veidrodinės ir matinės plėvelės langams – vėsesnės patalpos vasarą, mažiau blunkantys baldai ir daugiau privatumo. Tinka namams, biurams, parduotuvėms ir sporto salėms.
-excerpt: Plėvelės langams nuo karščio, UV ir smalsių žvilgsnių – namams, biurams, verslui.
+h1: Langų tamsinimas biurams ir namams
+lead: Veidrodinės, saulės kontrolės, matinės ir dekoratyvinės plėvelės langams – vėsesnės patalpos vasarą, mažiau blunkantys baldai ir daugiau privatumo. Tinka namams, biurams, parduotuvėms ir sporto salėms.
+excerpt: Veidrodinės, matinės ir dekoratyvinės plėvelės langams – namams, biurams, verslui.
 
-cover: ../../assets/pastatai/namo-lango-veidrodine-plevele.jpg
-coverAlt: Privataus namo langas su veidrodine saulės kontrolės plėvele
+cover: ../../assets/veidrodines/fasado-stiklu-klijavimas-keltuvu.jpg
+coverAlt: Komercinio pastato stiklinio fasado klijavimas plėvele naudojant keltuvą
 
 highlights:
   - Vėsesnės patalpos vasarą
@@ -34,37 +35,10 @@ benefits:
     title: Mažesnės išlaidos
     text: Mažiau karščio vasarą reiškia mažesnį kondicionavimo poreikį ir energijos sąnaudas.
 
-gallery:
-  - src: ../../assets/pastatai/fasado-stiklu-klijavimas-keltuvu.jpg
-    alt: Komercinio pastato stiklinio fasado klijavimas plėvele naudojant keltuvą
-  - src: ../../assets/pastatai/namo-fasado-veidrodine-plevele.jpg
-    alt: Modernaus pastato fasado langai su veidrodine plėvele
-  - src: ../../assets/pastatai/dideli-langai-veidrodine-plevele.jpg
-    alt: Dideli langai su veidrodine plėvele – iš lauko matosi tik atspindys
-  - src: ../../assets/pastatai/komercinio-pastato-fasado-plevele.jpg
-    alt: Komercinio pastato stiklinis fasadas – plėvelės klijavimo darbai
-  - src: ../../assets/pastatai/namo-lango-veidrodine-plevele.jpg
-    alt: Namo langas su veidrodine plėvele
-  - src: ../../assets/pastatai/duru-stiklo-ruda-plevele.jpg
-    alt: Įėjimo durų stiklas su ruda Orocal plėvele
-  - src: ../../assets/pastatai/veidrodine-plevele-langams.jpg
-    alt: Veidrodine plėvele tamsinti namo langai
-  - src: ../../assets/pastatai/erkerio-langu-tamsinimas.jpg
-    alt: Erkerio langų tamsinimas privačiame name
-  - src: ../../assets/pastatai/pastato-langu-tamsinimas.jpg
-    alt: Pastato langai po tamsinimo plėvele
-  - src: ../../assets/pastatai/namo-fasado-langu-tamsinimas.jpg
-    alt: Namo fasado langų ir durų tamsinimas
-  - src: ../../assets/pastatai/langu-tamsinimas-is-vidaus.jpg
-    alt: Tamsinti langai – vaizdas iš vidaus
-  - src: ../../assets/pastatai/sporto-sales-langu-plevele.jpg
-    alt: Sporto salės langai su plėvele
-  - src: ../../assets/pastatai/matine-plevele-biuro-pertvarai.jpg
-    alt: Matinė plėvelė ant biuro stiklinės pertvaros
-  - src: ../../assets/pastatai/matine-plevele-stiklo-sienai.jpg
-    alt: Matine plėvele padengta stiklo siena
-  - src: ../../assets/pastatai/iejimo-duru-matine-plevele.jpg
-    alt: Įėjimo durų ir langų matinė plėvelė
+galleries:
+  - folder: veidrodines
+  - folder: matines
+  - folder: dekoravimas
 
 faq:
   - q: Ar pro veidrodinę plėvelę matysis iš lauko?

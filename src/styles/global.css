@@ -1,43 +1,87 @@
 @import 'tailwindcss';
 
-/* ---------------------------------------------------------------
-   Dizaino sistema. Pagrindinė spalva – logotipo mėlyna #008dd2.
-   --------------------------------------------------------------- */
+/* Tamsi tema įjungiama atributu <html data-theme="dark"> (žr. ThemeScript) */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* ---------- Spalvų paletė (4-spalvu-palete.png) ---------- */
+:root {
+  /* Šviesi tema – diena */
+  --c-logo: #008ed2;
+  --c-primary: #0072a9;
+  --c-primary-hover: #00608f;
+  --c-on-primary: #ffffff;
+  --c-link: #0072a9;
+  --c-soft: #ddeffa;
+  --c-accent: #f5a524;
+  --c-footer: #052538;
+  --c-bg: #f3f8fc;
+  --c-bg-2: #e9f2f9;
+  --c-card: #ffffff;
+  --c-text: #0a2233;
+  --c-muted: #4a6273;
+  --c-border: #d5e3ed;
+  --c-shadow: 10 34 51;
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  /* Tamsi tema – vakaras */
+  --c-logo: #2ea6e3;
+  --c-primary: #2ea6e3;
+  --c-primary-hover: #5bbdee;
+  --c-on-primary: #03121c;
+  --c-link: #5bbdee;
+  --c-soft: #0f2e44;
+  --c-accent: #ffc65a;
+  --c-footer: #030b11;
+  --c-bg: #06111a;
+  --c-bg-2: #0a1823;
+  --c-card: #0d1d29;
+  --c-text: #e6f0f7;
+  --c-muted: #94acbd;
+  --c-border: #1d3546;
+  --c-shadow: 0 0 0;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-logo: var(--c-logo);
+  --color-primary: var(--c-primary);
+  --color-primary-hover: var(--c-primary-hover);
+  --color-on-primary: var(--c-on-primary);
+  --color-link: var(--c-link);
+  --color-soft: var(--c-soft);
+  --color-accent: var(--c-accent);
+  --color-footer: var(--c-footer);
+  --color-bg: var(--c-bg);
+  --color-bg-2: var(--c-bg-2);
+  --color-card: var(--c-card);
+  --color-text: var(--c-text);
+  --color-muted: var(--c-muted);
+  --color-border: var(--c-border);
+}
+
 @theme {
-  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Manrope Variable', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
-
-  --color-brand-50: #effaff;
-  --color-brand-100: #def3ff;
-  --color-brand-200: #b6e9ff;
-  --color-brand-300: #75daff;
-  --color-brand-400: #2cc8ff;
-  --color-brand-500: #00b0f0;
-  --color-brand-600: #008dd2;
-  --color-brand-700: #0070aa;
-  --color-brand-800: #025e8c;
-  --color-brand-900: #084e74;
-  --color-brand-950: #06324d;
-
-  --color-ink-50: #f5f7fa;
-  --color-ink-100: #eaeef3;
-  --color-ink-200: #d3dae3;
-  --color-ink-300: #aab6c4;
-  --color-ink-400: #7b8a9c;
-  --color-ink-500: #5b6a7c;
-  --color-ink-600: #455364;
-  --color-ink-700: #323e4d;
-  --color-ink-800: #1b2533;
-  --color-ink-900: #0e1621;
-  --color-ink-950: #070b12;
-
-  --radius-4xl: 2rem;
-
+  --font-sans: 'Manrope Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --animate-fade-up: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-ring: ring 2.8s ease-out infinite;
+
+  @keyframes ring {
+    0% {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+    70%,
+    100% {
+      transform: scale(1.3, 1.45);
+      opacity: 0;
+    }
+  }
+
   @keyframes fade-up {
     from {
       opacity: 0;
-      transform: translateY(14px);
+      transform: translateY(16px);
     }
     to {
       opacity: 1;
@@ -46,136 +90,178 @@
   }
 }
 
+/* ---------- Bazė ---------- */
 @layer base {
   html {
+    scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
-    text-rendering: optimizeLegibility;
     scroll-padding-top: 6rem;
   }
-
-  @media (prefers-reduced-motion: no-preference) {
-    html {
-      scroll-behavior: smooth;
-    }
-  }
-
   body {
-    @apply bg-white font-sans text-ink-700 antialiased;
+    @apply bg-bg font-sans text-text antialiased;
+    font-feature-settings: 'ss01', 'cv11';
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
-
   h1,
   h2,
   h3,
   h4 {
-    @apply font-display text-ink-950;
-    text-wrap: balance;
-    letter-spacing: -0.02em;
+    @apply font-extrabold tracking-[-0.02em] text-balance text-text;
   }
-
-  p {
-    text-wrap: pretty;
-  }
-
   ::selection {
-    @apply bg-brand-500 text-ink-950;
+    @apply bg-primary text-on-primary;
   }
-
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-brand-500;
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+  img {
+    @apply select-none;
   }
 }
 
+/* ---------- Komponentai ---------- */
 @layer components {
   .container-site {
-    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8;
   }
 
+  .section {
+    @apply py-20 lg:py-28;
+  }
+
+  /* „○ PASLAUGOS ——“ */
   .eyebrow {
-    @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-brand-700 uppercase;
+    @apply inline-flex items-center gap-2.5 text-xs font-bold tracking-[0.18em] text-link uppercase;
   }
   .eyebrow::before {
     content: '';
-    @apply h-px w-6 bg-current;
+    @apply size-3 rounded-full border-2 border-current;
   }
-  .on-dark .eyebrow,
-  .eyebrow.on-dark {
-    @apply text-brand-400;
+  .eyebrow::after {
+    content: '';
+    @apply h-0.5 w-9 rounded-full bg-current opacity-70;
   }
 
-  /* Mygtukai: naudoti kartu, pvz. class="btn btn-primary" */
   .btn {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 text-[0.95rem] font-semibold whitespace-nowrap transition duration-200 active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-[0.95rem] font-bold whitespace-nowrap transition duration-200 select-none disabled:pointer-events-none disabled:opacity-60;
   }
   .btn-primary {
-    @apply bg-brand-700 text-white shadow-lg shadow-brand-700/25 hover:bg-brand-800;
+    @apply bg-primary text-on-primary shadow-[0_10px_24px_-10px_var(--c-primary)] hover:-translate-y-px hover:bg-primary-hover;
   }
-  .btn-accent {
-    @apply bg-brand-500 text-ink-950 shadow-lg shadow-brand-500/25 hover:bg-brand-400;
+  .btn-outline {
+    @apply border border-border bg-card/60 text-text hover:border-primary hover:text-link;
   }
-  .btn-ghost-dark {
-    @apply border border-white/20 bg-white/5 text-white backdrop-blur hover:border-white/40 hover:bg-white/10;
+  .btn-white {
+    @apply bg-white text-[#0a2233] shadow-lg hover:-translate-y-px hover:bg-[#ddeffa];
   }
-  .btn-ghost {
-    @apply border border-ink-200 bg-white text-ink-900 hover:border-ink-300 hover:bg-ink-50;
-  }
-  .btn-whatsapp {
-    @apply bg-[#25d366] text-ink-950 hover:bg-[#3ee07a];
+  .btn-glass {
+    @apply border border-white/50 text-white hover:bg-white/10;
   }
 
   .card {
-    @apply rounded-3xl border border-ink-100 bg-white shadow-[0_1px_2px_rgb(7_11_18/0.04),0_8px_24px_-12px_rgb(7_11_18/0.12)];
+    @apply rounded-[1.25rem] border border-border bg-card;
+    box-shadow:
+      0 1px 2px rgb(var(--c-shadow) / 0.04),
+      0 12px 32px -18px rgb(var(--c-shadow) / 0.18);
+  }
+  .card-hover {
+    @apply transition duration-300 hover:-translate-y-1 hover:border-primary/50;
   }
 
-  /* Ilgo teksto (markdown) stilius */
+  .icon-bubble {
+    @apply grid size-12 shrink-0 place-items-center rounded-full bg-soft text-link;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-muted transition hover:border-primary hover:text-link;
+  }
+  .chip[aria-selected='true'],
+  .chip[aria-pressed='true'] {
+    @apply border-primary bg-primary text-on-primary;
+  }
+
+  /* Straipsnių ir paslaugų tekstas iš Markdown */
   .prose-site {
-    @apply max-w-none text-[1.05rem] leading-relaxed text-ink-600;
+    @apply max-w-none text-[1.05rem] leading-[1.8] text-muted;
   }
   .prose-site > * + * {
     @apply mt-5;
   }
   .prose-site h2 {
-    @apply mt-12 text-2xl font-bold sm:text-3xl;
+    @apply mt-12 text-2xl leading-tight sm:text-[1.75rem];
   }
   .prose-site h3 {
-    @apply mt-8 text-xl font-bold;
+    @apply mt-9 text-xl leading-snug;
   }
   .prose-site h2 + *,
   .prose-site h3 + * {
     @apply mt-3;
   }
-  .prose-site a {
-    @apply font-medium text-brand-700 underline decoration-brand-300 underline-offset-4 hover:decoration-brand-700;
-  }
   .prose-site strong {
-    @apply font-semibold text-ink-900;
+    @apply font-bold text-text;
+  }
+  .prose-site a {
+    @apply font-semibold text-link underline decoration-current/30 underline-offset-4 hover:decoration-current;
+  }
+  .prose-site ul,
+  .prose-site ol {
+    @apply space-y-2 pl-6;
   }
   .prose-site ul {
-    @apply space-y-2 pl-0;
-  }
-  .prose-site ul > li {
-    @apply relative pl-7;
-  }
-  .prose-site ul > li::before {
-    content: '';
-    @apply absolute top-[0.6em] left-1 size-2 rounded-full bg-brand-500;
+    @apply list-disc marker:text-logo;
   }
   .prose-site ol {
-    @apply list-decimal space-y-2 pl-6 marker:font-semibold marker:text-brand-700;
+    @apply list-decimal marker:font-bold marker:text-logo;
   }
   .prose-site blockquote {
-    @apply rounded-2xl border-l-4 border-brand-500 bg-brand-50 px-6 py-4 text-ink-700;
+    @apply rounded-r-xl border-l-4 border-logo bg-soft/60 px-5 py-4 text-text;
+  }
+  .prose-site img {
+    @apply rounded-2xl;
+  }
+  .prose-site table {
+    @apply w-full text-left text-sm;
+  }
+  .prose-site th,
+  .prose-site td {
+    @apply border-b border-border px-3 py-2.5;
+  }
+  .prose-site th {
+    @apply font-bold text-text;
   }
 }
 
-/* Lengvas pasirodymo efektas (be JavaScript) */
-@media (prefers-reduced-motion: no-preference) {
-  .reveal {
-    @apply animate-fade-up;
-  }
+/* Atsiradimo animacija slenkant (JS prideda .is-visible) */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal.is-visible,
+.no-js .reveal {
+  opacity: 1;
+  transform: none;
 }
 
-/* Galerijos peržiūros langas */
 dialog.lightbox::backdrop {
-  background: rgb(7 11 18 / 0.92);
+  background: rgb(3 11 17 / 0.92);
   backdrop-filter: blur(6px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
 }

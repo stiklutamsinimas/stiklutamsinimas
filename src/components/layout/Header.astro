@@ -1,80 +1,76 @@
 ---
 import { ChevronDown, Menu, Phone, X } from '@lucide/astro';
 import Logo from './Logo.astro';
+import ThemeToggle from './ThemeToggle.astro';
 import Icon from '@/components/ui/Icon.astro';
-import { site, telHref } from '@/config/site';
-import { getServicesByCategory, getPublishedPosts, serviceUrl } from '@/lib/services';
+import { features, site, telHref } from '@/config/site';
+import { getServicesByCategory, serviceUrl } from '@/lib/content';
 
 const groups = await getServicesByCategory();
-const hasBlog = (await getPublishedPosts()).length > 0;
 const path = Astro.url.pathname.replace(/\.html$/, '');
 
-const dropdowns = groups.filter((g) => g.items.length > 1);
-const singles = groups.filter((g) => g.items.length === 1).map((g) => g.items[0]!);
-
-const extraLinks = [
-  ...singles.map((s) => ({ href: serviceUrl(s.id), label: s.data.title })),
-  ...(hasBlog ? [{ href: '/tinklarastis', label: 'Tinklaraštis' }] : []),
+const links = [
+  { href: '/#kainos', label: 'Kainos' },
+  { href: '/naujienos', label: 'Naujienos' },
+  { href: '/#duk', label: 'DUK' },
   { href: '/kontaktai', label: 'Kontaktai' },
+  ...(features.shop ? [{ href: '/parduotuve', label: 'Parduotuvė' }] : []),
 ];
+const isActive = (href: string) => !href.includes('#') && (path === href || path.startsWith(href + '/'));
 ---
 
-<header class="sticky top-0 z-50 border-b border-white/10 bg-ink-950">
-  <div class="container-site flex h-[4.5rem] items-center justify-between gap-6">
-    <Logo />
+<header class="sticky top-0 z-40 border-b border-border bg-bg/85 backdrop-blur-xl supports-[backdrop-filter]:bg-bg/75">
+  <div class="container-site flex h-[4.5rem] items-center gap-4 lg:h-20">
+    <Logo class="mr-auto lg:mr-6" width={200} />
 
-    <nav aria-label="Pagrindinis meniu" class="hidden items-center gap-1 lg:flex">
-      {
-        dropdowns.map((group) => (
-          <div class="nav-dropdown group relative">
-            <button
-              type="button"
-              class="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[0.93rem] font-medium text-ink-200 transition hover:bg-white/5 hover:text-white"
-              aria-expanded="false"
-              aria-haspopup="true"
-            >
-              {group.short}
-              <ChevronDown size={16} class="transition-transform duration-200 group-hover:rotate-180" aria-hidden="true" />
-            </button>
-            <div class="invisible absolute top-full left-1/2 w-[25rem] -translate-x-1/2 pt-3 opacity-0 transition duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 group-data-[open]:visible group-data-[open]:opacity-100">
-              <div class="rounded-3xl border border-white/10 bg-ink-900/95 p-2 shadow-2xl shadow-black/40 backdrop-blur-xl">
-                {group.items.map((s) => (
-                  <a
-                    href={serviceUrl(s.id)}
-                    class:list={[
-                      'flex items-start gap-3 rounded-2xl p-3 transition hover:bg-white/5',
-                      path === serviceUrl(s.id) && 'bg-white/5',
-                    ]}
-                  >
-                    <span class="mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl bg-brand-500/10 text-brand-400">
-                      <Icon name={s.data.icon} size={18} />
-                    </span>
-                    <span>
-                      <span class="block text-sm font-semibold text-white">{s.data.title}</span>
-                      <span class="mt-0.5 block text-[0.8rem] leading-snug text-ink-300">{s.data.excerpt}</span>
-                    </span>
-                  </a>
-                ))}
-                <a
-                  href={`/paslaugos#${group.key}`}
-                  class="mt-1 block rounded-2xl px-3 py-2.5 text-center text-[0.8rem] font-semibold text-brand-400 hover:bg-white/5"
-                >
-                  Visos paslaugos →
-                </a>
-              </div>
-            </div>
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="Pagrindinis meniu">
+      <div class="dropdown group relative">
+        <a
+          href="/paslaugos"
+          class:list={[
+            'inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-[0.95rem] font-semibold transition hover:text-link',
+            path === '/paslaugos' ? 'text-link' : 'text-text/80',
+          ]}
+          aria-haspopup="true"
+        >
+          Paslaugos <ChevronDown size={16} aria-hidden="true" class="transition group-hover:rotate-180" />
+        </a>
+        <div class="dropdown-panel invisible absolute top-full left-1/2 z-50 w-[46rem] -translate-x-1/2 pt-3 opacity-0 transition duration-200">
+          <div class="card grid grid-cols-3 gap-6 p-6">
+            {
+              groups.map((g) => (
+                <div>
+                  <p class="mb-3 text-xs font-bold tracking-[0.16em] text-muted uppercase">{g.label}</p>
+                  <ul class="space-y-1">
+                    {g.items.map((s) => (
+                      <li>
+                        <a
+                          href={serviceUrl(s.id)}
+                          class="flex items-center gap-3 rounded-xl px-2 py-2 text-[0.93rem] font-semibold text-text transition hover:bg-soft hover:text-link"
+                        >
+                          <span class="grid size-8 shrink-0 place-items-center rounded-full bg-soft text-link">
+                            <Icon name={s.data.icon} size={16} />
+                          </span>
+                          {s.data.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            }
           </div>
-        ))
-      }
+        </div>
+      </div>
       {
-        extraLinks.map((l) => (
+        links.map((l) => (
           <a
             href={l.href}
             class:list={[
-              'rounded-full px-4 py-2 text-[0.93rem] font-medium transition hover:bg-white/5 hover:text-white',
-              path === l.href ? 'text-white' : 'text-ink-200',
+              'rounded-full px-3.5 py-2 text-[0.95rem] font-semibold transition hover:text-link',
+              isActive(l.href) ? 'text-link' : 'text-text/80',
             ]}
-            aria-current={path === l.href ? 'page' : undefined}
+            aria-current={isActive(l.href) ? 'page' : undefined}
           >
             {l.label}
           </a>
@@ -82,49 +78,46 @@ const extraLinks = [
       }
     </nav>
 
-    <div class="flex items-center gap-2">
-      <a href={telHref} class="hidden items-center gap-2 rounded-full px-3 py-2 text-[0.93rem] font-semibold text-white hover:text-brand-300 xl:inline-flex">
-        <Phone size={17} class="text-brand-400" aria-hidden="true" />
-        {site.phoneDisplay}
-      </a>
-      <a href="/kontaktai#uzklausa" class="btn btn-accent hidden min-h-11 px-5 text-sm sm:inline-flex">Gauti pasiūlymą</a>
+    <ThemeToggle class="hidden sm:inline-flex" />
 
-      <a
-        href={telHref}
-        class="grid size-11 place-items-center rounded-full border border-white/15 text-white sm:hidden"
-        aria-label={`Skambinti ${site.phoneDisplay}`}
-      >
-        <Phone size={19} aria-hidden="true" />
-      </a>
-      <button
-        type="button"
-        id="menu-toggle"
-        class="grid size-11 place-items-center rounded-full border border-white/15 text-white lg:hidden"
-        aria-expanded="false"
-        aria-controls="mobile-menu"
-        aria-label="Atidaryti meniu"
-      >
-        <Menu size={20} class="menu-open-icon" aria-hidden="true" />
-        <X size={20} class="menu-close-icon hidden" aria-hidden="true" />
-      </button>
-    </div>
+    <a href={telHref} class="btn btn-primary hidden !px-5 !py-2.5 text-sm md:inline-flex">
+      <Phone size={16} aria-hidden="true" />
+      {site.phoneDisplay}
+    </a>
+
+    <a href={telHref} class="grid size-11 place-items-center rounded-full bg-primary text-on-primary md:hidden" aria-label={`Skambinti ${site.phoneDisplay}`}>
+      <Phone size={18} aria-hidden="true" />
+    </a>
+    <button
+      type="button"
+      class="menu-toggle grid size-11 place-items-center rounded-full border border-border bg-card text-text lg:hidden"
+      aria-expanded="false"
+      aria-controls="mobilus-meniu"
+      aria-label="Atidaryti meniu"
+    >
+      <Menu size={20} class="icon-open" aria-hidden="true" />
+      <X size={20} class="icon-close hidden" aria-hidden="true" />
+    </button>
   </div>
 
-  <!-- Mobilus meniu -->
-  <div id="mobile-menu" class="hidden max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-t border-white/10 bg-ink-950 lg:hidden">
-    <nav aria-label="Mobilus meniu" class="container-site space-y-8 py-6">
+  <div id="mobilus-meniu" class="mobile-menu hidden border-t border-border bg-bg lg:hidden">
+    <nav class="container-site max-h-[calc(100dvh-4.5rem)] overflow-y-auto py-6" aria-label="Mobilus meniu">
+      <div class="mb-6 flex items-center justify-between gap-4 sm:hidden">
+        <span class="text-sm font-semibold text-muted">Tema</span>
+        <ThemeToggle class="inline-flex" />
+      </div>
       {
-        groups.map((group) => (
-          <div>
-            <p class="eyebrow on-dark mb-3">{group.short}</p>
+        groups.map((g) => (
+          <div class="mb-5">
+            <p class="mb-2 text-xs font-bold tracking-[0.16em] text-muted uppercase">{g.label}</p>
             <ul class="grid gap-1 sm:grid-cols-2">
-              {group.items.map((s) => (
+              {g.items.map((s) => (
                 <li>
-                  <a href={serviceUrl(s.id)} class="flex items-center gap-3 rounded-2xl p-3 text-white hover:bg-white/5">
-                    <span class="grid size-9 shrink-0 place-items-center rounded-xl bg-brand-500/10 text-brand-400">
-                      <Icon name={s.data.icon} size={18} />
+                  <a href={serviceUrl(s.id)} class="flex items-center gap-3 rounded-xl px-2 py-2.5 font-semibold text-text hover:bg-soft">
+                    <span class="grid size-8 shrink-0 place-items-center rounded-full bg-soft text-link">
+                      <Icon name={s.data.icon} size={16} />
                     </span>
-                    <span class="font-medium">{s.data.title}</span>
+                    {s.data.title}
                   </a>
                 </li>
               ))}
@@ -132,57 +125,43 @@ const extraLinks = [
           </div>
         ))
       }
-      <div class="flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row">
-        {hasBlog && <a href="/tinklarastis" class="btn btn-ghost-dark">Tinklaraštis</a>}
-        <a href="/kontaktai" class="btn btn-ghost-dark">Kontaktai</a>
-        <a href="/kontaktai#uzklausa" class="btn btn-accent">Gauti pasiūlymą</a>
-      </div>
+      <ul class="mt-2 grid grid-cols-2 gap-2 border-t border-border pt-5">
+        {
+          [{ href: '/paslaugos', label: 'Visos paslaugos' }, ...links].map((l) => (
+            <li>
+              <a href={l.href} class="block rounded-xl px-2 py-2.5 font-semibold text-text hover:bg-soft">
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </nav>
   </div>
 </header>
 
-<script>
-  // Mobilus meniu
-  const toggle = document.getElementById('menu-toggle');
-  const menu = document.getElementById('mobile-menu');
-  if (toggle && menu) {
-    const setOpen = (open: boolean) => {
-      toggle.setAttribute('aria-expanded', String(open));
-      toggle.setAttribute('aria-label', open ? 'Uždaryti meniu' : 'Atidaryti meniu');
-      menu.classList.toggle('hidden', !open);
-      toggle.querySelector('.menu-open-icon')?.classList.toggle('hidden', open);
-      toggle.querySelector('.menu-close-icon')?.classList.toggle('hidden', !open);
-      document.documentElement.classList.toggle('overflow-hidden', open);
-    };
-    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
-    menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
-    window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => e.matches && setOpen(false));
+<style>
+  .dropdown:hover .dropdown-panel,
+  .dropdown:focus-within .dropdown-panel,
+  .dropdown[data-open] .dropdown-panel {
+    visibility: visible;
+    opacity: 1;
   }
+</style>
 
-  // Išskleidžiami meniu (paspaudimui ir klaviatūrai; pelės užvedimas veikia per CSS)
-  const dropdowns = document.querySelectorAll<HTMLElement>('.nav-dropdown');
-  const closeAll = (except?: HTMLElement) =>
-    dropdowns.forEach((d) => {
-      if (d === except) return;
-      d.removeAttribute('data-open');
-      d.querySelector('button')?.setAttribute('aria-expanded', 'false');
-    });
-  dropdowns.forEach((d) => {
-    const btn = d.querySelector('button');
-    btn?.addEventListener('click', () => {
-      const open = !d.hasAttribute('data-open');
-      closeAll(d);
-      d.toggleAttribute('data-open', open);
-      btn.setAttribute('aria-expanded', String(open));
-    });
-  });
-  document.addEventListener('click', (e) => {
-    if (!(e.target as Element).closest('.nav-dropdown')) closeAll();
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeAll();
-      (document.activeElement as HTMLElement | null)?.blur();
-    }
-  });
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const menu = document.getElementById('mobilus-meniu');
+  const setOpen = (open: boolean) => {
+    if (!toggle || !menu) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Uždaryti meniu' : 'Atidaryti meniu');
+    menu.classList.toggle('hidden', !open);
+    toggle.querySelector('.icon-open')?.classList.toggle('hidden', open);
+    toggle.querySelector('.icon-close')?.classList.toggle('hidden', !open);
+    document.body.classList.toggle('overflow-hidden', open);
+  };
+  toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
 </script>
