@@ -30,9 +30,10 @@ export const site = {
   phoneDisplay: '+370 605 64933',
   email: 'steponas@stiklutamsinimas.eu',
 
-  experienceYears: 10,
-  /** Minimali garantija visiems darbams (metais); priklausomai nuo medžiagų – ir ilgesnė */
-  warrantyYears: 5,
+  /** Veiklos pradžios metai („Patirtis nuo 2007 m.“) */
+  foundedYear: 2007,
+  /** Garantija atliktiems darbams (metais) */
+  warrantyYears: 10,
   appointmentNote: 'Darbai atliekami tik iš anksto susitarus',
   filmBrands: ['Solar Screen', 'Global Window Films', 'Ultra Vision'],
 

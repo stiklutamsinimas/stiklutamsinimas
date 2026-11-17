@@ -3,8 +3,8 @@ title: Ženklinimas plėvelėmis – saugiai ir estetiškai
 seoTitle: Stiklo ženklinimas plėvelėmis
 description: Matinės juostos, logotipai ir ženklai ant stiklo durų ir pertvarų – kaip ženklinimas plėvelėmis padeda išvengti atsitrenkimų ir sustiprina įmonės įvaizdį.
 pubDate: 2024-01-09
-cover: ../../assets/dekoravimas/matines-juostos-stiklo-durims.jpg
-coverAlt: Matinės juostos ant biuro stiklo durų
+cover: ../../assets/naujienos/zenklinimas-plevelemis.jpg
+coverAlt: Stiklo ženklinimo plėvelėmis iliustracija
 tags: [Namams ir verslui, Dekoravimas]
 ---
 

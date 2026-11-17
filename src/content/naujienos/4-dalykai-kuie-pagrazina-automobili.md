@@ -2,8 +2,8 @@
 title: 4 dalykai, kurie pagražina automobilio išvaizdą
 description: Tamsinti stiklai, dizaino lipdukai, chromo detalių apklijavimas ir tamsinti žibintai – keturi paprasti būdai suteikti automobiliui išskirtinę išvaizdą.
 pubDate: 2024-01-08
-cover: ../../assets/darbai/dodge-challenger-tamsinti-langai.jpg
-coverAlt: Violetinis Dodge Challenger su tamsintais langais
+cover: ../../assets/naujienos/4-dalykai-kuie-pagrazina-automobili.jpg
+coverAlt: Automobilio išvaizdos pagražinimo iliustracija
 tags: [Automobiliams, Patarimai]
 ---
 

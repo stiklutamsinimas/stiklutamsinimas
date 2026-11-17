@@ -3,8 +3,8 @@ title: Kuo skiriasi langų tamsinimo plėvelės?
 seoTitle: Langų tamsinimo plėvelių tipai ir skirtumai
 description: Dažytos, metalizuotos, anglies ir keraminės tamsinimo plėvelės – kuo jos skiriasi, kokie jų privalumai ir trūkumai, ir kurią rinktis savo automobiliui.
 pubDate: 2023-11-30
-cover: ../../assets/pleveles/select/solar-screen-select-75c.jpg
-coverAlt: Solar Screen Select plėvelės pavyzdys ant automobilio galinių langų
+cover: ../../assets/naujienos/kuo-skiriasi-langu-tamsinimo-pleveles.jpg
+coverAlt: Skirtingo tamsumo langų tamsinimo plėvelių pavyzdžiai (AI iliustracija)
 tags: [Automobiliams, Plėvelės]
 ---
 

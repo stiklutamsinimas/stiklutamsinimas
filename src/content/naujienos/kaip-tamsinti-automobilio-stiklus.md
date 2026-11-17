@@ -2,8 +2,8 @@
 title: Kaip tamsinti automobilio stiklus savarankiškai
 description: Žingsnis po žingsnio – kaip patiems užklijuoti tamsinimo plėvelę ant automobilio stiklų, kokių įrankių reikės ir kada geriau kreiptis į profesionalus.
 pubDate: 2024-01-09
-cover: ../../assets/pleveles/sk-20/sk-20-dirbtuveje.jpg
-coverAlt: Automobilio stiklas su plėvele dirbtuvėse
+cover: ../../assets/naujienos/kaip-tamsinti-automobilio-stiklus.jpg
+coverAlt: "Įrankiai automobilio stiklų tamsinimui: plėvelė, brauklės, purkštuvas, fenas (AI iliustracija)"
 tags: [Automobiliams, Patarimai]
 ---
 
@@ -44,4 +44,4 @@ Lietuvoje galinius šoninius langus ir galinį stiklą galima tamsinti laisvai, 
 
 ## Kada verta kreiptis į profesionalus
 
-Lenkti galiniai stiklai, šildymo siūlai ir plėvelės formavimas reikalauja įgūdžių – pirmas bandymas dažnai baigiasi sugadinta plėvele. Profesionalai darbą atlieka per **2–3 valandas**, be burbulų, ir suteikia garantiją. Jei norite rezultato be rizikos – [užsisakykite tamsinimą](/automobilio-stiklu-tamsinimas): mūsų darbams taikoma 5 metų ar ilgesnė garantija.
+Lenkti galiniai stiklai, šildymo siūlai ir plėvelės formavimas reikalauja įgūdžių – pirmas bandymas dažnai baigiasi sugadinta plėvele. Profesionalai darbą atlieka per **2–3 valandas**, be burbulų, ir suteikia garantiją. Jei norite rezultato be rizikos – [užsisakykite tamsinimą](/automobilio-stiklu-tamsinimas): mūsų atliktiems darbams taikoma 10 metų garantija.

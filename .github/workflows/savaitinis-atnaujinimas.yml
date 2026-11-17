@@ -1,0 +1,26 @@
+# Kas pirmadienį paprašo Cloudflare iš naujo sukurti svetainę,
+# kad atsinaujintų Google atsiliepimai ir Instagram įrašai (ir pratęstų Instagram raktą).
+# Reikia GitHub saugyklos paslapties CLOUDFLARE_DEPLOY_HOOK (žr. README.md). Be jos – nieko nedaro.
+name: Savaitinis atnaujinimas
+
+on:
+  schedule:
+    - cron: '0 5 * * 1'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  atnaujinti:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Paleisti Cloudflare Pages atnaujinimą
+        env:
+          HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "CLOUDFLARE_DEPLOY_HOOK nenustatytas – praleidžiama."
+            exit 0
+          fi
+          curl -fsS -X POST "$HOOK" > /dev/null
+          echo "Atnaujinimas paleistas."

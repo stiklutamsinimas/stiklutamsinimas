@@ -4,8 +4,8 @@ seoTitle: Kiek galima tamsinti priekinius stiklus?
 description: Priekinį stiklą ir priekinius šoninius langus Lietuvoje galima patamsinti ne daugiau kaip 30 % – jie turi praleisti bent 70 % šviesos. Ką tai reiškia ir kokias plėveles rinktis.
 pubDate: 2024-01-08
 updatedDate: 2026-11-17
-cover: ../../assets/pleveles/sk-20/sk-20-saulelydis.jpg
-coverAlt: Chameleono plėvelė ant priekinio stiklo saulėlydžio šviesoje
+cover: ../../assets/naujienos/priekiniu-automobilio-stiklu-tamsinimas.jpg
+coverAlt: Priekinių automobilio stiklų tamsinimo iliustracija
 tags: [Automobiliams, Reikalavimai]
 ---
 

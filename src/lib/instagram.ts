@@ -16,9 +16,28 @@ export interface InstagramPost {
 
 let cache: Promise<InstagramPost[]> | undefined;
 
+/**
+ * Ilgalaikis raktas galioja 60 d. Kiekvieno svetainės atnaujinimo metu jį pratęsiame
+ * (kas savaitę – per .github/workflows/savaitinis-atnaujinimas.yml), todėl jis nenustoja galioti.
+ */
+async function refresh(token: string): Promise<string> {
+  try {
+    const url = new URL('https://graph.instagram.com/refresh_access_token');
+    url.searchParams.set('grant_type', 'ig_refresh_token');
+    url.searchParams.set('access_token', token);
+    const res = await fetch(url, { signal: AbortSignal.timeout(10_000) });
+    if (!res.ok) return token;
+    const json = (await res.json()) as { access_token?: string };
+    return json.access_token || token;
+  } catch {
+    return token;
+  }
+}
+
 async function load(limit: number): Promise<InstagramPost[]> {
-  const token = import.meta.env.INSTAGRAM_ACCESS_TOKEN as string | undefined;
-  if (!token) return [];
+  const stored = import.meta.env.INSTAGRAM_ACCESS_TOKEN as string | undefined;
+  if (!stored) return [];
+  const token = await refresh(stored);
   try {
     const url = new URL('https://graph.instagram.com/me/media');
     url.searchParams.set('fields', 'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp');

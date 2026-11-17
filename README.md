@@ -24,7 +24,8 @@ npm run preview    # peržiūrėti dist/ versiją
 | Straipsniai (naujienos) | `src/content/naujienos/*.md` arba **/admin** |
 | Plėvelių pavyzdžiai (pavadinimai, tamsumo %) | `src/data/films.ts` |
 | Nuotraukų aprašymai (alt tekstai) | `src/data/galleries.ts` |
-| Pagrindinio puslapio kainos | `src/components/sections/Pricing.astro` |
+| Automobilių tamsinimo kainos (visur svetainėje) | `src/data/prices.ts` |
+| Garantija, veiklos pradžios metai | `src/config/site.ts` (`warrantyYears`, `foundedYear`) |
 | Spalvos (šviesi ir tamsi tema) | `src/styles/global.css` |
 | Logotipas ir ikonos | `src/assets/brand/` → `npm run icons` |
 | Saugumo antraštės, peradresavimai | `public/_headers`, `public/_redirects` |
@@ -53,15 +54,32 @@ Nauja nuotrauka: įkelkite `.jpg` į aplanką (pavadinimas mažosiomis raidėmis
 
 ## Google atsiliepimai ir Instagram įrašai
 
-Be papildomų nustatymų rodoma nuoroda į Google atsiliepimus ir jūsų darbų nuotraukos su nuoroda į Instagram. Kad būtų rodomi **tikri atsiliepimai ir naujausi Instagram įrašai**, Cloudflare Pages → projektas → **Settings → Variables and Secrets** pridėkite (tipas *Secret*):
+Be raktų rodoma nuoroda į Google atsiliepimus ir jūsų darbų nuotraukos su nuoroda į Instagram. Raktai įrašomi **Cloudflare** → Workers & Pages → `stiklutamsinimas` → **Settings → Variables and Secrets → Add** (tipas *Secret*, aplinka *Production*), po to **Deployments → Retry deployment**.
 
-| Kintamasis | Kur gauti |
-|---|---|
-| `GOOGLE_PLACES_API_KEY` | Google Cloud Console → įjungti *Places API (New)* → Credentials → API key |
-| `GOOGLE_PLACE_ID` | [Place ID Finder](https://developers.google.com/maps/documentation/places/web-service/place-id) – susiraskite savo verslą |
-| `INSTAGRAM_ACCESS_TOKEN` | Meta for Developers → Instagram API (Instagram Login) → ilgalaikis raktas (galioja 60 d., reikia atnaujinti) |
+### Google atsiliepimai – `GOOGLE_PLACES_API_KEY`
 
-Duomenys paimami kiekvieno svetainės atnaujinimo metu; raktai į naršyklę nepatenka.
+1. https://console.cloud.google.com → prisijunkite Google paskyra → sukurkite projektą (pvz. „stiklutamsinimas“).
+2. **Billing** – pridėkite mokėjimo kortelę (Google to reikalauja; svetainė siunčia vos kelias užklausas per savaitę – tai telpa į nemokamą limitą).
+3. **APIs & Services → Library** → raskite **Places API (New)** → **Enable**.
+4. **APIs & Services → Credentials → Create credentials → API key**. Nukopijuokite raktą.
+5. Rakto nustatymuose **API restrictions → Restrict key → Places API (New)** (saugumui).
+6. Cloudflare įrašykite `GOOGLE_PLACES_API_KEY` = raktas. Jūsų verslo profilis surandamas automatiškai (jei rastų ne tą – papildomai įrašykite `GOOGLE_PLACE_ID`).
+
+### Instagram įrašai – `INSTAGRAM_ACCESS_TOKEN`
+
+1. Instagram programėlėje: **Nustatymai → Paskyros tipas** – turi būti *Profesionali* (Verslo arba Kūrėjo) paskyra.
+2. https://developers.facebook.com → prisijunkite Facebook paskyra → **My Apps → Create App** → tipas *Business* (arba „Other“).
+3. Programėlėje **Add product → Instagram** → **API setup with Instagram login**.
+4. **Generate access tokens → Add account** → prisijunkite savo Instagram paskyra → **Generate token**. Nukopijuokite raktą.
+5. Cloudflare įrašykite `INSTAGRAM_ACCESS_TOKEN` = raktas. Raktas galioja 60 d., bet kiekvieno svetainės atnaujinimo metu pratęsiamas automatiškai.
+
+### Automatinis atnaujinimas kas savaitę (rekomenduojama)
+
+Kad atsiliepimai ir Instagram įrašai atsinaujintų patys, o Instagram raktas nenustotų galioti:
+1. Cloudflare → projektas → **Settings → Builds → Deploy hooks → Add** (pavadinimas „savaitinis“, šaka `main`) → nukopijuokite URL.
+2. GitHub → saugykla → **Settings → Secrets and variables → Actions → New repository secret**: `CLOUDFLARE_DEPLOY_HOOK` = URL.
+
+Kas pirmadienį svetainė bus perkurta automatiškai (`.github/workflows/savaitinis-atnaujinimas.yml`). Raktai į naršyklę nepatenka.
 
 ## Tiesioginis susirašinėjimas
 

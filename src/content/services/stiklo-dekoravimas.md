@@ -52,7 +52,7 @@ faq:
 related:
   - langu-tamsinimas
   - lipduku-spausdinimas
-  - stiklo-pertvaros
+  - apsaugine-plevele
 ---
 
 ## Stiklo dekoravimas – stilius ir privatumas

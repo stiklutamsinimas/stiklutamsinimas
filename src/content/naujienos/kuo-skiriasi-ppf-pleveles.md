@@ -3,8 +3,8 @@ title: 'Kuo skiriasi PPF plėvelės TPU ir TPH: kokie jų skirtumai?'
 seoTitle: PPF plėvelės TPU ir TPH – skirtumai
 description: PPF plėvelės saugo automobilio dažus nuo įbrėžimų, akmenukų ir UV spindulių. Kuo skiriasi TPU ir TPH plėvelės ir kurią rinktis?
 pubDate: 2024-01-08
-cover: ../../assets/darbai/maserati-granturismo-sonas.jpg
-coverAlt: Mėlynas Maserati GranTurismo – automobilio kėbulo apsauga
+cover: ../../assets/naujienos/kuo-skiriasi-ppf-pleveles.jpg
+coverAlt: PPF apsauginių plėvelių iliustracija
 tags: [Automobiliams, Plėvelės]
 ---
 

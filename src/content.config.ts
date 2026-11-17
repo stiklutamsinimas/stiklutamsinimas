@@ -34,6 +34,8 @@ const services = defineCollection({
 
       prices: z.array(z.object({ label: z.string(), value: z.string(), note: z.string().optional() })).optional(),
       priceFrom: z.number().optional(),
+      /** Rodyti automobilių kainų lentelę (src/data/prices.ts) */
+      priceTable: z.boolean().default(false),
 
       /** Galerijos – nuotraukos imamos iš src/assets/<folder> */
       galleries: z

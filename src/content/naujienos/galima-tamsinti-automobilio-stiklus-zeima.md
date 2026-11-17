@@ -2,8 +2,8 @@
 title: Ar galima tamsinti automobilių stiklus žiemą?
 description: Ar žiemą galima tamsinti automobilio stiklus, kiek laiko plėvelė džiūsta šaltuoju metų laiku ir ką reikia žinoti apie matomumą tamsiu paros metu.
 pubDate: 2024-01-13
-cover: ../../assets/darbai/skoda-kodiaq-tamsinti-stiklai.jpg
-coverAlt: Škoda Kodiaq su tamsintais galiniais stiklais žiemą
+cover: ../../assets/naujienos/galima-tamsinti-automobilio-stiklus-zeima.jpg
+coverAlt: Automobilio stiklų tamsinimas šiltose dirbtuvėse žiemą (AI iliustracija)
 tags: [Automobiliams, Patarimai]
 ---
 

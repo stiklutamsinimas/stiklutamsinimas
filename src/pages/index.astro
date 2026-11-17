@@ -46,16 +46,16 @@ const faq = [
   { q: 'Ar galima tamsinti priekinius langus?', a: 'Taip, bet ribotai: priekinį stiklą ir priekinius šoninius langus leidžiama patamsinti ne daugiau kaip 30 % – jie turi praleisti ne mažiau kaip 70 % šviesos. Tam naudojame skaidrias atermines ir chameleono plėveles.' },
   { q: 'Kada galima nuleisti langus ir juos plauti?', a: 'Kelias dienas po tamsinimo langų nenuleiskite – plėvelei reikia laiko visiškai prilipti. Pirmomis dienomis matomas lengvas drumstumas ar smulkūs lašeliai yra normalu – jie išnyksta plėvelei išdžiūvus. Valykite minkšta šluoste, be abrazyvinių priemonių.' },
   { q: 'Ar plėvelė netrikdys GPS ir mobiliojo ryšio?', a: 'Metalo dalelių turinčios plėvelės gali silpninti radijo ir telefono signalą, todėl automobiliams siūlome plėveles be metalo – jos ryšio netrikdo.' },
-  { q: 'Ar suteikiate garantiją?', a: `Taip. Visiems darbams suteikiame ne trumpesnę kaip ${site.warrantyYears} metų garantiją, o priklausomai nuo pasirinktų medžiagų – ir ilgesnę.` },
+  { q: 'Ar suteikiate garantiją?', a: `Taip. Visiems atliktiems darbams suteikiame ${site.warrantyYears} metų garantiją. Dirbame nuo ${site.foundedYear} m.` },
   { q: 'Ar galima tamsinti stiklus žiemą?', a: 'Taip. Plėvelė klijuojama šiltoje patalpoje, todėl oras lauke darbui įtakos neturi. Kokybiškos plėvelės atsparios šalčiui, karščiui ir drėgmei.' },
   { q: 'Kur atliekate darbus?', a: `Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje. ${site.appointmentNote} – paskambinkite ar parašykite ir suderinsime patogų laiką. Pastatų langus klijuojame atvykę į objektą.` },
-  { q: 'Kiek kainuoja automobilio stiklų tamsinimas?', a: 'Sedano galinių stiklų tamsinimas – nuo 120 €, universalo ir visureigio – nuo 140 €. Tikslią kainą pasakysime iš anksto pagal automobilio modelį ir pasirinktą plėvelę.' },
+  { q: 'Kiek kainuoja automobilio stiklų tamsinimas?', a: 'Galinių stiklų tamsinimas: hečbekui 90–120 €, kupė 90–110 €, sedanui 100–130 €, džipui 110–130 €, minivenui 120–150 €, mikroautobusui 145–180 €. Tikslią kainą pasakysime iš anksto pagal automobilio modelį ir pasirinktą plėvelę.' },
 ];
 ---
 
 <BaseLayout
   title="Stiklų tamsinimas automobiliams ir pastatams | stiklutamsinimas.eu"
-  description="Automobilių ir pastatų stiklų tamsinimas kokybiškomis plėvelėmis Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje. Galiniai stiklai nuo 120 €, 5 metų garantija."
+  description="Automobilių ir pastatų stiklų tamsinimas kokybiškomis plėvelėmis Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje. Galiniai stiklai nuo 90 €, 10 metų garantija, patirtis nuo 2007 m."
   schema={[faqSchema(faq)]}
 >
   <!-- ===== Įvadas ===== -->
@@ -81,7 +81,7 @@ const faq = [
         </div>
         <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-[0.95rem] text-muted">
           {
-            ['UV apsauga iki 99 %', 'Automobiliui – per 2–3 val.', `Garantija nuo ${site.warrantyYears} metų`].map((t) => (
+            ['UV apsauga iki 99 %', 'Automobiliui – per 2–3 val.', `${site.warrantyYears} metų garantija`, `Patirtis nuo ${site.foundedYear} m.`].map((t) => (
               <li class="inline-flex items-center gap-2">
                 <CircleCheck size={18} class="text-link" aria-hidden="true" />
                 {t}
@@ -155,7 +155,7 @@ const faq = [
   <!-- ===== Kainos ===== -->
   <section id="kainos" class="section bg-bg-2">
     <div class="container-site">
-      <SectionHeading eyebrow="Kainos" title="Orientacinės kainos" lead="Galutinė kaina priklauso nuo automobilio modelio, stiklų ploto ir pasirinktos plėvelės." />
+      <SectionHeading eyebrow="Kainos" title="Automobilių stiklų tamsinimo kainos" lead="Kainos pagal kėbulo tipą. Pastatams kaina skaičiuojama pagal stiklų plotą." />
       <div class="mt-12"><Pricing /></div>
     </div>
   </section>

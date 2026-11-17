@@ -3,8 +3,8 @@ title: 'Langų tamsinimo plėvelė su ABG žymėjimu: sertifikuota kokybė ir sa
 seoTitle: Tamsinimo plėvelė su ABG žymėjimu – kas tai?
 description: Kas yra ABG žymėjimas ant langų tamsinimo plėvelės, kada jo reikia keliaujant po Europą ir kodėl verta rinktis sertifikuotą plėvelę.
 pubDate: 2024-01-14
-cover: ../../assets/pleveles/ultravision-ms93c/ultravision-ms93c-priekinis-stiklas.jpg
-coverAlt: Sertifikuota aterminė plėvelė ant automobilio priekinio stiklo
+cover: ../../assets/naujienos/langu-tamsinimo-plevele-su-abg-sertifikatu.jpg
+coverAlt: Meistras brauklėmis lygina tamsinimo plėvelę ant automobilio lango (AI iliustracija)
 tags: [Automobiliams, Plėvelės]
 ---
 

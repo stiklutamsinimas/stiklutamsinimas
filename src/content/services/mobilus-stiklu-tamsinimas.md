@@ -33,7 +33,7 @@ benefits:
     text: Pastatų langus, vitrinas ir stiklo pertvaras visada klijuojame objekte.
   - icon: badge-check
     title: Ta pati kokybė
-    text: Naudojame tas pačias plėveles ir įrankius kaip dirbtuvėse, suteikiame tokią pačią 5 metų ar ilgesnę garantiją.
+    text: Naudojame tas pačias plėveles ir įrankius kaip dirbtuvėse, suteikiame tokią pačią 10 metų garantiją.
 
 faq:
   - q: Kur atvykstate?

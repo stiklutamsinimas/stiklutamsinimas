@@ -12,6 +12,7 @@ import FilmSamples from '@/components/sections/FilmSamples.astro';
 import BeforeAfter from '@/components/sections/BeforeAfter.astro';
 import Steps from '@/components/sections/Steps.astro';
 import CtaBand from '@/components/sections/CtaBand.astro';
+import Pricing from '@/components/sections/Pricing.astro';
 import Faq from '@/components/sections/Faq.astro';
 import ServiceCard from '@/components/sections/ServiceCard.astro';
 import ContactForm from '@/components/sections/ContactForm.astro';
@@ -85,7 +86,7 @@ const schema = [
             </a>
           </div>
           <p class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
-            <span class="inline-flex items-center gap-1.5"><ShieldCheck size={16} class="text-link" aria-hidden="true" /> Garantija nuo {site.warrantyYears} metų</span>
+            <span class="inline-flex items-center gap-1.5"><ShieldCheck size={16} class="text-link" aria-hidden="true" /> {site.warrantyYears} metų garantija</span>
             <span class="inline-flex items-center gap-1.5"><CalendarCheck size={16} class="text-link" aria-hidden="true" /> Tik iš anksto susitarus</span>
           </p>
         </div>
@@ -105,7 +106,7 @@ const schema = [
           {
             d.priceFrom && (
               <div class="card absolute -bottom-6 left-5 px-5 py-4 sm:left-8">
-                <p class="text-xs text-muted">{d.prices?.[0]?.label ?? 'Kaina'}</p>
+                <p class="text-xs text-muted">{d.prices?.[0]?.label ?? (d.priceTable ? 'Galiniai stiklai' : 'Kaina')}</p>
                 <p class="mt-0.5 text-2xl font-extrabold text-text">nuo {d.priceFrom} €</p>
               </div>
             )
@@ -116,6 +117,15 @@ const schema = [
   </section>
 
   <!-- Kainos -->
+  {
+    d.priceTable && (
+      <section id="kainos" class="pt-6 pb-6">
+        <div class="container-site max-w-3xl">
+          <Pricing compact />
+        </div>
+      </section>
+    )
+  }
   {
     d.prices && d.prices.length > 0 && (
       <section id="kainos" class="pb-6">

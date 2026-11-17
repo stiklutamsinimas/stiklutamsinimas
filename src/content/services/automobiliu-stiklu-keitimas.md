@@ -6,7 +6,7 @@ icon: wrench
 featured: false
 
 seoTitle: Automobilių stiklų keitimas ir remontas | stiklutamsinimas.eu
-seoDescription: Automobilių priekinių, galinių ir šoninių stiklų keitimas lengviesiems automobiliams, visureigiams ir komerciniam transportui. Daugiau nei 10 metų patirtis.
+seoDescription: Automobilių priekinių, galinių ir šoninių stiklų keitimas lengviesiems automobiliams, visureigiams ir komerciniam transportui. Patirtis nuo 2007 m.
 
 h1: Automobilių stiklų keitimas
 lead: Įskilęs ar sudužęs stiklas – ne tik nepatogumas, bet ir saugumo klausimas. Keičiame priekinius, galinius ir šoninius stiklus lengviesiems automobiliams, visureigiams ir komerciniam transportui.
@@ -18,12 +18,12 @@ coverAlt: Automobilio priekinis stiklas dirbtuvėse
 highlights:
   - Priekiniai, galiniai ir šoniniai stiklai
   - Lengvieji, visureigiai ir komercinis transportas
-  - Daugiau nei 10 metų patirtis
+  - Patirtis nuo 2007 m.
   - Kokybiški stiklai ir klijai
 
 benefits:
   - icon: badge-check
-    title: 10+ metų patirtis
+    title: Patirtis nuo 2007 m.
     text: Automobilių stiklų srityje dirbame daugiau nei dešimtmetį ir žinome kiekvieno modelio subtilybes.
   - icon: truck
     title: Visam transportui

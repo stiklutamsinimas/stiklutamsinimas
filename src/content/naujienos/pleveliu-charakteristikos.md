@@ -3,8 +3,8 @@ title: 'Plėvelių charakteristikos: kas naujo rinkoje?'
 seoTitle: Tamsinimo plėvelių naujovės ir savybės
 description: Išmanieji stiklai, keraminės ir aterminės plėvelės, mažos emisijos stiklai – svarbiausios stiklų tamsinimo technologijų naujovės ir ką jos reiškia vartotojui.
 pubDate: 2026-11-17
-cover: ../../assets/veidrodines/modernaus-namo-veidrodine-plevele.jpg
-coverAlt: Modernaus namo stiklinis fasadas su veidrodine plėvele
+cover: ../../assets/naujienos/pleveliu-charakteristikos.jpg
+coverAlt: Langų plėvelių technologijų naujovių iliustracija
 tags: [Plėvelės, Naujienos]
 ---
 

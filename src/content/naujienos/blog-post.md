@@ -3,8 +3,8 @@ title: 'Automobilio langų tamsinimas ar užuolaidėlės: skirtumai ir privaluma
 seoTitle: Langų tamsinimas ar užuolaidėlės?
 description: Tamsinimo plėvelė ar langų užuolaidėlės – kuris būdas geriau apsaugo automobilio saloną nuo saulės ir suteikia privatumo? Palyginame privalumus ir trūkumus.
 pubDate: 2024-01-08
-cover: ../../assets/darbai/volvo-xc60-tamsinti-stiklai.jpg
-coverAlt: Baltas Volvo XC60 su tamsintais galiniais stiklais
+cover: ../../assets/naujienos/blog-post.jpg
+coverAlt: Langų tamsinimo ir užuolaidėlių palyginimo iliustracija
 tags: [Automobiliams, Patarimai]
 ---
 

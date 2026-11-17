@@ -46,7 +46,7 @@ faq:
 related:
   - langu-tamsinimas
   - stiklo-dekoravimas
-  - stiklo-pertvaros
+  - stiklo-dekoravimas
 ---
 
 ## Kaip veikia stiklų šarvavimas

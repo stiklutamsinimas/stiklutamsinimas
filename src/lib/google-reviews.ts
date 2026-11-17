@@ -4,8 +4,8 @@
  *
  * Kad atsiliepimai rodytųsi, Cloudflare Pages → Settings → Variables nustatykite:
  *   GOOGLE_PLACES_API_KEY – Google Cloud raktas su įjungtu „Places API (New)“
- *   GOOGLE_PLACE_ID       – jūsų Google verslo profilio Place ID (pvz. ChIJ...)
- * Be jų rodoma nuoroda į atsiliepimus Google Maps.
+ *   GOOGLE_PLACE_ID       – (nebūtina) verslo profilio Place ID; jei nėra – randamas automatiškai
+ * Be rakto rodoma nuoroda į atsiliepimus Google Maps.
  */
 export interface Review {
   author: string;
@@ -25,12 +25,31 @@ export interface ReviewsData {
 
 let cache: Promise<ReviewsData | null> | undefined;
 
+/** Jei Place ID nenurodytas – susirandame verslo profilį pagal pavadinimą ir adresą */
+async function findPlaceId(key: string): Promise<string | undefined> {
+  const res = await fetch('https://places.googleapis.com/v1/places:searchText', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Goog-Api-Key': key, 'X-Goog-FieldMask': 'places.id,places.displayName' },
+    body: JSON.stringify({ textQuery: 'Stiklų tamsinimas stiklutamsinimas.eu, Gedimino g. 67, Kupiškis', languageCode: 'lt' }),
+    signal: AbortSignal.timeout(10_000),
+  });
+  if (!res.ok) {
+    console.warn(`[google-reviews] paieška HTTP ${res.status}`);
+    return undefined;
+  }
+  const json = (await res.json()) as { places?: { id: string; displayName?: { text?: string } }[] };
+  const place = json.places?.[0];
+  if (place) console.log(`[google-reviews] rastas profilis: ${place.displayName?.text ?? ''} (${place.id})`);
+  return place?.id;
+}
+
 async function load(): Promise<ReviewsData | null> {
   const key = import.meta.env.GOOGLE_PLACES_API_KEY as string | undefined;
-  const placeId = import.meta.env.GOOGLE_PLACE_ID as string | undefined;
-  if (!key || !placeId) return null;
+  if (!key) return null;
 
   try {
+    const placeId = (import.meta.env.GOOGLE_PLACE_ID as string | undefined) || (await findPlaceId(key));
+    if (!placeId) return null;
     const res = await fetch(`https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}?languageCode=lt`, {
       headers: {
         'X-Goog-Api-Key': key,

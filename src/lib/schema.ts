@@ -31,6 +31,7 @@ export function siteGraph() {
       telephone: site.phone,
       description: site.description,
       slogan: site.tagline,
+      foundingDate: String(site.foundedYear),
       areaServed: { '@type': 'Country', name: 'Lietuva' },
       sameAs: site.social.map((s) => s.url),
       contactPoint: {
