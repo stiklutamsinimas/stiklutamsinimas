@@ -3,7 +3,10 @@
  * Nuotraukos atsisiunčiamos ir optimizuojamos, todėl lankytojų naršyklė į Instagram nesikreipia.
  *
  * Kad įrašai rodytųsi, Cloudflare Pages → Settings → Variables nustatykite:
- *   INSTAGRAM_ACCESS_TOKEN – Instagram API (Instagram Login) ilgalaikis raktas
+ *   INSTAGRAM_ACCESS_TOKEN – Meta programėlės „Stikliu tamsinimas svetaine“ raktas
+ *     (EAA… – Instagram API su Unified login, sistemos naudotojo raktas, nesibaigia)
+ *     arba senesnis Instagram Login raktas (IG…, galioja 60 d., pratęsiamas automatiškai)
+ *   INSTAGRAM_USER_ID – (nebūtina) Instagram paskyros ID, numatytasis – @stiklutamsinimas.eu
  * Be rakto rodomos jūsų darbų nuotraukos su nuoroda į Instagram profilį.
  */
 export interface InstagramPost {
@@ -15,6 +18,9 @@ export interface InstagramPost {
 }
 
 let cache: Promise<InstagramPost[]> | undefined;
+
+/** @stiklutamsinimas.eu Instagram paskyros ID (Meta Graph API) */
+const DEFAULT_IG_USER_ID = '17841404079336193';
 
 /**
  * Ilgalaikis raktas galioja 60 d. Kiekvieno svetainės atnaujinimo metu jį pratęsiame
@@ -37,9 +43,16 @@ async function refresh(token: string): Promise<string> {
 async function load(limit: number): Promise<InstagramPost[]> {
   const stored = import.meta.env.INSTAGRAM_ACCESS_TOKEN as string | undefined;
   if (!stored) return [];
-  const token = await refresh(stored);
+  // EAA… – Facebook Graph raktas (Unified login): nesibaigia, pratęsti nereikia
+  const facebookToken = stored.startsWith('EAA');
+  const token = facebookToken ? stored : await refresh(stored);
   try {
-    const url = new URL('https://graph.instagram.com/me/media');
+    const userId = (import.meta.env.INSTAGRAM_USER_ID as string | undefined) || DEFAULT_IG_USER_ID;
+    const url = new URL(
+      facebookToken
+        ? `https://graph.facebook.com/v23.0/${encodeURIComponent(userId)}/media`
+        : 'https://graph.instagram.com/me/media',
+    );
     url.searchParams.set('fields', 'id,caption,media_type,media_url,thumbnail_url,permalink,timestamp');
     url.searchParams.set('limit', String(limit));
     url.searchParams.set('access_token', token);
