@@ -54,9 +54,9 @@ Nauja nuotrauka: įkelkite `.jpg` į aplanką (pavadinimas mažosiomis raidėmis
 
 ## Google atsiliepimai ir Instagram įrašai
 
-Be raktų rodoma nuoroda į Google atsiliepimus ir jūsų darbų nuotraukos su nuoroda į Instagram. Raktai įrašomi **Cloudflare** → Workers & Pages → `stiklutamsinimas` → **Settings → Variables and Secrets → Add** (tipas *Secret*, aplinka *Production*), po to **Deployments → Retry deployment**.
+**Atsiliepimai rodomi be jokių raktų ir mokesčių**: įvertinimas, skaičius ir atsiliepimų tekstai saugomi faile src/data/atsiliepimai.json – juos patogiausia keisti per **/admin → Atsiliepimai** (atsiradus naujam atsiliepimui Google). Žemiau aprašytas raktas – tik jei norite, kad atsiliepimai atsinaujintų visiškai automatiškai (Google reikalauja mokėjimo kortelės). Instagram įrašams be rakto rodomos jūsų darbų nuotraukos su nuoroda į Instagram. Raktai įrašomi **Cloudflare** → Workers & Pages → `stiklutamsinimas` → **Settings → Variables and Secrets → Add** (tipas *Secret*, aplinka *Production*), po to **Deployments → Retry deployment**.
 
-### Google atsiliepimai – `GOOGLE_PLACES_API_KEY`
+### (Nebūtina) Automatiniai Google atsiliepimai – `GOOGLE_PLACES_API_KEY`
 
 1. https://console.cloud.google.com → prisijunkite Google paskyra → sukurkite projektą (pvz. „stiklutamsinimas“).
 2. **Billing** – pridėkite mokėjimo kortelę (Google to reikalauja; svetainė siunčia vos kelias užklausas per savaitę – tai telpa į nemokamą limitą).

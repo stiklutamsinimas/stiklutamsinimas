@@ -95,3 +95,41 @@ collections:
         name: body
         widget: markdown
         hint: Naudokite antraštes (H2, H3), sąrašus ir nuorodas į paslaugas, pvz. /automobilio-stiklu-tamsinimas
+
+  - name: nustatymai
+    label: Atsiliepimai
+    description: Google atsiliepimai, rodomi svetainėje. Atsiradus naujam atsiliepimui Google – pridėkite jį čia ir atnaujinkite skaičių.
+    files:
+      - name: atsiliepimai
+        label: Google atsiliepimai
+        file: src/data/atsiliepimai.json
+        format: json
+        fields:
+          - label: Vidutinis įvertinimas (pvz. 5 arba 4.9)
+            name: rating
+            widget: number
+            value_type: float
+            min: 1
+            max: 5
+          - label: Atsiliepimų skaičius Google
+            name: count
+            widget: number
+            value_type: int
+            min: 0
+          - label: Ką klientai dažniausiai mini
+            name: highlights
+            widget: list
+            default: []
+          - label: Nuoroda „Palikti atsiliepimą“ (nebūtina)
+            name: writeReviewUrl
+            widget: string
+            required: false
+            hint: Google verslo profilyje → „Prašyti atsiliepimų“ → nukopijuokite nuorodą (pvz. https://g.page/r/.../review)
+          - label: Atsiliepimai
+            name: reviews
+            widget: list
+            summary: '{{fields.author}} – {{fields.text}}'
+            fields:
+              - { label: Vardas (pvz. Žilvinas S.), name: author, widget: string }
+              - { label: Įvertinimas, name: rating, widget: number, value_type: int, min: 1, max: 5, default: 5 }
+              - { label: Tekstas, name: text, widget: text }

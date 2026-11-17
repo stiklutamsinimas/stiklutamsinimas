@@ -1,0 +1,13 @@
+{
+  "rating": 5,
+  "count": 13,
+  "highlights": ["Puikiai dirba", "Profesionalus darbas", "Puikus atlikimas"],
+  "writeReviewUrl": "",
+  "reviews": [
+    {
+      "author": "Žilvinas S.",
+      "rating": 5,
+      "text": "Profesionaliai ir greitai užtamsino automobilio galą!"
+    }
+  ]
+}
