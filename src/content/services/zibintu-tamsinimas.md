@@ -6,7 +6,7 @@ icon: lightbulb
 featured: true
 
 seoTitle: Žibintų tamsinimas plėvele | stiklutamsinimas.eu
-seoDescription: Automobilių galinių ir priekinių žibintų tamsinimas specialia plėvele – modernesnė išvaizda ir apsauga nuo įbrėžimų. Plėvelę galima nuimti be pėdsakų.
+seoDescription: Galinių ir priekinių žibintų tamsinimas plėvele – modernesnė automobilio išvaizda ir apsauga nuo įbrėžimų. Plėvelę galima nuimti be pėdsakų.
 
 h1: Žibintų tamsinimas
 lead: Tamsinta plėvelė ant galinių ar priekinių žibintų suteikia automobiliui modernesnę, vientisą išvaizdą ir apsaugo žibintų paviršių nuo smulkių įbrėžimų bei saulės poveikio.

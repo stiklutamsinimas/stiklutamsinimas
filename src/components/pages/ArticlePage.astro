@@ -21,6 +21,10 @@ const url = postUrl(entry.id);
 const absUrl = new URL(url, site.url).href;
 const more = (await getPosts()).filter((p) => p.id !== entry.id).slice(0, 3);
 
+// Google rodo ~60 simbolių – ilgiems pavadinimams svetainės pavadinimo nepridedame
+const baseTitle = d.seoTitle ?? d.title;
+const pageTitle = [...baseTitle].length <= 42 ? `${baseTitle} | stiklutamsinimas.eu` : baseTitle;
+
 const crumbs = [
   { name: 'Pradžia', url: '/' },
   { name: 'Naujienos', url: '/naujienos' },
@@ -41,7 +45,7 @@ const schema = [
 ---
 
 <BaseLayout
-  title={`${d.seoTitle ?? d.title} | stiklutamsinimas.eu`}
+  title={pageTitle}
   description={d.description}
   image={d.cover}
   imageAlt={d.coverAlt}

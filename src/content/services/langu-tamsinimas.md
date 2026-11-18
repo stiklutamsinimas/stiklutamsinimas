@@ -5,8 +5,8 @@ order: 1
 icon: building
 featured: true
 
-seoTitle: Langų tamsinimas biurams ir namams | stiklutamsinimas.eu
-seoDescription: Pastatų langų tamsinimas plėvelėmis – veidrodinės, matinės ir dekoratyvinės plėvelės namams, biurams ir verslui. Mažiau karščio, daugiau privatumo.
+seoTitle: Langų tamsinimas, veidrodinė plėvelė | stiklutamsinimas.eu
+seoDescription: 'Langų tamsinimas (tonavimas) namams ir biurams: veidrodinė plėvelė langams, plėvelės nuo saulės ir karščio, matinės plėvelės. Atvykstame į objektą.'
 
 h1: Langų tamsinimas biurams ir namams
 lead: Veidrodinės, saulės kontrolės, matinės ir dekoratyvinės plėvelės langams – vėsesnės patalpos vasarą, mažiau blunkantys baldai ir daugiau privatumo. Tinka namams, biurams, parduotuvėms ir sporto salėms.

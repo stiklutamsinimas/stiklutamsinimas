@@ -5,8 +5,8 @@ order: 3
 icon: layers
 featured: false
 
-seoTitle: Stiklo matinimas ir dekoravimas plėvelėmis | stiklutamsinimas.eu
-seoDescription: Stiklo matinimas ir dekoravimas plėvelėmis – matinės ir raštuotos plėvelės, logotipai ant stiklo durų, pertvarų matinimas biurams ir namams.
+seoTitle: Matinė plėvelė stiklui – stiklo matinimas | stiklutamsinimas.eu
+seoDescription: Matinė plėvelė langams, stiklo durims ir pertvaroms. Stiklo matinimas ir dekoravimas plėvelėmis biurams ir namams, logotipai ant stiklo.
 
 h1: Stiklų dekoravimas plėvelėmis
 lead: Matinės, raštuotos ir spalvotos plėvelės paverčia paprastą stiklą interjero akcentu. Jos suteikia privatumo neužtemdant patalpos, o įmonės logotipas ant stiklo durų sustiprina įvaizdį.

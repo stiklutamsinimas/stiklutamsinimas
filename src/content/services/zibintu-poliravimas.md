@@ -6,7 +6,7 @@ icon: sparkles
 featured: true
 
 seoTitle: Žibintų poliravimas – skaidrūs žibintai | stiklutamsinimas.eu
-seoDescription: Profesionalus automobilių žibintų poliravimas – pašaliname pageltimą, matiškumą ir smulkius įbrėžimus. Šviesesnis kelias naktį ir tvarkinga išvaizda.
+seoDescription: Žibintų poliravimas Panevėžyje, Kupiškyje, Rokiškyje ir Vilniuje – pašaliname pageltimą ir matiškumą, padengiame apsauga. Šviesesnis kelias naktį.
 
 h1: Žibintų poliravimas
 lead: Laikui bėgant plastikiniai žibintų gaubtai pagelsta ir tampa matiniai – sumažėja šviesos srautas ir matomumas naktį. Poliruodami atkuriame žibintų skaidrumą ir automobilio išvaizdą.

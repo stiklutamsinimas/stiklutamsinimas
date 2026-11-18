@@ -5,8 +5,8 @@ order: 1
 icon: sticker
 featured: true
 
-seoTitle: Reklamos darbai – lipdukai ir spauda | stiklutamsinimas.eu
-seoDescription: Ploteriuoti lipdukai, automobilių ir vitrinų apklijavimas, plačiaformatė spauda, baneriai ir įrangos apklijavimas. Nuo maketo iki priklijuoto rezultato.
+seoTitle: Lipdukų gamyba ir reklamos darbai | stiklutamsinimas.eu
+seoDescription: 'Lipdukų gamyba ir spauda: ploteriuoti lipdukai, reklama ant automobilių ir vitrinų, baneriai. Gaminame ir mažais kiekiais – nuo maketo iki klijavimo.'
 
 h1: Reklamos darbai – lipdukai ir spauda
 lead: Išpjauname ir spausdiname lipdukus, apklijuojame automobilius, vitrinas ir valtis, gaminame banerius ir iškabas. Padėsime ir su maketu – nuo idėjos iki priklijuoto rezultato.

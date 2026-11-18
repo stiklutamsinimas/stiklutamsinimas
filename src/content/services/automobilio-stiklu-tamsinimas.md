@@ -5,8 +5,8 @@ order: 1
 icon: car
 featured: true
 
-seoTitle: Automobilių stiklų tamsinimas nuo 90 € | stiklutamsinimas.eu
-seoDescription: Profesionalus automobilių stiklų tamsinimas kokybiškomis plėvelėmis. Galiniai stiklai nuo 90 €, darbas per 2–3 val., be burbulų, 5–10 metų garantija.
+seoTitle: Automobilio stiklų tamsinimas nuo 90 € | stiklutamsinimas.eu
+seoDescription: Automobilio stiklų tamsinimas (tonavimas) Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje. Kaina nuo 90 €, darbas per 2–3 val., 5–10 metų garantija.
 
 h1: Automobilių stiklų tamsinimas
 lead: Tamsiname automobilių stiklus kokybiškomis Solar Screen, Global Window Films ir Ultra Vision plėvelėmis. Vėsesnis salonas, apsauga nuo UV spindulių ir daugiau privatumo – tvarkingai, be burbulų ir su 5–10 metų garantija.
@@ -68,6 +68,8 @@ related:
 ---
 
 ## Kodėl verta tamsinti automobilio stiklus
+
+Automobilio langų tamsinimas (dar vadinamas **tonavimu**) – tai specialios plėvelės klijavimas ant stiklų iš salono pusės.
 
 Automobilio stiklų tamsinimas – tai ne tik išvaizda. Tinkamai parinkta plėvelė **sumažina saulės šilumą salone**, sulaiko UV spindulius, apsaugo salono apdailą nuo blukimo ir užtikrina privatumą keleiviams. Vasarą salonas įkaista lėčiau, o vakare mažiau akina iš paskos važiuojančių automobilių žibintai.
 
