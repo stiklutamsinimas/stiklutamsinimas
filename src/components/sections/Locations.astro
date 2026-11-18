@@ -1,7 +1,9 @@
 ---
-/** Keturi adresai su Google Maps žemėlapiais */
+/** Keturi adresai su Google Maps žemėlapiais ir nuorodomis į miestų puslapius */
 import { CalendarCheck, Navigation } from '@lucide/astro';
 import { mapsEmbedUrl, mapsUrl, site } from '@/config/site';
+import { cities, cityUrl } from '@/data/cities';
+const cityOf = (name: string) => cities.find((c) => c.location === name);
 ---
 
 <ul class="grid gap-5 md:grid-cols-2">
@@ -20,11 +22,14 @@ import { mapsEmbedUrl, mapsUrl, site } from '@/config/site';
         </div>
         <div class="flex flex-1 flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div>
-            <h3 class="text-xl">{loc.city}</h3>
+            <h3 class="text-xl">
+              <a href={cityUrl(cityOf(loc.city)?.slug ?? '')} class="hover:text-link">{loc.city}</a>
+            </h3>
             <p class="mt-1 text-muted">{loc.street}</p>
             <p class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-link">
               <CalendarCheck size={15} aria-hidden="true" /> Tik iš anksto susitarus
             </p>
+            <a href={cityUrl(cityOf(loc.city)?.slug ?? '')} class="mt-2 block text-sm font-bold text-link hover:underline">Stiklų tamsinimas {cityOf(loc.city)?.nameIn} →</a>
           </div>
           <a href={mapsUrl(loc)} target="_blank" rel="noopener" class="btn btn-outline shrink-0 !px-4 !py-2.5 text-sm">
             <Navigation size={16} aria-hidden="true" /> Maršrutas

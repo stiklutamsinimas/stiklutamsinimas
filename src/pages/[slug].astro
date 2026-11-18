@@ -14,7 +14,7 @@ export const getStaticPaths = (async () => {
   const reserved = new Set(['paslaugos', 'kontaktai', 'naujienos', 'parduotuve', 'admin', 'privatumo-politika', '404', 'rss']);
   const seen = new Set<string>();
   for (const id of [...services.map((s) => s.id), ...posts.map((p) => p.id)]) {
-    if (reserved.has(id) || seen.has(id)) {
+    if (reserved.has(id) || seen.has(id) || id.startsWith('stiklu-tamsinimas-')) {
       throw new Error(`Adresas „/${id}“ jau užimtas – pervadinkite failą src/content/.../${id}.md`);
     }
     seen.add(id);

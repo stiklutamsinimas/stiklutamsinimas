@@ -4,6 +4,7 @@ import Logo from './Logo.astro';
 import SocialIcon from '@/components/ui/SocialIcon.astro';
 import { features, mailHref, mapsUrl, site, telHref } from '@/config/site';
 import { getServices, serviceUrl } from '@/lib/content';
+import { cities, cityUrl } from '@/data/cities';
 
 const services = await getServices();
 const year = new Date().getFullYear();
@@ -89,16 +90,27 @@ const pages = [
           </a>
         </li>
         {
-          site.locations.map((loc) => (
-            <li>
-              <a href={mapsUrl(loc)} target="_blank" rel="noopener" class="inline-flex gap-2.5 hover:text-white">
+          cities.map((c) => {
+            const loc = site.locations.find((l) => l.city === c.location);
+            return (
+              <li class="flex gap-2.5">
                 <MapPin size={16} class="mt-1 shrink-0 text-[#5bbdee]" aria-hidden="true" />
                 <span>
-                  <strong class="font-semibold text-white">{loc.city}</strong>, {loc.street}
+                  <a href={cityUrl(c.slug)} class="font-semibold text-white hover:text-[#5bbdee]" title={`Stiklų tamsinimas ${c.nameIn}`}>
+                    {c.name}
+                  </a>
+                  ,{' '}
+                  {loc ? (
+                    <a href={mapsUrl(loc)} target="_blank" rel="noopener" class="hover:text-white">
+                      {loc.street}
+                    </a>
+                  ) : (
+                    <span>atvykstame pas jus</span>
+                  )}
                 </span>
-              </a>
-            </li>
-          ))
+              </li>
+            );
+          })
         }
       </ul>
     </div>

@@ -17,6 +17,7 @@ import ContactInfo from '@/components/sections/ContactInfo.astro';
 import ContactForm from '@/components/sections/ContactForm.astro';
 import { site } from '@/config/site';
 import { getFolder } from '@/data/galleries';
+import { cities, cityUrl } from '@/data/cities';
 import { getPosts, getServices, serviceUrl } from '@/lib/content';
 import { faqSchema } from '@/lib/schema';
 
@@ -54,7 +55,7 @@ const faq = [
 ---
 
 <BaseLayout
-  title="Stiklų tamsinimas automobiliams ir pastatams | stiklutamsinimas.eu"
+  title="Automobilių ir langų stiklų tamsinimas | stiklutamsinimas.eu"
   description="Automobilių ir pastatų stiklų tamsinimas kokybiškomis plėvelėmis Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje. Galiniai stiklai nuo 90 €, 5–10 metų garantija, patirtis nuo 2007 m."
   schema={[faqSchema(faq)]}
 >
@@ -67,10 +68,10 @@ const faq = [
     </div>
     <div class="container-site grid items-center gap-12 py-14 lg:grid-cols-12 lg:gap-10 lg:py-24">
       <div class="animate-fade-up lg:col-span-6">
-        <p class="eyebrow">Profesionalus klijavimas</p>
-        <h1 class="mt-6 text-[2.75rem] leading-[1.02] sm:text-6xl lg:text-[4.1rem]">
+        <h1 class="eyebrow">Automobilių ir langų stiklų tamsinimas</h1>
+        <p class="mt-6 text-[2.75rem] leading-[1.02] font-extrabold tracking-[-0.02em] text-balance text-text sm:text-6xl lg:text-[4.1rem]">
           Mažiau saulės.<br /><span class="text-link">Daugiau komforto.</span>
-        </h1>
+        </p>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted">
           Automobilių ir pastatų stiklų tamsinimas kokybiškomis plėvelėmis. Tvarkingas darbas, aiški kaina ir {site.warranty.short}
           – Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje.
@@ -215,6 +216,14 @@ const faq = [
       <div class="lg:col-span-5">
         <SectionHeading eyebrow="Kontaktai" title="Susisiekite" lead="Paskambinkite, parašykite arba užpildykite formą – pateiksime pasiūlymą ir suderinsime laiką." />
         <ContactInfo />
+        <p class="mt-8 mb-3 text-sm font-bold text-text">Stiklų tamsinimas jūsų mieste:</p>
+        <ul class="flex flex-wrap gap-2">
+          {cities.map((c) => (
+            <li>
+              <a href={cityUrl(c.slug)} class="chip">{c.name}</a>
+            </li>
+          ))}
+        </ul>
       </div>
       <div class="lg:col-span-7"><ContactForm /></div>
     </div>

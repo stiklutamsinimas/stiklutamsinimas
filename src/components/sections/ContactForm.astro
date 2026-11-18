@@ -11,8 +11,10 @@ import { getServices } from '@/lib/content';
 interface Props {
   /** Iš anksto pasirinkta paslauga */
   selected?: string;
+  /** Iš anksto pasirinktas miestas */
+  city?: string;
 }
-const { selected } = Astro.props;
+const { selected, city } = Astro.props;
 const services = await getServices();
 
 const field =
@@ -50,7 +52,8 @@ const label = 'text-sm font-bold text-text';
   <div>
     <label for="f-city" class={label}>Miestas</label>
     <select id="f-city" name="miestas" class={field}>
-      {site.locations.map((l) => <option value={l.city}>{l.city}</option>)}
+      {site.locations.map((l) => <option value={l.city} selected={city === l.city}>{l.city}</option>)}
+      <option value="Kaunas (mobiliai)" selected={city === 'Kaunas'}>Kaunas (mobiliai)</option>
       <option value="Kitas miestas (mobilus tamsinimas)">Kitas miestas</option>
     </select>
   </div>

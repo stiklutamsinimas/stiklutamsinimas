@@ -3,6 +3,7 @@
  * kas esate, kur esate ir ką siūlote (Google Maps, išplėstiniai paieškos rezultatai).
  */
 import { site } from '@/config/site';
+import type { City } from '@/data/cities';
 
 export const ORG_ID = `${site.url}/#organization`;
 const WEBSITE_ID = `${site.url}/#website`;
@@ -47,7 +48,8 @@ export function siteGraph() {
       '@type': ['LocalBusiness', 'AutomotiveBusiness'],
       '@id': `${site.url}/#${slug(loc.city)}`,
       name: `${site.name} – ${loc.city}`,
-      url: `${site.url}/kontaktai`,
+      url: `${site.url}/stiklu-tamsinimas-${slug(loc.city)}`,
+      hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.mapQuery)}`,
       image: DEFAULT_IMAGE,
       logo: LOGO_URL,
       telephone: site.phone,
@@ -134,5 +136,25 @@ export function articleSchema(opts: {
     inLanguage: 'lt-LT',
     author: { '@id': ORG_ID },
     publisher: { '@id': ORG_ID },
+  };
+}
+
+/** Miesto puslapio paslauga: „Stiklų tamsinimas Vilniuje“ */
+export function cityServiceSchema(city: City, url: string) {
+  const loc = site.locations.find((l) => l.city === city.location);
+  return {
+    '@type': 'Service',
+    name: `Stiklų tamsinimas ${city.nameIn}`,
+    serviceType: 'Stiklų tamsinimas',
+    description: city.seoDescription,
+    url: new URL(url, site.url).href,
+    provider: loc ? { '@id': `${site.url}/#${slug(loc.city)}` } : { '@id': ORG_ID },
+    areaServed: { '@type': 'City', name: city.name },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'EUR',
+      price: 90,
+      priceSpecification: { '@type': 'PriceSpecification', minPrice: 90, maxPrice: 180, priceCurrency: 'EUR' },
+    },
   };
 }

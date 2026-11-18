@@ -23,6 +23,8 @@ npm run preview    # peržiūrėti dist/ versiją
 | Paslaugų tekstai, kainos, DUK, kurios galerijos rodomos | `src/content/services/*.md` |
 | Straipsniai (naujienos) | `src/content/naujienos/*.md` arba **/admin** |
 | Plėvelių pavyzdžiai (pavadinimai, tamsumo %) | `src/data/films.ts` |
+| Miestų puslapiai (/stiklu-tamsinimas-vilnius ir kt.) – tekstai, DUK, nuotraukos | `src/data/cities.ts` |
+| Google Ads raktažodžių ir skelbimų planas | `docs/google-ads-planas.md` |
 | Nuotraukų aprašymai (alt tekstai) | `src/data/galleries.ts` |
 | Automobilių tamsinimo kainos (visur svetainėje) | `src/data/prices.ts` |
 | Garantija, veiklos pradžios metai | `src/config/site.ts` (`warranty`, `foundedYear`) |

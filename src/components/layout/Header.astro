@@ -5,6 +5,7 @@ import ThemeToggle from './ThemeToggle.astro';
 import Icon from '@/components/ui/Icon.astro';
 import { features, site, telHref } from '@/config/site';
 import { getServicesByCategory, serviceUrl } from '@/lib/content';
+import { cities, cityUrl } from '@/data/cities';
 
 const groups = await getServicesByCategory();
 const path = Astro.url.pathname.replace(/\.html$/, '');
@@ -59,6 +60,16 @@ const isActive = (href: string) => !href.includes('#') && (path === href || path
                 </div>
               ))
             }
+            <div class="col-span-3 flex flex-wrap items-center gap-2 border-t border-border pt-4">
+              <span class="mr-1 text-xs font-bold tracking-[0.16em] text-muted uppercase">Miestai:</span>
+              {
+                cities.map((c) => (
+                  <a href={cityUrl(c.slug)} class="chip !px-3 !py-1.5 !text-xs">
+                    {c.name}
+                  </a>
+                ))
+              }
+            </div>
           </div>
         </div>
       </div>
@@ -125,6 +136,18 @@ const isActive = (href: string) => !href.includes('#') && (path === href || path
           </div>
         ))
       }
+      <div class="mb-5">
+        <p class="mb-2 text-xs font-bold tracking-[0.16em] text-muted uppercase">Miestai</p>
+        <div class="flex flex-wrap gap-2">
+          {
+            cities.map((c) => (
+              <a href={cityUrl(c.slug)} class="chip">
+                {c.name}
+              </a>
+            ))
+          }
+        </div>
+      </div>
       <ul class="mt-2 grid grid-cols-2 gap-2 border-t border-border pt-5">
         {
           [{ href: '/paslaugos', label: 'Visos paslaugos' }, ...links].map((l) => (
