@@ -1,6 +1,9 @@
 /**
  * AUTOMOBILIŲ STIKLŲ TAMSINIMO KAINOS – vienoje vietoje.
  * Naudojama pradžios puslapyje, automobilių stiklų tamsinimo puslapyje ir Google duomenyse.
+ * PAKEITUS KAINAS – pataisykite ir tekstus, kuriuose jos paminėtos:
+ *   src/pages/index.astro (DUK), src/content/services/automobilio-stiklu-tamsinimas.md (DUK, „nuo 90 €“),
+ *   src/content/naujienos/kiek-kainuoja-stiklu-tamsinimas.md (lentelė).
  */
 export interface CarPrice {
   type: string;
