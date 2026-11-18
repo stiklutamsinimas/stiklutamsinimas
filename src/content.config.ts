@@ -18,6 +18,10 @@ const services = defineCollection({
       icon: z.enum(iconNames),
       /** Pagrindinė paslauga – rodoma didesne kortele */
       featured: z.boolean().default(false),
+      /** Miestai, rodomi paslaugos viršuje (pvz. mobiliam tamsinimui) */
+      cities: z.array(z.string()).default([]),
+      /** YouTube vaizdo įrašai (id iš nuorodos youtube.com/watch?v=ID) */
+      videos: z.array(z.object({ id: z.string().regex(/^[\w-]{11}$/), title: z.string() })).default([]),
 
       seoTitle: z.string().min(20).max(65),
       seoDescription: z.string().min(80).max(165),

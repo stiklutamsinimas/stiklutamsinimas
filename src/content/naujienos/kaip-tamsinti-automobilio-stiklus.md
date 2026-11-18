@@ -44,4 +44,4 @@ Lietuvoje galinius šoninius langus ir galinį stiklą galima tamsinti laisvai, 
 
 ## Kada verta kreiptis į profesionalus
 
-Lenkti galiniai stiklai, šildymo siūlai ir plėvelės formavimas reikalauja įgūdžių – pirmas bandymas dažnai baigiasi sugadinta plėvele. Profesionalai darbą atlieka per **2–3 valandas**, be burbulų, ir suteikia garantiją. Jei norite rezultato be rizikos – [užsisakykite tamsinimą](/automobilio-stiklu-tamsinimas): mūsų atliktiems darbams taikoma 10 metų garantija.
+Lenkti galiniai stiklai, šildymo siūlai ir plėvelės formavimas reikalauja įgūdžių – pirmas bandymas dažnai baigiasi sugadinta plėvele. Profesionalai darbą atlieka per **2–3 valandas**, be burbulų, ir suteikia garantiją. Jei norite rezultato be rizikos – [užsisakykite tamsinimą](/automobilio-stiklu-tamsinimas): mūsų atliktiems darbams taikoma 5–10 metų garantija (priklausomai nuo plėvelės rūšies).

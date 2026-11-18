@@ -3,7 +3,7 @@ title: Langų plėvelės – daugybė panaudojimo galimybių
 description: Kur naudojamos langų plėvelės – automobiliuose, namuose ir komerciniuose pastatuose – ir kokių stiklų nerekomenduojama dengti plėvele.
 pubDate: 2024-01-09
 cover: ../../assets/naujienos/langu-pleveles-daug-panaudojimo-dalyku.jpg
-coverAlt: Langų plėvelių panaudojimo namams, pastatams ir automobiliams iliustracija
+coverAlt: Modernus namas su dideliais langais
 tags: [Namams ir verslui, Plėvelės]
 ---
 

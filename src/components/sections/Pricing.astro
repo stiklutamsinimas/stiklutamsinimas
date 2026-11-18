@@ -42,7 +42,7 @@ const { compact = false } = Astro.props;
     <div class="flex flex-col gap-3 border-t border-border px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
       <ul class="flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-muted">
         {
-          ['Darbas per 2–3 val.', `${site.warrantyYears} metų garantija`, 'Be burbulų'].map((t) => (
+          ['Darbas per 2–3 val.', site.warranty.short, 'Be burbulų'].map((t) => (
             <li class="inline-flex items-center gap-1.5">
               <Check size={16} class="text-link" aria-hidden="true" />
               {t}

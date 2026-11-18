@@ -4,7 +4,7 @@ seoTitle: Kaip išsirinkti stiklų tamsinimo meistrą
 description: Pigiausia kaina dažnai reiškia taupymą medžiagomis ir skubotą darbą. Penki patarimai, kaip išsirinkti patikimą stiklų tamsinimo paslaugų teikėją.
 pubDate: 2024-01-08
 cover: ../../assets/naujienos/kaip-isirinkti-teisinga-paslaugu-teikeja.jpg
-coverAlt: Patikimo paslaugų teikėjo pasirinkimo iliustracija
+coverAlt: Meistras konsultuoja klientą servise
 tags: [Patarimai]
 ---
 
@@ -29,7 +29,7 @@ Profesionalas į šiuos klausimus atsakys aiškiai ir be išsisukinėjimų.
 
 ## 4. Pasidomėkite garantija
 
-Patikimas meistras suteikia garantiją ir darbui, ir plėvelei. Mūsų atliktiems darbams taikoma **10 metų garantija**.
+Patikimas meistras suteikia garantiją ir darbui, ir plėvelei. Mūsų atliktiems darbams taikoma **5–10 metų garantija**, priklausomai nuo plėvelės rūšies.
 
 ## 5. Palyginkite ne tik kainą
 

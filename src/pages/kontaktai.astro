@@ -6,6 +6,7 @@ import ContactInfo from '@/components/sections/ContactInfo.astro';
 import ContactForm from '@/components/sections/ContactForm.astro';
 import Locations from '@/components/sections/Locations.astro';
 import GoogleReviews from '@/components/sections/GoogleReviews.astro';
+import InstagramFeed from '@/components/sections/InstagramFeed.astro';
 import SocialIcon from '@/components/ui/SocialIcon.astro';
 import { site } from '@/config/site';
 import { breadcrumbSchema } from '@/lib/schema';
@@ -62,6 +63,13 @@ const crumbs = [
     <div class="container-site">
       <SectionHeading eyebrow="Atsiliepimai" title="Klientų atsiliepimai Google" />
       <div class="mt-10"><GoogleReviews /></div>
+    </div>
+  </section>
+
+  <section id="instagram" class="section bg-bg-2">
+    <div class="container-site">
+      <SectionHeading eyebrow="Instagram" title="Naujausi darbai mūsų Instagram" class="mb-10" />
+      <InstagramFeed />
     </div>
   </section>
 </BaseLayout>

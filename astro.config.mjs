@@ -21,6 +21,8 @@ export default defineConfig({
     remotePatterns: [
       { protocol: 'https', hostname: '**.cdninstagram.com' },
       { protocol: 'https', hostname: '**.fbcdn.net' },
+      // YouTube vaizdo įrašų paveikslėliai
+      { protocol: 'https', hostname: 'i.ytimg.com' },
     ],
   },
 

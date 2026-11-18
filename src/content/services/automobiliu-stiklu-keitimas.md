@@ -12,8 +12,8 @@ h1: Automobilių stiklų keitimas
 lead: Įskilęs ar sudužęs stiklas – ne tik nepatogumas, bet ir saugumo klausimas. Keičiame priekinius, galinius ir šoninius stiklus lengviesiems automobiliams, visureigiams ir komerciniam transportui.
 excerpt: Priekinių, galinių ir šoninių stiklų keitimas – nuo lengvųjų iki sunkvežimių.
 
-cover: ../../assets/pleveles/sk-20/sk-20-dirbtuveje.jpg
-coverAlt: Automobilio priekinis stiklas dirbtuvėse
+cover: ../../assets/paslaugos/priekinio-stiklo-keitimas.jpg
+coverAlt: Meistras montuoja naują automobilio priekinį stiklą
 
 highlights:
   - Priekiniai, galiniai ir šoniniai stiklai

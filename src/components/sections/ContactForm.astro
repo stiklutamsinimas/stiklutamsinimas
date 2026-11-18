@@ -63,16 +63,19 @@ const label = 'text-sm font-bold text-text';
     Užpildykite vardą, kontaktą ir žinutę.
   </p>
 
-  <div class="flex flex-col gap-3 sm:col-span-2 sm:flex-row">
+  <div class="flex flex-col flex-wrap gap-3 sm:col-span-2 sm:flex-row">
     <button type="submit" value="email" class="btn btn-primary">
-      Siųsti užklausą <ArrowRight size={18} aria-hidden="true" />
+      Siųsti el. paštu <ArrowRight size={18} aria-hidden="true" />
     </button>
     <button type="submit" value="whatsapp" class="btn border border-[#25d366]/50 text-[#128c4a] hover:bg-[#25d366]/10 dark:text-[#4ade80]">
       <SocialIcon name="WhatsApp" size={18} /> Siųsti per WhatsApp
     </button>
+    <button type="submit" value="viber" class="btn border border-[#7360f2]/50 text-[#5b47e0] hover:bg-[#7360f2]/10 dark:text-[#a99cff]">
+      <SocialIcon name="Viber" size={18} /> Siųsti per Viber
+    </button>
   </div>
-  <p class="text-xs leading-relaxed text-muted sm:col-span-2">
-    Paspaudus atsidarys jūsų el. pašto programa arba WhatsApp su jau parašyta žinute – liks tik ją išsiųsti. Duomenys svetainėje
+  <p class="form-note text-xs leading-relaxed text-muted sm:col-span-2" role="status">
+    Paspaudus atsidarys el. pašto programa, WhatsApp arba Viber su jau parašyta žinute – liks tik ją išsiųsti. Duomenys svetainėje
     nesaugomi.
   </p>
 </form>
@@ -101,6 +104,13 @@ const label = 'text-sm font-bold text-text';
       const via = (e.submitter as HTMLButtonElement | null)?.value ?? 'email';
       if (via === 'whatsapp') {
         window.open(`https://wa.me/${form.dataset.phone}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+      } else if (via === 'viber') {
+        // Viber atidaro pokalbį su mūsų numeriu; žinutė įrašoma kaip juodraštis.
+        // Jei Viber versija juodraščio nepalaiko – tekstas nukopijuotas, jį tereikia įklijuoti.
+        navigator.clipboard?.writeText(text).catch(() => {});
+        const note = form.querySelector('.form-note');
+        if (note) note.textContent = 'Atidaromas Viber. Jei žinutės lauke teksto nėra – jis nukopijuotas, tiesiog įklijuokite.';
+        window.location.href = `viber://chat?number=%2B${form.dataset.phone}&draft=${encodeURIComponent(text)}`;
       } else {
         const subject = `Užklausa: ${get('paslauga')} – ${get('vardas')}`;
         window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;

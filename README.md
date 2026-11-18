@@ -25,7 +25,7 @@ npm run preview    # peržiūrėti dist/ versiją
 | Plėvelių pavyzdžiai (pavadinimai, tamsumo %) | `src/data/films.ts` |
 | Nuotraukų aprašymai (alt tekstai) | `src/data/galleries.ts` |
 | Automobilių tamsinimo kainos (visur svetainėje) | `src/data/prices.ts` |
-| Garantija, veiklos pradžios metai | `src/config/site.ts` (`warrantyYears`, `foundedYear`) |
+| Garantija, veiklos pradžios metai | `src/config/site.ts` (`warranty`, `foundedYear`) |
 | Spalvos (šviesi ir tamsi tema) | `src/styles/global.css` |
 | Logotipas ir ikonos | `src/assets/brand/` → `npm run icons` |
 | Saugumo antraštės, peradresavimai | `public/_headers`, `public/_redirects` |
@@ -50,7 +50,7 @@ Nauja nuotrauka: įkelkite `.jpg` į aplanką (pavadinimas mažosiomis raidėmis
 1. Atidarykite **https://stiklutamsinimas.eu/admin** (arba `…pages.dev/admin`).
 2. Pirmą kartą: GitHub → *Settings → Developer settings → Fine-grained tokens → Generate new token*, pasirinkite saugyklą `stiklutamsinimas`, leidimas **Contents: Read and write**. Nukopijuotą raktą įklijuokite į „Sign In Using Access Token“.
 3. **Naujienos → New**: pavadinimas, aprašymas, nuotrauka, tekstas → **Save**.
-4. Straipsnis įrašomas į GitHub, o Cloudflare per ~2 min. paskelbia jį svetainėje adresu `/straipsnio-pavadinimas`. Kiekviename straipsnyje automatiškai atsiranda dalinimosi mygtukai (Facebook, WhatsApp, Viber, X, el. paštas, nuorodos kopijavimas).
+4. Straipsnis įrašomas į GitHub, o Cloudflare per ~2 min. paskelbia jį svetainėje adresu `/straipsnio-pavadinimas`. Kiekviename straipsnyje automatiškai atsiranda dalinimosi mygtukai (Facebook, Instagram, TikTok, YouTube ir nuorodos kopijavimas).
 
 ## Google atsiliepimai ir Instagram įrašai
 

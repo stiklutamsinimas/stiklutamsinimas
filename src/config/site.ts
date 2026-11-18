@@ -32,8 +32,11 @@ export const site = {
 
   /** Veiklos pradžios metai („Patirtis nuo 2007 m.“) */
   foundedYear: 2007,
-  /** Garantija atliktiems darbams (metais) */
-  warrantyYears: 10,
+  /** Garantija atliktiems darbams – priklauso nuo plėvelės rūšies */
+  warranty: {
+    short: '5–10 metų garantija',
+    full: '5–10 metų garantija, priklausomai nuo plėvelės rūšies',
+  },
   appointmentNote: 'Darbai atliekami tik iš anksto susitarus',
   filmBrands: ['Solar Screen', 'Global Window Films', 'Ultra Vision'],
 

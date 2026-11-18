@@ -3,7 +3,7 @@ title: 4 dalykai, kurie pagražina automobilio išvaizdą
 description: Tamsinti stiklai, dizaino lipdukai, chromo detalių apklijavimas ir tamsinti žibintai – keturi paprasti būdai suteikti automobiliui išskirtinę išvaizdą.
 pubDate: 2024-01-08
 cover: ../../assets/naujienos/4-dalykai-kuie-pagrazina-automobili.jpg
-coverAlt: Automobilio išvaizdos pagražinimo iliustracija
+coverAlt: Juodas automobilis su tamsintu galiniu stiklu ir galiniais žibintais
 tags: [Automobiliams, Patarimai]
 ---
 

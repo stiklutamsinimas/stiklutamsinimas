@@ -13,7 +13,7 @@ export const carPrices: CarPrice[] = [
   { type: 'Hečbekas', note: '2 ar 4 durų', from: 90, to: 120 },
   { type: 'Kupė', from: 90, to: 110 },
   { type: 'Sedanas', from: 100, to: 130 },
-  { type: 'Džipas', note: 'Visureigis, SUV', from: 110, to: 130 },
+  { type: 'Visureigis', note: 'SUV', from: 110, to: 130 },
   { type: 'Minivenas', from: 120, to: 150 },
   { type: 'Mikroautobusas', from: 145, to: 180 },
 ];

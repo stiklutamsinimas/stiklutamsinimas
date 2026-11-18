@@ -12,8 +12,13 @@ h1: Apsauginė plėvelė stiklams (šarvavimas)
 lead: Skaidri apsauginė plėvelė sutvirtina stiklą – sudužęs jis lieka laikytis ant plėvelės ir nesubyra pavojingomis šukėmis. Tai papildoma apsauga nuo įsilaužimų, nelaimingų atsitikimų ir UV spindulių.
 excerpt: Skaidri plėvelė, kuri sulaiko šukes ir apsunkina įsilaužimą. Langams ir vitrinoms.
 
-cover: ../../assets/veidrodines/stiklinio-fasado-klijavimas.jpg
-coverAlt: Stiklinio fasado klijavimas plėvele
+cover: ../../assets/paslaugos/apsaugine-plevele-suskiles-stiklas.jpg
+coverAlt: Suskilęs stiklas, kurio šukės nesubyra – apsauginės plėvelės veikimo principas
+videos:
+  - id: wmZvpB1AD6I
+    title: 3M S2400 apsauginės plėvelės bandymas kūju (SPF Window Films)
+  - id: F4PCOw-otEM
+    title: Ar plėvelė atlaiko smūgį kumščiu, beisbolo lazda ir plaktuku? (ROLLerUP)
 
 highlights:
   - Sudužęs stiklas lieka vietoje

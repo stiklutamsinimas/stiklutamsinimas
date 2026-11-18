@@ -1,7 +1,7 @@
 ---
 import { Image, getImage } from 'astro:assets';
 import { getEntries, render } from 'astro:content';
-import { ArrowRight, CalendarCheck, CircleCheck, MessageCircle, Phone, ShieldCheck } from '@lucide/astro';
+import { ArrowRight, CalendarCheck, CircleCheck, MapPin, MessageCircle, Phone, ShieldCheck } from '@lucide/astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
@@ -13,6 +13,7 @@ import BeforeAfter from '@/components/sections/BeforeAfter.astro';
 import Steps from '@/components/sections/Steps.astro';
 import CtaBand from '@/components/sections/CtaBand.astro';
 import Pricing from '@/components/sections/Pricing.astro';
+import YouTubeVideo from '@/components/sections/YouTubeVideo.astro';
 import Faq from '@/components/sections/Faq.astro';
 import ServiceCard from '@/components/sections/ServiceCard.astro';
 import ContactForm from '@/components/sections/ContactForm.astro';
@@ -68,6 +69,18 @@ const schema = [
           <h1 class="mt-5 text-4xl leading-[1.08] sm:text-5xl lg:text-[3.3rem]">{d.h1}</h1>
           <p class="mt-6 text-lg leading-relaxed text-muted">{d.lead}</p>
           {
+            d.cities.length > 0 && (
+              <ul class="mt-6 flex flex-wrap gap-2" aria-label="Miestai">
+                {d.cities.map((c) => (
+                  <li class="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-bold text-on-primary">
+                    <MapPin size={15} aria-hidden="true" />
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+          {
             d.highlights.length > 0 && (
               <ul class="mt-7 grid gap-3 sm:grid-cols-2">
                 {d.highlights.map((h) => (
@@ -86,7 +99,7 @@ const schema = [
             </a>
           </div>
           <p class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
-            <span class="inline-flex items-center gap-1.5"><ShieldCheck size={16} class="text-link" aria-hidden="true" /> {site.warrantyYears} metų garantija</span>
+            <span class="inline-flex items-center gap-1.5"><ShieldCheck size={16} class="text-link" aria-hidden="true" /> {site.warranty.short}</span>
             <span class="inline-flex items-center gap-1.5"><CalendarCheck size={16} class="text-link" aria-hidden="true" /> Tik iš anksto susitarus</span>
           </p>
         </div>
@@ -184,6 +197,22 @@ const schema = [
           <SectionHeading eyebrow="Atlikti darbai" title="Mūsų darbų nuotraukos" />
           <div class="mt-10">
             <Gallery groups={galleryGroups} />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Vaizdo įrašai -->
+  {
+    d.videos.length > 0 && (
+      <section id="video" class="section">
+        <div class="container-site">
+          <SectionHeading eyebrow="Vaizdo įrašai" title="Pažiūrėkite, kaip veikia" lead="Bandymai rodo: stiklas su apsaugine plėvele suskyla, bet šukės nesubyra ir lieka ant plėvelės." />
+          <div class:list={['mt-10 grid gap-6', d.videos.length > 1 && 'md:grid-cols-2']}>
+            {d.videos.map((v) => (
+              <YouTubeVideo id={v.id} title={v.title} />
+            ))}
           </div>
         </div>
       </section>

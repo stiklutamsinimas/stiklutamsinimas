@@ -5,7 +5,7 @@ description: Priekinį stiklą ir priekinius šoninius langus Lietuvoje galima p
 pubDate: 2024-01-08
 updatedDate: 2026-11-17
 cover: ../../assets/naujienos/priekiniu-automobilio-stiklu-tamsinimas.jpg
-coverAlt: Priekinių automobilio stiklų tamsinimo iliustracija
+coverAlt: Saulė pro automobilio priekinį stiklą – vaizdas iš salono
 tags: [Automobiliams, Reikalavimai]
 ---
 

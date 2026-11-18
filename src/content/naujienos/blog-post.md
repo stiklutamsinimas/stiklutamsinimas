@@ -4,7 +4,7 @@ seoTitle: Langų tamsinimas ar užuolaidėlės?
 description: Tamsinimo plėvelė ar langų užuolaidėlės – kuris būdas geriau apsaugo automobilio saloną nuo saulės ir suteikia privatumo? Palyginame privalumus ir trūkumus.
 pubDate: 2024-01-08
 cover: ../../assets/naujienos/blog-post.jpg
-coverAlt: Langų tamsinimo ir užuolaidėlių palyginimo iliustracija
+coverAlt: Saulės šviesa pro automobilio šoninį langą
 tags: [Automobiliams, Patarimai]
 ---
 
