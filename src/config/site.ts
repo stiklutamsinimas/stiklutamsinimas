@@ -21,7 +21,8 @@ export const site = {
   name: 'Stiklų tamsinimas',
   legalName: 'stiklutamsinimas.eu',
   domain: 'stiklutamsinimas.eu',
-  url: 'https://stiklutamsinimas.eu',
+  /** Svetainės adresas – imamas iš astro.config.mjs (DOMAIN_LIVE) */
+  url: String(import.meta.env.SITE).replace(/\/$/, ''),
   tagline: 'Profesionalus klijavimas',
   description:
     'Automobilių ir pastatų stiklų tamsinimas, žibintų tamsinimas ir poliravimas, matinės ir veidrodinės plėvelės, reklama. Kupiškis, Rokiškis, Panevėžys, Vilnius.',

@@ -107,6 +107,8 @@ Kiekvienas `git push` į `main` šaką automatiškai atnaujina svetainę (~2–3
 
 Kai svetainė bus baigta: Cloudflare → **Custom domains** → `stiklutamsinimas.eu` ir `www.stiklutamsinimas.eu`.
 
+**Prijungus domeną būtinai** faile `astro.config.mjs` pakeiskite `DOMAIN_LIVE = false` į `true` (kad nuorodos, Facebook peržiūros ir Google duomenys vestų į stiklutamsinimas.eu, o ne į laikiną adresą). Po to [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) įveskite svetainės adresą ir spauskite „Scrape Again“ – Facebook pamirš seną „404“ peržiūrą.
+
 ## Po paleidimo – SEO
 
 - [ ] **Google Search Console**: pridėti domeną, pateikti `https://stiklutamsinimas.eu/sitemap-index.xml`.

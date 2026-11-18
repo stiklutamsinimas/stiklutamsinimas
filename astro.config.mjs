@@ -3,8 +3,17 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
+/**
+ * DOMENAS. Kol stiklutamsinimas.eu dar rodo seną (Hostinger) svetainę, visos nuorodos
+ * (Facebook dalinimasis, paveikslėliai, Google duomenys) turi vesti į laikiną adresą,
+ * kitaip Facebook rodo „Website Builder 404“.
+ * PRIJUNGUS DOMENĄ PRIE CLOUDFLARE – pakeisti į true.
+ */
+const DOMAIN_LIVE = false;
+const SITE = DOMAIN_LIVE ? 'https://stiklutamsinimas.eu' : 'https://stiklutamsinimas.pages.dev';
+
 export default defineConfig({
-  site: 'https://stiklutamsinimas.eu',
+  site: SITE,
 
   // Seni adresai buvo be pasvirojo brūkšnio gale (pvz. /langu-tamsinimas),
   // todėl išlaikome tą pačią struktūrą – Google pozicijos neprarandamos.
