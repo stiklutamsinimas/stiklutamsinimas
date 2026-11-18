@@ -23,7 +23,7 @@ npm run preview    # peržiūrėti dist/ versiją
 | Paslaugų tekstai, kainos, DUK, kurios galerijos rodomos | `src/content/services/*.md` |
 | Straipsniai (naujienos) | `src/content/naujienos/*.md` arba **/admin** |
 | Plėvelių pavyzdžiai (pavadinimai, tamsumo %) | `src/data/films.ts` |
-| Miestų puslapiai (/stiklu-tamsinimas-vilnius ir kt.) – tekstai, DUK, nuotraukos | `src/data/cities.ts` |
+| Miestų puslapiai (/stiklu-tamsinimas-panevezys ir kt.) – tekstai, DUK, aplinkinės vietovės. Automobiliai – tik Kupiškis, Rokiškis, Panevėžys (`cars: true`); Vilnius, Kaunas – tik pastatai | `src/data/cities.ts` |
 | Google Ads raktažodžių ir skelbimų planas | `docs/google-ads-planas.md` |
 | Nuotraukų aprašymai (alt tekstai) | `src/data/galleries.ts` |
 | Automobilių tamsinimo kainos (visur svetainėje) | `src/data/prices.ts` |
@@ -87,6 +87,18 @@ Kas pirmadienį svetainė bus perkurta automatiškai (`.github/workflows/savaiti
 
 Mygtukas „Parašykite mums“ atidaro **Messenger** (m.me nuoroda į Facebook puslapį), **WhatsApp**, **Viber**, skambutį ir el. paštą. Facebook „Customer Chat“ įskiepis Meta buvo išjungtas 2024 m., todėl naudojamos tiesioginės nuorodos – pokalbis iškart atsidaro Messenger programėlėje.
 
+## Google Ads sekimas ir slapukų langas
+
+Įdiegta, bet **išjungta**, kol `src/config/site.ts` → `googleAds.id` tuščias (arba nenustatytas Cloudflare kintamasis `PUBLIC_GOOGLE_ADS_ID`). Tada svetainė nenaudoja jokių slapukų ir lango nerodo.
+
+Įrašius Google Ads ID (`AW-…`) ir konversijų žymes (`labels.call` – skambutis, `labels.lead` – žinutė / forma):
+- apačioje kairėje atsiranda slapukų langas su vienodais „Sutinku“ / „Nesutinku“ mygtukais (ES reikalavimas);
+- Google žyma įkeliama **tik paspaudus „Sutinku“** (Consent Mode v2), reklamos personalizavimas išjungtas;
+- konversija skaičiuojama paspaudus telefono numerį, WhatsApp, Viber, Messenger, el. paštą ar išsiuntus užklausos formą;
+- poraštėje atsiranda nuoroda „Slapukų nustatymai“, privatumo politikoje – slapukų aprašymas.
+
+Instrukcija, kaip gauti ID ir žymes – `docs/google-ads-planas.md` („Konversijų sekimas“).
+
 ## Šviesi / tamsi tema
 
 Automatiškai: **šviesi nuo saulėtekio iki saulėlydžio** (skaičiuojama Lietuvai), vakare – tamsi. Lankytojas gali pasirinkti ir pats (☀ / ◐ / ☾ viršuje) – pasirinkimas įsimenamas naršyklėje.
@@ -114,6 +126,6 @@ Kai svetainė bus baigta: Cloudflare → **Custom domains** → `stiklutamsinima
 ## Po paleidimo – SEO
 
 - [ ] **Google Search Console**: pridėti domeną, pateikti `https://stiklutamsinimas.eu/sitemap-index.xml`.
-- [ ] **Google Business Profile** kiekvienam adresui, nuoroda į `/kontaktai`.
+- [ ] **Google Business Profile** Rokiškiui ir Panevėžiui (Kupiškis jau yra), svetainės nuoroda – miesto puslapis, pvz. `/stiklu-tamsinimas-panevezys`.
 - [ ] Prašyti klientų atsiliepimų Google.
 - [ ] Patikrinti [Rich Results Test](https://search.google.com/test/rich-results) ir [PageSpeed Insights](https://pagespeed.web.dev).

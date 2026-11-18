@@ -1,0 +1,145 @@
+---
+/**
+ * Slapukų sutikimas + Google Ads konversijų sekimas (ES reikalavimas).
+ * Rodomas tik tada, kai site.ts įrašytas googleAds.id. Google žyma (gtag.js) įkeliama
+ * TIK paspaudus „Sutinku“ (Consent Mode v2, „basic“ režimas). Atsisakius – jokių slapukų.
+ */
+import { googleAds } from '@/config/site';
+
+const { id, labels } = googleAds;
+const call = labels.call || labels.lead;
+const lead = labels.lead || labels.call;
+---
+
+{
+  id && (
+    <div
+      id="slapuku-langas"
+      class="cookie-banner card fixed inset-x-3 bottom-3 z-[60] hidden p-5 sm:inset-x-auto sm:bottom-6 sm:left-6 sm:max-w-md"
+      role="dialog"
+      aria-live="polite"
+      aria-label="Slapukų nustatymai"
+      data-ads-id={id}
+      data-label-call={call}
+      data-label-lead={lead}
+    >
+      <p class="text-base font-extrabold text-text">Slapukai</p>
+      <p class="mt-1.5 text-sm leading-relaxed text-muted">
+        Svetainė veikia ir be slapukų. Sutikus, Google Ads slapukai padės mums matuoti, kiek žmonių susisiekia atėję iš reklamos.
+        Sutikimą galite bet kada atšaukti puslapio apačioje („Slapukų nustatymai“).{' '}
+        <a href="/privatumo-politika#slapukai" class="font-semibold text-link underline underline-offset-2">
+          Plačiau
+        </a>
+      </p>
+      <div class="mt-4 grid grid-cols-2 gap-2.5">
+        <button type="button" class="btn btn-outline px-4" data-consent="ne">
+          Nesutinku
+        </button>
+        <button type="button" class="btn btn-primary px-4" data-consent="taip">
+          Sutinku
+        </button>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  type Gtag = (...args: unknown[]) => void;
+  const w = window as unknown as { dataLayer?: unknown[]; gtag?: Gtag };
+
+  const banner = document.getElementById('slapuku-langas');
+  const KEY = 'slapukai';
+
+  const read = () => {
+    try {
+      return localStorage.getItem(KEY);
+    } catch {
+      return null;
+    }
+  };
+  const save = (v: string) => {
+    try {
+      localStorage.setItem(KEY, v);
+    } catch {
+      /* privatus režimas – sutikimas galios tik šiame puslapyje */
+    }
+  };
+
+  let loaded = false;
+  function loadGoogleTag(adsId: string) {
+    if (loaded) return;
+    loaded = true;
+    w.dataLayer = w.dataLayer || [];
+    w.gtag = function gtag() {
+      // gtag.js tikisi būtent `arguments` objekto
+      // eslint-disable-next-line prefer-rest-params
+      w.dataLayer!.push(arguments);
+    };
+    w.gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+    });
+    // Lankytojas sutiko – leidžiame tik konversijų matavimą (be reklamos personalizavimo ir analitikos)
+    w.gtag('consent', 'update', { ad_storage: 'granted', ad_user_data: 'granted' });
+    w.gtag('js', new Date());
+    w.gtag('config', adsId);
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(adsId)}`;
+    document.head.appendChild(s);
+  }
+
+  if (banner) {
+    const adsId = banner.dataset.adsId!;
+    const { labelCall, labelLead } = banner.dataset;
+
+    const show = () => banner.classList.remove('hidden');
+    const hide = () => banner.classList.add('hidden');
+
+    const choice = read();
+    if (choice === 'taip') loadGoogleTag(adsId);
+    else if (choice !== 'ne') show();
+
+    banner.querySelectorAll<HTMLButtonElement>('[data-consent]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const v = b.dataset.consent!;
+        save(v);
+        hide();
+        if (v === 'taip') loadGoogleTag(adsId);
+        // Atšaukus sutikimą – perkrauname puslapį, kad Google žyma nebeveiktų
+        else if (loaded) location.reload();
+      }),
+    );
+
+    document.querySelectorAll('[data-cookie-settings]').forEach((el) =>
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        show();
+        banner.querySelector<HTMLButtonElement>('[data-consent="taip"]')?.focus();
+      }),
+    );
+
+    // ---- Konversijos: skambutis ir žinutės (tik sutikus)
+    const convert = (kind: 'call' | 'lead') => {
+      const label = kind === 'call' ? labelCall : labelLead;
+      if (!loaded || !label || !w.gtag) return;
+      w.gtag('event', 'conversion', { send_to: `${adsId}/${label}` });
+    };
+
+    document.addEventListener(
+      'click',
+      (e) => {
+        const a = (e.target as Element | null)?.closest?.('a[href]');
+        if (!a) return;
+        const href = a.getAttribute('href') ?? '';
+        if (href.startsWith('tel:')) convert('call');
+        else if (/^(mailto:|viber:)|wa\.me\/|m\.me\//.test(href)) convert('lead');
+      },
+      { capture: true },
+    );
+    // Užklausos forma (ContactForm.astro) praneša apie išsiųstą žinutę
+    document.addEventListener('st:uzklausa', () => convert('lead'));
+  }
+</script>

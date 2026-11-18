@@ -2,7 +2,7 @@
 /** Keturi adresai su Google Maps žemėlapiais ir nuorodomis į miestų puslapius */
 import { CalendarCheck, Navigation } from '@lucide/astro';
 import { mapsEmbedUrl, mapsUrl, site } from '@/config/site';
-import { cities, cityUrl } from '@/data/cities';
+import { cities, cityAnchor, cityUrl } from '@/data/cities';
 const cityOf = (name: string) => cities.find((c) => c.location === name);
 ---
 
@@ -29,7 +29,7 @@ const cityOf = (name: string) => cities.find((c) => c.location === name);
             <p class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-link">
               <CalendarCheck size={15} aria-hidden="true" /> Tik iš anksto susitarus
             </p>
-            <a href={cityUrl(cityOf(loc.city)?.slug ?? '')} class="mt-2 block text-sm font-bold text-link hover:underline">Stiklų tamsinimas {cityOf(loc.city)?.nameIn} →</a>
+            <a href={cityUrl(cityOf(loc.city)?.slug ?? '')} class="mt-2 block text-sm font-bold text-link hover:underline">{cityAnchor(cityOf(loc.city)!)} →</a>
           </div>
           <a href={mapsUrl(loc)} target="_blank" rel="noopener" class="btn btn-outline shrink-0 !px-4 !py-2.5 text-sm">
             <Navigation size={16} aria-hidden="true" /> Maršrutas

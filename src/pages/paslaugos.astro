@@ -5,7 +5,7 @@ import SectionHeading from '@/components/ui/SectionHeading.astro';
 import ServiceCard from '@/components/sections/ServiceCard.astro';
 import CtaBand from '@/components/sections/CtaBand.astro';
 import { getServicesByCategory } from '@/lib/content';
-import { cities, cityUrl } from '@/data/cities';
+import { cities, cityAnchor, cityUrl } from '@/data/cities';
 import { breadcrumbSchema } from '@/lib/schema';
 
 const groups = await getServicesByCategory();
@@ -57,7 +57,7 @@ const crumbs = [
       <ul class="mt-6 flex flex-wrap gap-2.5">
         {cities.map((c) => (
           <li>
-            <a href={cityUrl(c.slug)} class="chip">Stiklų tamsinimas {c.nameIn}</a>
+            <a href={cityUrl(c.slug)} class="chip">{cityAnchor(c)}</a>
           </li>
         ))}
       </ul>

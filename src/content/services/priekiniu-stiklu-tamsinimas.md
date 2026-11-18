@@ -6,7 +6,7 @@ icon: sun
 featured: true
 
 seoTitle: Priekinių stiklų tamsinimas iki 30 % | stiklutamsinimas.eu
-seoDescription: Priekinio stiklo ir priekinių šoninių langų tamsinimas aterminėmis (soliarinėmis) ir chameleono plėvelėmis iki 30 % – mažiau karščio, geras matomumas.
+seoDescription: Priekinio stiklo tamsinimas Panevėžyje, Kupiškyje ir Rokiškyje – aterminės (soliarinės) ir chameleono plėvelės iki 30 %, mažiau karščio, geras matomumas.
 
 h1: Priekinių stiklų tamsinimas
 lead: Priekinį stiklą ir priekinius šoninius langus klijuojame skaidriomis aterminėmis plėvelėmis. Jos sulaiko dalį saulės šilumos ir UV spindulių, mažina akinimą, o matomumas išlieka geras.

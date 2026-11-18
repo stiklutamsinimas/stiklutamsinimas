@@ -2,9 +2,9 @@
 import { Contrast, Mail, MapPin, Phone } from '@lucide/astro';
 import Logo from './Logo.astro';
 import SocialIcon from '@/components/ui/SocialIcon.astro';
-import { features, mailHref, mapsUrl, site, telHref } from '@/config/site';
+import { features, googleAds, mailHref, mapsUrl, site, telHref } from '@/config/site';
 import { getServices, serviceUrl } from '@/lib/content';
-import { cities, cityUrl } from '@/data/cities';
+import { cities, cityAnchor, cityUrl } from '@/data/cities';
 
 const services = await getServices();
 const year = new Date().getFullYear();
@@ -96,7 +96,7 @@ const pages = [
               <li class="flex gap-2.5">
                 <MapPin size={16} class="mt-1 shrink-0 text-[#5bbdee]" aria-hidden="true" />
                 <span>
-                  <a href={cityUrl(c.slug)} class="font-semibold text-white hover:text-[#5bbdee]" title={`Stiklų tamsinimas ${c.nameIn}`}>
+                  <a href={cityUrl(c.slug)} class="font-semibold text-white hover:text-[#5bbdee]" title={cityAnchor(c)}>
                     {c.name}
                   </a>
                   ,{' '}
@@ -122,6 +122,16 @@ const pages = [
         © {year} {site.name} · {site.domain}
         <span class="mx-2 text-white/20">|</span>
         <a href="/privatumo-politika" class="hover:text-white">Privatumo politika</a>
+        {
+          googleAds.id && (
+            <>
+              <span class="mx-2 text-white/20">|</span>
+              <a href="/privatumo-politika#slapukai" class="hover:text-white" data-cookie-settings>
+                Slapukų nustatymai
+              </a>
+            </>
+          )
+        }
       </p>
       <p class="inline-flex items-center gap-2" data-theme-note>
         <Contrast size={15} class="text-[#5bbdee]" aria-hidden="true" />

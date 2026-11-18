@@ -20,7 +20,7 @@ import ContactForm from '@/components/sections/ContactForm.astro';
 import ContactInfo from '@/components/sections/ContactInfo.astro';
 import { site, telHref } from '@/config/site';
 import { galleryTitles } from '@/data/gallery-folders';
-import { cities as allCities, cityUrl } from '@/data/cities';
+import { cities as allCities, cityAnchor, cityUrl } from '@/data/cities';
 import { getFolder, image } from '@/data/galleries';
 import { categories, serviceUrl, type Service } from '@/lib/content';
 import { breadcrumbSchema, faqSchema, serviceSchema } from '@/lib/schema';
@@ -292,7 +292,7 @@ const schema = [
             {serviceCities.map((c) => (
               <li>
                 <a href={cityUrl(c.slug)} class="chip">
-                  <MapPin size={15} aria-hidden="true" /> Stiklų tamsinimas {c.nameIn}
+                  <MapPin size={15} aria-hidden="true" /> {cityAnchor(c)}
                 </a>
               </li>
             ))}

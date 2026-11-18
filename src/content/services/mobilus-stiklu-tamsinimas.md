@@ -7,11 +7,11 @@ featured: false
 cities: [Kupiškis, Rokiškis, Panevėžys, Vilnius, Kaunas]
 
 seoTitle: Mobilus stiklų tamsinimas pas jus | stiklutamsinimas.eu
-seoDescription: Mobilus stiklų tamsinimas Kupiškyje, Rokiškyje, Panevėžyje, Vilniuje ir Kaune – atvykstame ir tamsiname automobilio ar pastato stiklus vietoje.
+seoDescription: 'Mobilus stiklų tamsinimas: atvykstame Kupiškio, Rokiškio ir Panevėžio rajonuose, o plėveles pastatų langams klijuojame ir Vilniuje bei Kaune.'
 
 h1: Mobilus stiklų tamsinimas
-lead: Mobilus stiklų tamsinimas Kupiškyje, Rokiškyje, Panevėžyje, Vilniuje ir Kaune. Neturite laiko atvažiuoti? Atvyksime patys – į jūsų namus, biurą ar įmonę – ir atliksime automobilio ar pastato stiklų tamsinimą vietoje.
-excerpt: Atvykstame pas jus – Kupiškis, Rokiškis, Panevėžys, Vilnius, Kaunas.
+lead: Neturite laiko atvažiuoti? Atvyksime patys. Automobilius tamsiname atvykę Kupiškio, Rokiškio ir Panevėžio rajonuose, o plėveles namų, biurų ir įmonių langams klijuojame objekte – taip pat Vilniuje ir Kaune.
+excerpt: 'Atvykstame pas jus: automobiliai – Kupiškio, Rokiškio, Panevėžio r.; pastatai – ir Vilnius, Kaunas.'
 
 cover: ../../assets/paslaugos/mobilus-stiklu-tamsinimas.jpg
 coverAlt: Meistras klijuoja tamsinimo plėvelę ant automobilio lango
@@ -38,7 +38,7 @@ benefits:
 
 faq:
   - q: Kur atvykstate?
-    a: Mobiliai dirbame Kupiškyje, Rokiškyje, Panevėžyje, Vilniuje ir Kaune. Dėl kitų vietovių paskambinkite – susitarsime individualiai.
+    a: Automobilių stiklus mobiliai tamsiname Kupiškio, Rokiškio ir Panevėžio rajonuose. Plėveles pastatų langams klijuojame atvykę ir į Vilnių bei Kauną. Dėl kitų vietovių paskambinkite – susitarsime individualiai.
   - q: Ko reikia iš mano pusės?
     a: Automobilio tamsinimui pageidautina pastogė – garažas ar stoginė, kad ant plėvelės nepatektų dulkės ir lietus. Pastato langams užtenka laisvo priėjimo prie langų.
   - q: Kiek laiko trunka darbas vietoje?
@@ -62,6 +62,9 @@ Mobiliai tamsiname:
 
 ## Kur dirbame
 
-Mobilaus tamsinimo paslaugą teikiame **Kupiškyje, Rokiškyje, Panevėžyje, Vilniuje ir Kaune**. Kitose vietovėse – pagal susitarimą.
+- **Automobilius** mobiliai tamsiname Kupiškio, Rokiškio ir Panevėžio rajonuose.
+- **Pastatų langus**, duris ir pertvaras klijuojame šiuose rajonuose, taip pat [Vilniuje](/stiklu-tamsinimas-vilnius) ir [Kaune](/stiklu-tamsinimas-kaunas).
+
+Kitose vietovėse – pagal susitarimą.
 
 Daugiau apie paslaugas: [automobilių stiklų tamsinimas](/automobilio-stiklu-tamsinimas) ir [pastatų langų tamsinimas](/langu-tamsinimas).

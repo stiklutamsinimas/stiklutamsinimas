@@ -1,12 +1,13 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
-import { mailHref, site } from '@/config/site';
+import { googleAds, mailHref, site } from '@/config/site';
 
 const crumbs = [
   { name: 'Pradžia', url: '/' },
   { name: 'Privatumo politika', url: '/privatumo-politika' },
 ];
+const ads = Boolean(googleAds.id);
 ---
 
 <BaseLayout title="Privatumo politika | stiklutamsinimas.eu" description="Kaip svetainėje stiklutamsinimas.eu tvarkomi duomenys: slapukai, trečiųjų šalių paslaugos ir kontaktai.">
@@ -18,25 +19,62 @@ const crumbs = [
         Svetainę <strong>{site.domain}</strong> administruoja {site.name}. Ši politika paaiškina, kokie duomenys tvarkomi jums lankantis
         svetainėje.
       </p>
-      <h2>Kokių duomenų nerenkame</h2>
+      <h2>Užklausos ir žinutės</h2>
       <p>
-        Svetainė neturi vartotojų paskyrų, nenaudoja reklaminių ar sekimo slapukų ir nesaugo jūsų užklausų. Užpildžius užklausos formą,
-        žinutė tik paruošiama jūsų el. pašto programoje arba WhatsApp – ją išsiunčiate patys.
+        Svetainė neturi vartotojų paskyrų ir nesaugo jūsų užklausų. Užpildžius užklausos formą, žinutė tik paruošiama jūsų el. pašto
+        programoje, WhatsApp arba Viber – ją išsiunčiate patys. Gautus kontaktus naudojame tik atsakyti į jūsų užklausą.
       </p>
+
+      <h2 id="slapukai">Slapukai</h2>
+      {
+        ads ? (
+          <>
+            <p>
+              Svetainė veikia ir be slapukų. Slapukus naudojame <strong>tik jums sutikus</strong> – iki tol Google žyma net neįkeliama.
+            </p>
+            <ul>
+              <li>
+                <strong>Google Ads</strong> (Google Ireland Ltd.) – matuoja, kiek lankytojų, atėjusių iš mūsų reklamos Google paieškoje,
+                paskambina ar parašo mums (paspaudimai ant telefono numerio, WhatsApp, Viber, Messenger, el. pašto ir užklausos formos).
+                Slapukai (pvz. <code>_gcl_au</code>) galioja iki 90 dienų. Google tai tvarko pagal savo{' '}
+                <a href="https://policies.google.com/privacy?hl=lt" target="_blank" rel="noopener">
+                  privatumo politiką
+                </a>
+                .
+              </li>
+            </ul>
+            <p>
+              Sutikimą galite bet kada pakeisti ar atšaukti: <a href="#slapukai" data-cookie-settings>slapukų nustatymai</a> (nuoroda yra ir
+              kiekvieno puslapio apačioje). Analitikos ir kitų sekimo slapukų nenaudojame, reklamos pagal jūsų naršymą nepersonalizuojame.
+            </p>
+          </>
+        ) : (
+          <p>Svetainė nenaudoja reklaminių, analitikos ar kitų sekimo slapukų.</p>
+        )
+      }
+
       <h2>Naršyklėje saugoma informacija</h2>
       <p>
-        Jei pasirenkate šviesią ar tamsią svetainės temą, šis pasirinkimas išsaugomas tik jūsų naršyklėje (localStorage) ir mums
-        neperduodamas.
+        Jei pasirenkate šviesią ar tamsią svetainės temą{ads && ' ar atsakote į slapukų klausimą'}, šis pasirinkimas išsaugomas tik
+        jūsų naršyklėje (localStorage) ir mums neperduodamas.
       </p>
       <h2>Trečiųjų šalių paslaugos</h2>
       <ul>
-        <li><strong>Google Maps</strong> – kontaktų puslapyje rodomi žemėlapiai. Juos atvaizduojant Google gali naudoti savo slapukus.</li>
+        <li><strong>Google Maps</strong> – žemėlapiai kontaktų ir miestų puslapiuose. Juos atvaizduojant Google gali naudoti savo slapukus.</li>
+        <li>
+          <strong>YouTube</strong> – vaizdo įrašai rodomi „privatumo“ režimu (youtube-nocookie.com) ir įkeliami tik paspaudus ant vaizdo įrašo.
+        </li>
         <li>
           <strong>Facebook Messenger, WhatsApp, Viber</strong> – paspaudus nuorodą atidaroma atitinkama programėlė; joje taikomos tų paslaugų
           taisyklės.
         </li>
         <li><strong>Cloudflare</strong> – svetainės talpinimas ir apsauga; renkama tik techninė, anoniminė informacija.</li>
       </ul>
+      <h2>Jūsų teisės</h2>
+      <p>
+        Galite paprašyti susipažinti su savo duomenimis, juos ištaisyti ar ištrinti. Taip pat turite teisę pateikti skundą Valstybinei
+        duomenų apsaugos inspekcijai (<a href="https://vdai.lrv.lt" target="_blank" rel="noopener">vdai.lrv.lt</a>).
+      </p>
       <h2>Kontaktai</h2>
       <p>
         Klausimus dėl duomenų tvarkymo siųskite el. paštu <a href={mailHref}>{site.email}</a>.

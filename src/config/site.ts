@@ -25,7 +25,7 @@ export const site = {
   url: String(import.meta.env.SITE).replace(/\/$/, ''),
   tagline: 'Profesionalus klijavimas',
   description:
-    'Automobilių ir pastatų stiklų tamsinimas, žibintų tamsinimas ir poliravimas, matinės ir veidrodinės plėvelės, reklama. Kupiškis, Rokiškis, Panevėžys, Vilnius.',
+    'Automobilių ir pastatų stiklų tamsinimas, žibintų tamsinimas ir poliravimas, matinės ir veidrodinės plėvelės, reklama. Automobiliai – Kupiškis, Rokiškis, Panevėžys; pastatai – ir Vilnius, Kaunas.',
 
   phone,
   phoneDisplay: '+370 605 64933',
@@ -70,6 +70,24 @@ export const site = {
     { city: 'Vilnius', cityIn: 'Vilniuje', street: 'Verkių g. 50', mapQuery: 'Verkių g. 50, Vilnius' },
   ] satisfies readonly Location[],
 } as const;
+
+/**
+ * Google Ads konversijų sekimas.
+ * Kol `id` tuščias – svetainė NENAUDOJA jokių slapukų ir slapukų sutikimo langas nerodomas.
+ * Įrašius ID (pvz. 'AW-123456789') atsiras sutikimo langas; Google žyma įkeliama TIK lankytojui paspaudus „Sutinku“.
+ * Žymės (label) – Google Ads → Tikslai → Konversijos → veiksmas → „Žymos sąranka“ → send_to: 'AW-…/ŠITA_DALIS'.
+ * ID galima nurodyti ir Cloudflare Pages kintamuoju PUBLIC_GOOGLE_ADS_ID.
+ */
+export const googleAds = {
+  /** Įrašykite čia, pvz. 'AW-123456789' */
+  id: (import.meta.env.PUBLIC_GOOGLE_ADS_ID as string | undefined)?.trim() || '',
+  labels: {
+    /** Paspaudimas ant telefono numerio */
+    call: '',
+    /** Žinutė: WhatsApp, Viber, Messenger, el. paštas, užklausos forma */
+    lead: '',
+  },
+};
 
 /** Funkcijos, kurias galima įjungti vėliau */
 export const features = {

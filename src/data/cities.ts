@@ -1,22 +1,31 @@
 /**
- * MIESTŲ PUSLAPIAI – /stiklu-tamsinimas-<slug> (pvz. /stiklu-tamsinimas-vilnius).
- * Žmonės Google dažniausiai ieško „stiklų / langų tamsinimas + miestas (+ kaina)“,
- * todėl kiekvienam miestui – atskiras puslapis su unikaliu tekstu, adresu, žemėlapiu ir DUK.
+ * MIESTŲ PUSLAPIAI – /stiklu-tamsinimas-<slug> (pvz. /stiklu-tamsinimas-kupiskis).
+ *
+ * Svarbiausi miestai – Kupiškis, Rokiškis, Panevėžys ir aplinkiniai rajonai:
+ * čia tamsiname automobilius ir klijuojame plėveles pastatams.
+ * Vilnius ir Kaunas – TIK pastatai / objektai (langų, durų, pertvarų plėvelės).
  */
 export interface City {
   slug: string;
-  /** Vardininkas: Vilnius */
+  /** Vardininkas: Kupiškis */
   name: string;
-  /** Vietininkas: Vilniuje */
+  /** Vietininkas: Kupiškyje */
   nameIn: string;
-  /** Kilmininkas: Vilniaus */
+  /** Kilmininkas: Kupiškio */
   nameOf: string;
-  /** Adresas iš site.locations (miesto pavadinimas). Jei nėra – dirbama tik mobiliai */
+  /** Ar šiame mieste tamsiname automobilius */
+  cars: boolean;
+  /** Pagrindinė frazė (H1, nuorodos): „Stiklų tamsinimas“ / „Langų tamsinimas“ */
+  keyword: string;
+  /** Adresas iš site.locations (miesto pavadinimas). Jei nėra – dirbama tik atvykus */
   location?: string;
   seoTitle: string;
   seoDescription: string;
   lead: string;
   intro: string[];
+  /** Aplinkinės vietovės (rajonas ir kaimyniniai miestai) */
+  areas: string[];
+  areasText: string;
   /** Paslaugų id tvarka (pirmos – svarbiausios šiame mieste) */
   services: string[];
   /** Nuotraukos iš src/assets (be plėtinio) */
@@ -26,40 +35,87 @@ export interface City {
 
 const priceAnswer =
   'Galinių stiklų tamsinimas: hečbekui 90–120 €, kupė 90–110 €, sedanui 100–130 €, visureigiui 110–130 €, minivenui 120–150 €, mikroautobusui 145–180 €. Tikslią kainą pasakysime pagal automobilio modelį ir plėvelę.';
+const carServices = ['automobilio-stiklu-tamsinimas', 'priekiniu-stiklu-tamsinimas', 'zibintu-tamsinimas', 'zibintu-poliravimas', 'automobiliu-stiklu-keitimas'];
+const buildingServices = ['langu-tamsinimas', 'stiklo-dekoravimas', 'apsaugine-plevele'];
+const objectsOnly = 'Automobilių stiklus tamsiname mūsų dirbtuvėse Kupiškyje, Rokiškyje ir Panevėžyje.';
 
 export const cities: City[] = [
   {
-    slug: 'vilnius',
-    name: 'Vilnius',
-    nameIn: 'Vilniuje',
-    nameOf: 'Vilniaus',
-    location: 'Vilnius',
-    seoTitle: 'Stiklų tamsinimas Vilniuje – auto ir langai | stiklutamsinimas.eu',
+    slug: 'kupiskis',
+    name: 'Kupiškis',
+    nameIn: 'Kupiškyje',
+    nameOf: 'Kupiškio',
+    cars: true,
+    keyword: 'Stiklų tamsinimas',
+    location: 'Kupiškis',
+    seoTitle: 'Stiklų tamsinimas Kupiškyje – automobiliai, langai',
     seoDescription:
-      'Automobilio stiklų ir langų tamsinimas Vilniuje, Verkių g. 50. Kaina nuo 90 €, darbas per 2–3 val., 5–10 m. garantija. Langus klijuojame visame Vilniuje.',
-    lead: 'Automobilių stiklų ir langų tamsinimas Vilniuje – Verkių g. 50. Tamsiname automobilių stiklus, klijuojame atermines plėveles, o namų ir biurų langus klijuojame atvykę į objektą visame mieste.',
+      'Automobilio stiklų tamsinimas Kupiškyje, Gedimino g. 67 – nuo 90 €, 5–10 m. garantija, 5,0 ★ Google. Žibintai, langų plėvelės visame Kupiškio rajone.',
+    lead: 'Automobilio stiklų tamsinimas, žibintų tamsinimas ir poliravimas, langų plėvelės ir reklama Kupiškyje – Gedimino g. 67. Aptarnaujame visą Kupiškio rajoną.',
     intro: [
-      'Vilniuje dirbame adresu **Verkių g. 50**. Čia tamsiname automobilių galinius stiklus, klijuojame atermines ir chameleono plėveles ant priekinių stiklų, tamsiname bei poliruojame žibintus. Galinių stiklų tamsinimas dažniausiai užtrunka 2–3 valandas – automobilį atsiimate tą pačią dieną.',
-      'Sostinėje daug biurų ir naujos statybos namų su dideliais langais, todėl populiarios **veidrodinės ir saulės kontrolės plėvelės** – jos sumažina karštį ir akinimą, o biurams – ir **matinės plėvelės** stiklinėms pertvaroms. Pastatų langus klijuojame atvykę į objektą, aukštus fasadus – naudodami keltuvą.',
+      'Kupiškyje dirbame adresu **Gedimino g. 67**. Mūsų Google verslo profilis čia įvertintas **5,0 ★** – klientai mini tvarkingą ir profesionalų darbą. Tamsiname automobilių galinius stiklus, klijuojame atermines plėveles ant priekinių langų, tamsiname ir poliruojame žibintus. Galinių stiklų tamsinimas dažniausiai trunka 2–3 valandas.',
+      'Kupiškyje taip pat gaminame **lipdukus ir reklamą** – ploteriuotus užrašus, reklamą ant automobilių ir vitrinų – bei klijuojame **langų plėveles** namams ir įmonėms: veidrodines, matines ir apsaugines.',
     ],
-    services: ['automobilio-stiklu-tamsinimas', 'priekiniu-stiklu-tamsinimas', 'langu-tamsinimas', 'stiklo-dekoravimas', 'zibintu-tamsinimas', 'zibintu-poliravimas', 'apsaugine-plevele', 'mobilus-stiklu-tamsinimas', 'lipduku-spausdinimas', 'automobiliu-stiklu-keitimas'],
+    areas: ['Subačius', 'Skapiškis', 'Šimonys', 'Noriūnai', 'Alizava', 'Salamiestis', 'Antašava', 'Anykščiai', 'Biržai'],
+    areasText:
+      'Į dirbtuves Kupiškyje patogu atvykti iš viso Kupiškio rajono, taip pat iš Anykščių ir Biržų. Pastatų langus klijuojame atvykę į objektą visame rajone.',
+    services: ['automobilio-stiklu-tamsinimas', 'priekiniu-stiklu-tamsinimas', 'zibintu-tamsinimas', 'zibintu-poliravimas', 'lipduku-spausdinimas', 'langu-tamsinimas', 'stiklo-dekoravimas', 'apsaugine-plevele', 'mobilus-stiklu-tamsinimas', 'automobiliu-stiklu-keitimas'],
     gallery: [
-      'veidrodines/fasado-stiklu-klijavimas-keltuvu',
-      'darbai/tesla-model-s-priekis',
-      'darbai/mercedes-s-klase-tamsinti-stiklai',
-      'matines/biuro-duru-ir-sienos-matinimas',
-      'darbai/audi-q8-e-tron-tamsinti-stiklai',
-      'veidrodines/modernaus-namo-veidrodine-plevele',
-      'darbai/jaguar-i-pace-tamsinti-langai',
-      'dekoravimas/biuro-stiklo-dekoravimas',
-      'darbai/bmw-ix1-tamsinti-stiklai',
+      'darbai/audi-q7-tamsinti-galiniai-stiklai',
+      'reklama/spauda/pastato-reklaminis-baneris',
+      'darbai/skoda-octavia-raudona',
+      'zibintai/vw-golf-tamsinti-galiniai-zibintai',
+      'darbai/vw-passat-tamsinti-stiklai',
+      'reklama/lipdukai/mercedes-vito-lipdukai',
+      'darbai/toyota-auris-tamsinti-stiklai',
+      'matines/dvigubu-duru-matinimas',
+      'darbai/peugeot-rifter-tamsinti-langai',
     ],
     faq: [
-      { q: 'Kur atliekate stiklų tamsinimą Vilniuje?', a: 'Vilniuje dirbame adresu Verkių g. 50. Darbai atliekami tik iš anksto susitarus – paskambinkite ar parašykite, ir suderinsime laiką.' },
-      { q: 'Kiek kainuoja automobilio stiklų tamsinimas Vilniuje?', a: priceAnswer },
-      { q: 'Ar atvykstate klijuoti langų plėvelių į biurą ar namus Vilniuje?', a: 'Taip. Pastatų langus, stiklines pertvaras ir vitrinas visada klijuojame objekte – visame Vilniuje. Aukštus stiklinius fasadus klijuojame naudodami keltuvą.' },
-      { q: 'Ar galima Vilniuje patamsinti priekinius langus?', a: 'Taip, bet ne daugiau kaip 30 % – priekinis stiklas ir priekiniai šoniniai langai turi praleisti ne mažiau kaip 70 % šviesos. Tam naudojame šviesias atermines ir chameleono plėveles.' },
+      { q: 'Kur atliekate automobilio stiklų tamsinimą Kupiškyje?', a: 'Kupiškyje dirbame adresu Gedimino g. 67. Darbai atliekami tik iš anksto susitarus – paskambinkite ir suderinsime jums patogų laiką.' },
+      { q: 'Kiek kainuoja automobilio stiklų tamsinimas Kupiškyje?', a: priceAnswer },
+      { q: 'Ar atvykstate į Kupiškio rajoną?', a: 'Taip. Pastatų langus, duris ir vitrinas klijuojame atvykę į objektą – Subačiuje, Skapiškyje, Šimonyse, Noriūnuose, Alizavoje ir kitur rajone. Dėl automobilio tamsinimo pas jus susitarsime individualiai.' },
+      { q: 'Ar gaminate lipdukus ir reklamą Kupiškyje?', a: 'Taip – ploteriuotus lipdukus, reklamą ant automobilių, vitrinų ir banerius. Maketą galime paruošti patys arba pritaikyti jūsų turimą.' },
       { q: 'Kokia garantija suteikiama?', a: 'Atliktiems darbams suteikiame nuo 5 iki 10 metų garantiją – trukmė priklauso nuo plėvelės rūšies.' },
+    ],
+  },
+  {
+    slug: 'rokiskis',
+    name: 'Rokiškis',
+    nameIn: 'Rokiškyje',
+    nameOf: 'Rokiškio',
+    cars: true,
+    keyword: 'Stiklų tamsinimas',
+    location: 'Rokiškis',
+    seoTitle: 'Stiklų tamsinimas Rokiškyje – automobiliai, langai',
+    seoDescription:
+      'Automobilio stiklų tamsinimas Rokiškyje, Miškininkų g. 5c – nuo 90 €, darbas per 2–3 val., 5–10 m. garantija. Žibintai ir langų plėvelės Rokiškio rajone.',
+    lead: 'Automobilio stiklų tamsinimas, aterminės plėvelės priekiniams stiklams, žibintų tamsinimas ir langų plėvelės Rokiškyje – Miškininkų g. 5c. Aptarnaujame visą Rokiškio rajoną.',
+    intro: [
+      'Rokiškyje dirbame adresu **Miškininkų g. 5c**. Tamsiname automobilių galinius stiklus – nuo lengvo atspalvio iki visiško privatumo – ir klijuojame **atermines plėveles** priekiniams langams, kurios sumažina karštį, bet neviršija leistinos 30 % ribos.',
+      'Rokiškėnams taip pat tamsiname ir poliruojame **žibintus**, o namų ir įmonių langams klijuojame **veidrodines, saulės kontrolės ir matines** plėveles. Pastatų langus klijuojame atvykę į objektą.',
+    ],
+    areas: ['Obeliai', 'Pandėlys', 'Juodupė', 'Kamajai', 'Panemunėlis', 'Kazliškis', 'Jūžintai', 'Zarasai', 'Utena'],
+    areasText:
+      'Į dirbtuves Rokiškyje patogu atvykti iš viso Rokiškio rajono, taip pat iš Zarasų ir Utenos. Pastatų langus klijuojame atvykę į objektą visame rajone.',
+    services: ['automobilio-stiklu-tamsinimas', 'priekiniu-stiklu-tamsinimas', 'zibintu-tamsinimas', 'zibintu-poliravimas', 'langu-tamsinimas', 'stiklo-dekoravimas', 'apsaugine-plevele', 'mobilus-stiklu-tamsinimas', 'lipduku-spausdinimas', 'automobiliu-stiklu-keitimas'],
+    gallery: [
+      'darbai/jaguar-f-pace-raudonas',
+      'pleveles/sk-20/sk-20-saulelydis',
+      'darbai/bmw-x1-baltas-tamsinti-stiklai',
+      'zibintai/mercedes-e-tamsinti-zibintai',
+      'darbai/skoda-kodiaq-juodas',
+      'veidrodines/dideli-langai-veidrodine-plevele',
+      'darbai/jaguar-e-pace-tamsinti-stiklai',
+      'pleveles/ultravision-ms93c/ultravision-ms93c-priekinis-stiklas',
+      'darbai/vw-golf-tamsinti-stiklai',
+    ],
+    faq: [
+      { q: 'Kur jus rasti Rokiškyje?', a: 'Rokiškyje dirbame adresu Miškininkų g. 5c. Darbai atliekami tik iš anksto susitarus – paskambinkite prieš atvykdami.' },
+      { q: 'Kiek kainuoja automobilio stiklų tamsinimas Rokiškyje?', a: priceAnswer },
+      { q: 'Ar atvykstate į Rokiškio rajoną?', a: 'Taip. Pastatų langus klijuojame atvykę į objektą – Obeliuose, Pandėlyje, Juodupėje, Kamajuose ir kitur rajone. Dėl automobilio tamsinimo pas jus susitarsime individualiai.' },
+      { q: 'Kokią plėvelę rinktis priekiniams langams?', a: 'Priekiniams langams naudojame šviesias atermines (soliarines) ir chameleono plėveles – jos sumažina karštį, o bendras šviesos pralaidumas lieka ne mažesnis kaip 70 %.' },
+      { q: 'Kiek laiko trunka automobilio stiklų tamsinimas?', a: 'Galinių stiklų tamsinimas dažniausiai trunka 2–3 valandas – automobilį atsiimsite tą pačią dieną.' },
     ],
   },
   {
@@ -67,15 +123,20 @@ export const cities: City[] = [
     name: 'Panevėžys',
     nameIn: 'Panevėžyje',
     nameOf: 'Panevėžio',
+    cars: true,
+    keyword: 'Stiklų tamsinimas',
     location: 'Panevėžys',
-    seoTitle: 'Stiklų tamsinimas Panevėžyje | stiklutamsinimas.eu',
+    seoTitle: 'Stiklų tamsinimas Panevėžyje – automobiliai, žibintai',
     seoDescription:
-      'Automobilio stiklų tamsinimas, žibintų poliravimas ir langų tamsinimas Panevėžyje, Molainių g. 15. Kaina nuo 90 €, 5–10 metų garantija.',
-    lead: 'Automobilio stiklų tamsinimas, žibintų tamsinimas ir poliravimas bei langų plėvelės Panevėžyje – Molainių g. 15.',
+      'Automobilio stiklų tamsinimas ir žibintų poliravimas Panevėžyje, Molainių g. 15. Nuo 90 €, 5–10 m. garantija. Langų plėvelės visame Panevėžio rajone.',
+    lead: 'Automobilio stiklų tamsinimas, žibintų tamsinimas ir poliravimas bei langų plėvelės Panevėžyje – Molainių g. 15. Aptarnaujame ir Panevėžio rajoną.',
     intro: [
       'Panevėžyje mus rasite adresu **Molainių g. 15**. Čia tamsiname automobilių stiklus kokybiškomis Solar Screen, Global Window Films ir Ultra Vision plėvelėmis, klijuojame atermines plėveles ant priekinių stiklų.',
       'Panevėžiečiai dažnai kreipiasi ir dėl **žibintų poliravimo** – pageltę, matiniai žibintai po poliravimo vėl tampa skaidrūs ir geriau apšviečia kelią. Taip pat tamsiname žibintus plėvele, klijuojame **veidrodines, matines ir apsaugines** plėveles namams, biurams ir parduotuvėms.',
     ],
+    areas: ['Ramygala', 'Velžys', 'Krekenava', 'Naujamiestis', 'Smilgiai', 'Raguva', 'Miežiškiai', 'Upytė', 'Pasvalys', 'Kėdainiai'],
+    areasText:
+      'Į dirbtuves Panevėžyje patogu atvykti iš viso Panevėžio rajono, taip pat iš Pasvalio ir Kėdainių. Pastatų langus klijuojame atvykę į objektą visame rajone.',
     services: ['automobilio-stiklu-tamsinimas', 'zibintu-poliravimas', 'zibintu-tamsinimas', 'priekiniu-stiklu-tamsinimas', 'langu-tamsinimas', 'stiklo-dekoravimas', 'apsaugine-plevele', 'lipduku-spausdinimas', 'mobilus-stiklu-tamsinimas', 'automobiliu-stiklu-keitimas'],
     gallery: [
       'darbai/land-rover-discovery-sport-raudonas',
@@ -90,78 +151,48 @@ export const cities: City[] = [
     ],
     faq: [
       { q: 'Kur jus rasti Panevėžyje?', a: 'Panevėžyje dirbame adresu Molainių g. 15. Darbai atliekami tik iš anksto susitarus – prieš atvykdami paskambinkite.' },
-      { q: 'Kiek kainuoja stiklų tamsinimas Panevėžyje?', a: priceAnswer },
+      { q: 'Kiek kainuoja automobilio stiklų tamsinimas Panevėžyje?', a: priceAnswer },
       { q: 'Ar poliruojate žibintus Panevėžyje?', a: 'Taip. Pašaliname pageltimą ir matiškumą, nupoliruojame ir padengiame apsaugine danga, kad žibintai vėl greitai nepageltų.' },
-      { q: 'Ar klijuojate langų plėveles namams ir biurams Panevėžyje?', a: 'Taip – veidrodines, saulės kontrolės, matines ir apsaugines plėveles. Atvykstame į objektą, įvertiname langus ir pasiūlome tinkamą plėvelę.' },
+      { q: 'Ar atvykstate į Panevėžio rajoną?', a: 'Taip. Langų plėveles namams ir įmonėms klijuojame atvykę į objektą – Ramygaloje, Velžyje, Krekenavoje, Naujamiestyje ir kitur rajone.' },
       { q: 'Kiek laiko trunka automobilio stiklų tamsinimas?', a: 'Galinių stiklų tamsinimas dažniausiai trunka 2–3 valandas – automobilį atsiimsite tą pačią dieną.' },
     ],
   },
   {
-    slug: 'kupiskis',
-    name: 'Kupiškis',
-    nameIn: 'Kupiškyje',
-    nameOf: 'Kupiškio',
-    location: 'Kupiškis',
-    seoTitle: 'Stiklų tamsinimas Kupiškyje | stiklutamsinimas.eu',
+    slug: 'vilnius',
+    name: 'Vilnius',
+    nameIn: 'Vilniuje',
+    nameOf: 'Vilniaus',
+    cars: false,
+    keyword: 'Langų tamsinimas',
+    location: 'Vilnius',
+    seoTitle: 'Langų tamsinimas Vilniuje – plėvelės pastatams',
     seoDescription:
-      'Stiklų ir langų tamsinimas Kupiškyje, Gedimino g. 67. Automobilių stiklai nuo 90 €, žibintai, plėvelės namams. 5,0 ★ Google, 5–10 m. garantija.',
-    lead: 'Automobilių stiklų tamsinimas, žibintų tamsinimas ir poliravimas, langų plėvelės ir reklama Kupiškyje – Gedimino g. 67.',
+      'Langų tamsinimas ir plėvelės pastatams Vilniuje: veidrodinė plėvelė langams, plėvelės nuo saulės ir karščio, matinės ir apsauginės plėvelės biurams.',
+    lead: 'Langų tamsinimas ir plėvelės pastatams Vilniuje – veidrodinės, saulės kontrolės, matinės ir apsauginės plėvelės namams, biurams ir verslui. Atvykstame į objektą.',
     intro: [
-      'Kupiškyje dirbame adresu **Gedimino g. 67**. Mūsų Google verslo profilis čia įvertintas **5,0 ★** – klientai mini tvarkingą ir profesionalų darbą. Tamsiname automobilių galinius ir priekinius stiklus, tamsiname ir poliruojame žibintus.',
-      'Kupiškyje taip pat gaminame **lipdukus ir reklamą** – ploteriuotus užrašus, reklamą ant automobilių ir vitrinų – bei klijuojame **langų plėveles** namams ir įmonėms: veidrodines, matines ir apsaugines.',
+      'Vilniuje klijuojame **plėveles pastatams**: langams, stiklinėms durims, pertvaroms ir vitrinoms. Atvykstame į objektą, įvertiname stiklus ir pasiūlome tinkamą plėvelę. Kontaktinis adresas Vilniuje – **Verkių g. 50**.',
+      'Sostinėje daug biurų ir naujos statybos namų su dideliais langais, todėl populiarios **veidrodinės ir saulės kontrolės plėvelės** – jos sumažina karštį ir akinimą, o biurams – ir **matinės plėvelės** stiklinėms pertvaroms. Aukštus stiklinius fasadus klijuojame naudodami keltuvą.',
     ],
-    services: ['automobilio-stiklu-tamsinimas', 'priekiniu-stiklu-tamsinimas', 'zibintu-tamsinimas', 'zibintu-poliravimas', 'lipduku-spausdinimas', 'langu-tamsinimas', 'stiklo-dekoravimas', 'apsaugine-plevele', 'mobilus-stiklu-tamsinimas', 'automobiliu-stiklu-keitimas'],
+    areas: [],
+    areasText: `Pastatų langus klijuojame visame Vilniuje ir Vilniaus rajone. ${objectsOnly}`,
+    services: [...buildingServices, 'mobilus-stiklu-tamsinimas'],
     gallery: [
-      'darbai/audi-q7-tamsinti-galiniai-stiklai',
-      'reklama/spauda/pastato-reklaminis-baneris',
-      'darbai/skoda-octavia-raudona',
-      'zibintai/vw-golf-tamsinti-galiniai-zibintai',
-      'darbai/vw-passat-tamsinti-stiklai',
-      'reklama/lipdukai/mercedes-vito-lipdukai',
-      'darbai/toyota-auris-tamsinti-stiklai',
-      'matines/dvigubu-duru-matinimas',
-      'darbai/peugeot-rifter-tamsinti-langai',
+      'veidrodines/fasado-stiklu-klijavimas-keltuvu',
+      'matines/biuro-duru-ir-sienos-matinimas',
+      'veidrodines/modernaus-namo-veidrodine-plevele',
+      'dekoravimas/biuro-stiklo-dekoravimas',
+      'veidrodines/stiklinio-fasado-klijavimas',
+      'matines/laukiamojo-pertvaru-matinimas',
+      'veidrodines/namo-fasado-veidrodine-plevele',
+      'dekoravimas/spalvota-plevele-biuro-pertvarai',
+      'matines/biuro-pertvaros-matine-plevele',
     ],
     faq: [
-      { q: 'Kur atliekate stiklų tamsinimą Kupiškyje?', a: 'Kupiškyje dirbame adresu Gedimino g. 67. Darbai atliekami tik iš anksto susitarus – paskambinkite ir suderinsime jums patogų laiką.' },
-      { q: 'Kiek kainuoja automobilio stiklų tamsinimas Kupiškyje?', a: priceAnswer },
-      { q: 'Ar gaminate lipdukus ir reklamą Kupiškyje?', a: 'Taip – ploteriuotus lipdukus, reklamą ant automobilių, vitrinų ir banerius. Maketą galime paruošti patys arba pritaikyti jūsų turimą.' },
-      { q: 'Ar galima tamsinti stiklus žiemą?', a: 'Taip. Plėvelė klijuojama šiltoje patalpoje, todėl oras lauke darbui įtakos neturi.' },
+      { q: 'Ar atvykstate klijuoti langų plėvelių į biurą ar namus Vilniuje?', a: 'Taip. Pastatų langus, stiklines duris, pertvaras ir vitrinas klijuojame objekte – visame Vilniuje. Aukštus stiklinius fasadus klijuojame naudodami keltuvą.' },
+      { q: 'Ar tamsinate automobilius Vilniuje?', a: `Ne. ${objectsOnly} Vilniuje klijuojame plėveles pastatų langams, durims ir pertvaroms.` },
+      { q: 'Kiek kainuoja langų tamsinimas Vilniuje?', a: 'Kaina priklauso nuo stiklų ploto, plėvelės rūšies ir darbo sąlygų (pvz., ar reikia keltuvo). Atvykstame įvertinti ir pateikiame pasiūlymą iš anksto.' },
+      { q: 'Ar pro veidrodinę plėvelę matysis vakare?', a: 'Dieną veidrodinė plėvelė iš lauko atrodo kaip veidrodis. Vakare, įjungus šviesą viduje, efektas apsiverčia – privatumui tada reikia užuolaidų arba matinės plėvelės.' },
       { q: 'Kokia garantija suteikiama?', a: 'Atliktiems darbams suteikiame nuo 5 iki 10 metų garantiją – trukmė priklauso nuo plėvelės rūšies.' },
-    ],
-  },
-  {
-    slug: 'rokiskis',
-    name: 'Rokiškis',
-    nameIn: 'Rokiškyje',
-    nameOf: 'Rokiškio',
-    location: 'Rokiškis',
-    seoTitle: 'Stiklų tamsinimas Rokiškyje | stiklutamsinimas.eu',
-    seoDescription:
-      'Automobilio stiklų ir langų tamsinimas Rokiškyje, Miškininkų g. 5c. Kaina nuo 90 €, darbas per 2–3 val., 5–10 metų garantija. Tik iš anksto susitarus.',
-    lead: 'Automobilio stiklų tamsinimas, aterminės plėvelės priekiniams stiklams, žibintų tamsinimas ir langų plėvelės Rokiškyje – Miškininkų g. 5c.',
-    intro: [
-      'Rokiškyje dirbame adresu **Miškininkų g. 5c**. Tamsiname automobilių galinius stiklus – nuo lengvo atspalvio iki visiško privatumo – ir klijuojame **atermines plėveles** priekiniams langams, kurios sumažina karštį, bet neviršija leistinos 30 % ribos.',
-      'Rokiškėnams taip pat tamsiname ir poliruojame **žibintus**, o namų ir įmonių langams klijuojame **veidrodines, saulės kontrolės ir matines** plėveles. Pastatų langus klijuojame atvykę į objektą.',
-    ],
-    services: ['automobilio-stiklu-tamsinimas', 'priekiniu-stiklu-tamsinimas', 'zibintu-tamsinimas', 'langu-tamsinimas', 'zibintu-poliravimas', 'stiklo-dekoravimas', 'apsaugine-plevele', 'mobilus-stiklu-tamsinimas', 'lipduku-spausdinimas', 'automobiliu-stiklu-keitimas'],
-    gallery: [
-      'darbai/jaguar-f-pace-raudonas',
-      'pleveles/sk-20/sk-20-saulelydis',
-      'darbai/bmw-x1-baltas-tamsinti-stiklai',
-      'zibintai/mercedes-e-tamsinti-zibintai',
-      'darbai/skoda-kodiaq-juodas',
-      'veidrodines/dideli-langai-veidrodine-plevele',
-      'darbai/jaguar-e-pace-tamsinti-stiklai',
-      'pleveles/ultravision-ms93c/ultravision-ms93c-priekinis-stiklas',
-      'darbai/vw-golf-tamsinti-stiklai',
-    ],
-    faq: [
-      { q: 'Kur jus rasti Rokiškyje?', a: 'Rokiškyje dirbame adresu Miškininkų g. 5c. Darbai atliekami tik iš anksto susitarus – paskambinkite prieš atvykdami.' },
-      { q: 'Kiek kainuoja stiklų tamsinimas Rokiškyje?', a: priceAnswer },
-      { q: 'Kokią plėvelę rinktis priekiniams langams?', a: 'Priekiniams langams naudojame šviesias atermines (soliarines) ir chameleono plėveles – jos sumažina karštį, o bendras šviesos pralaidumas lieka ne mažesnis kaip 70 %.' },
-      { q: 'Ar klijuojate plėveles namų langams Rokiškyje?', a: 'Taip – veidrodines, saulės kontrolės, matines ir apsaugines. Atvykstame į objektą, įvertiname langus ir pasiūlome tinkamą plėvelę.' },
-      { q: 'Kiek laiko trunka automobilio stiklų tamsinimas?', a: 'Galinių stiklų tamsinimas dažniausiai trunka 2–3 valandas – automobilį atsiimsite tą pačią dieną.' },
     ],
   },
   {
@@ -169,34 +200,42 @@ export const cities: City[] = [
     name: 'Kaunas',
     nameIn: 'Kaune',
     nameOf: 'Kauno',
-    seoTitle: 'Stiklų tamsinimas Kaune – atvykstame | stiklutamsinimas.eu',
+    cars: false,
+    keyword: 'Langų tamsinimas',
+    seoTitle: 'Langų tamsinimas Kaune – plėvelės pastatams',
     seoDescription:
-      'Mobilus stiklų tamsinimas Kaune – atvykstame pas jus ir tamsiname automobilio stiklus, klijuojame plėveles namų ir biurų langams. 5–10 m. garantija.',
-    lead: 'Mobilus stiklų tamsinimas Kaune – atvykstame į jūsų namus, biurą ar įmonę ir tamsiname automobilio stiklus ar klijuojame plėveles langams vietoje.',
+      'Langų tamsinimas ir plėvelės pastatams Kaune – atvykstame į objektą: veidrodinės, saulės kontrolės, matinės ir apsauginės plėvelės namams ir biurams.',
+    lead: 'Langų tamsinimas ir plėvelės pastatams Kaune – atvykstame į jūsų namus, biurą ar įmonę ir klijuojame plėveles langams, durims ir pertvaroms vietoje.',
     intro: [
-      'Kaune nuolatinių dirbtuvių neturime – čia dirbame **mobiliai**: atvykstame į jūsų nurodytą vietą su visa reikalinga įranga. Tamsiname automobilių galinius stiklus, klijuojame atermines plėveles priekiniams langams.',
-      'Namams, biurams ir parduotuvėms Kaune klijuojame **veidrodines, saulės kontrolės, matines ir apsaugines** plėveles. Automobilio tamsinimui pageidautina pastogė – garažas ar stoginė, kad ant plėvelės nepatektų dulkės ir lietus.',
+      'Kaune klijuojame **plėveles pastatams** – atvykstame į objektą su visa reikalinga įranga. Namams, biurams ir parduotuvėms klijuojame **veidrodines, saulės kontrolės, matines ir apsaugines** plėveles.',
+      'Didelius biurų langus ir stiklines pertvaras dažnai renkamasi apklijuoti **matine plėvele** – patalpa lieka šviesi, o vaizdas į vidų paslepiamas. Saulėtoje pusėje esantiems langams siūlome **saulės kontrolės plėveles**, kurios sumažina karštį ir akinimą.',
     ],
-    services: ['mobilus-stiklu-tamsinimas', 'automobilio-stiklu-tamsinimas', 'priekiniu-stiklu-tamsinimas', 'langu-tamsinimas', 'stiklo-dekoravimas', 'apsaugine-plevele'],
+    areas: [],
+    areasText: `Pastatų langus klijuojame visame Kaune ir Kauno rajone – pagal susitarimą. ${objectsOnly}`,
+    services: [...buildingServices, 'mobilus-stiklu-tamsinimas'],
     gallery: [
-      'darbai/range-rover-sport-pilkas',
       'veidrodines/veidrodine-plevele-dideliam-langui',
-      'darbai/maserati-granturismo-tamsinti-stiklai',
       'matines/laukiamojo-pertvaru-matinimas',
-      'darbai/dodge-challenger-tamsinti-langai',
-      'pleveles/spectra-15c/spectra-15c-tesla-model-3',
-      'darbai/land-rover-discovery-sport',
-      'veidrodines/stiklinio-fasado-klijavimas',
-      'darbai/bmw-2-coupe-tamsinti-stiklai',
+      'veidrodines/dideli-langai-veidrodine-plevele',
+      'matines/stumdomu-duru-matinimas',
+      'dekoravimas/duru-stiklo-dekoravimas',
+      'veidrodines/pastato-langu-veidrodine-plevele',
+      'matines/stiklo-sienos-matinimas',
+      'veidrodines/veidrodine-plevele-langams',
+      'dekoravimas/matines-juostos-stiklo-durims',
     ],
     faq: [
-      { q: 'Ar turite dirbtuves Kaune?', a: 'Ne – Kaune dirbame mobiliai: atvykstame į jūsų nurodytą vietą. Darbai atliekami tik iš anksto susitarus.' },
-      { q: 'Ko reikia, kad galėtumėte tamsinti automobilį pas mane?', a: 'Pageidautina pastogė – garažas ar stoginė, kad ant plėvelės nepatektų dulkės ir lietus. Pastato langams užtenka laisvo priėjimo prie langų.' },
-      { q: 'Kiek kainuoja stiklų tamsinimas Kaune?', a: `${priceAnswer} Dėl atvykimo į Kauną kainos susitarsime individualiai.` },
-      { q: 'Ar klijuojate plėveles biurų langams Kaune?', a: 'Taip – veidrodines, saulės kontrolės, matines ir apsaugines plėveles biurams, namams ir parduotuvėms.' },
+      { q: 'Ar turite dirbtuves Kaune?', a: 'Ne – Kaune dirbame atvykę į objektą. Darbai atliekami tik iš anksto susitarus.' },
+      { q: 'Ar tamsinate automobilius Kaune?', a: `Ne. ${objectsOnly} Kaune klijuojame plėveles pastatų langams, durims ir pertvaroms.` },
+      { q: 'Kiek kainuoja langų tamsinimas Kaune?', a: 'Kaina priklauso nuo stiklų ploto, plėvelės rūšies ir atvykimo. Atsiųskite langų nuotraukas ar matmenis – pateiksime pasiūlymą iš anksto.' },
+      { q: 'Ar klijuojate matines plėveles biurų pertvaroms Kaune?', a: 'Taip – matines, dekoratyvines ir spalvotas plėveles stiklinėms pertvaroms ir durims, taip pat logotipus ant stiklo.' },
       { q: 'Kokia garantija suteikiama?', a: 'Atliktiems darbams suteikiame nuo 5 iki 10 metų garantiją – trukmė priklauso nuo plėvelės rūšies.' },
     ],
   },
 ];
 
 export const cityUrl = (slug: string) => `/stiklu-tamsinimas-${slug}`;
+/** Nuorodos tekstas: „Stiklų tamsinimas Kupiškyje“ / „Langų tamsinimas Vilniuje“ */
+export const cityAnchor = (c: City) => `${c.keyword} ${c.nameIn}`;
+export const carCities = cities.filter((c) => c.cars);
+export { carServices, buildingServices };

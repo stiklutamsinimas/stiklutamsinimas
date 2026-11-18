@@ -5,8 +5,8 @@ order: 1
 icon: car
 featured: true
 
-seoTitle: Automobilio stiklų tamsinimas nuo 90 € | stiklutamsinimas.eu
-seoDescription: Automobilio stiklų tamsinimas (tonavimas) Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje. Kaina nuo 90 €, darbas per 2–3 val., 5–10 metų garantija.
+seoTitle: Automobilio stiklų tamsinimas – Panevėžys, Kupiškis, Rokiškis
+seoDescription: Automobilio stiklų tamsinimas (tonavimas) Panevėžyje, Kupiškyje ir Rokiškyje. Kaina nuo 90 €, darbas per 2–3 val., 5–10 metų garantija.
 
 h1: Automobilių stiklų tamsinimas
 lead: Tamsiname automobilių stiklus kokybiškomis Solar Screen, Global Window Films ir Ultra Vision plėvelėmis. Vėsesnis salonas, apsauga nuo UV spindulių ir daugiau privatumo – tvarkingai, be burbulų ir su 5–10 metų garantija.
@@ -95,4 +95,4 @@ Galime dirbti ir pas jus – plačiau apie [mobilų stiklų tamsinimą](/mobilus
 
 ## Kur atliekame tamsinimą
 
-Automobilių stiklus tamsiname **Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje**. Visuose miestuose darbus atliekame **tik iš anksto susitarus** – paskambinkite ar parašykite, ir suderinsime jums patogų laiką bei vietą.
+Automobilių stiklus tamsiname mūsų dirbtuvėse **[Kupiškyje](/stiklu-tamsinimas-kupiskis), [Rokiškyje](/stiklu-tamsinimas-rokiskis) ir [Panevėžyje](/stiklu-tamsinimas-panevezys)** – patogu atvykti iš viso Kupiškio, Rokiškio ir Panevėžio rajonų, taip pat iš Anykščių, Biržų, Pasvalio, Zarasų ar Utenos. Darbus atliekame **tik iš anksto susitarus** – paskambinkite ar parašykite, ir suderinsime jums patogų laiką.

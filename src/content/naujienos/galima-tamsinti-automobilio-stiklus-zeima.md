@@ -26,4 +26,4 @@ Kokybiškos tamsinimo plėvelės sukurtos atlaikyti ir karštį, ir šaltį, ir 
 
 ## Atsakymas – taip
 
-Automobilio stiklus galima tamsinti bet kuriuo metų laiku. Žiemą dažnai būna ir lengviau suderinti laiką. Paskambinkite – suderinsime patogią datą viename iš mūsų padalinių Kupiškyje, Rokiškyje, Panevėžyje ar Vilniuje.
+Automobilio stiklus galima tamsinti bet kuriuo metų laiku. Žiemą dažnai būna ir lengviau suderinti laiką. Paskambinkite – suderinsime patogią datą mūsų dirbtuvėse Kupiškyje, Rokiškyje ar Panevėžyje.

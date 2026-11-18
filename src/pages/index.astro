@@ -49,14 +49,14 @@ const faq = [
   { q: 'Ar plėvelė netrikdys GPS ir mobiliojo ryšio?', a: 'Metalo dalelių turinčios plėvelės gali silpninti radijo ir telefono signalą, todėl automobiliams siūlome plėveles be metalo – jos ryšio netrikdo.' },
   { q: 'Ar suteikiate garantiją?', a: `Taip. Atliktiems darbams suteikiame nuo 5 iki 10 metų garantiją – trukmė priklauso nuo plėvelės rūšies. Dirbame nuo ${site.foundedYear} m.` },
   { q: 'Ar galima tamsinti stiklus žiemą?', a: 'Taip. Plėvelė klijuojama šiltoje patalpoje, todėl oras lauke darbui įtakos neturi. Kokybiškos plėvelės atsparios šalčiui, karščiui ir drėgmei.' },
-  { q: 'Kur atliekate darbus?', a: `Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje. ${site.appointmentNote} – paskambinkite ar parašykite ir suderinsime patogų laiką. Pastatų langus klijuojame atvykę į objektą.` },
+  { q: 'Kur atliekate darbus?', a: `Automobilių stiklus tamsiname dirbtuvėse Kupiškyje, Rokiškyje ir Panevėžyje – patogu atvykti iš viso Kupiškio, Rokiškio ir Panevėžio rajonų. Pastatų langus klijuojame atvykę į objektą – šiuose rajonuose, taip pat Vilniuje ir Kaune. ${site.appointmentNote}.` },
   { q: 'Kiek kainuoja automobilio stiklų tamsinimas?', a: 'Galinių stiklų tamsinimas: hečbekui 90–120 €, kupė 90–110 €, sedanui 100–130 €, visureigiui 110–130 €, minivenui 120–150 €, mikroautobusui 145–180 €. Tikslią kainą pasakysime iš anksto pagal automobilio modelį ir pasirinktą plėvelę.' },
 ];
 ---
 
 <BaseLayout
   title="Automobilių ir langų stiklų tamsinimas | stiklutamsinimas.eu"
-  description="Automobilių ir pastatų stiklų tamsinimas kokybiškomis plėvelėmis Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje. Galiniai stiklai nuo 90 €, 5–10 metų garantija, patirtis nuo 2007 m."
+  description="Automobilių stiklų tamsinimas Kupiškyje, Rokiškyje ir Panevėžyje – nuo 90 €, 5–10 m. garantija. Langų plėvelės pastatams, taip pat Vilniuje ir Kaune."
   schema={[faqSchema(faq)]}
 >
   <!-- ===== Įvadas ===== -->
@@ -74,7 +74,7 @@ const faq = [
         </p>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted">
           Automobilių ir pastatų stiklų tamsinimas kokybiškomis plėvelėmis. Tvarkingas darbas, aiški kaina ir {site.warranty.short}
-          – Kupiškyje, Rokiškyje, Panevėžyje ir Vilniuje.
+          – Kupiškyje, Rokiškyje ir Panevėžyje. Pastatų langams – ir Vilniuje bei Kaune.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
           <a href="#kontaktai" class="btn btn-primary !px-7 !py-3.5">Gauti pasiūlymą <ArrowRight size={18} aria-hidden="true" /></a>

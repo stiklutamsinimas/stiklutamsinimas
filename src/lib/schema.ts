@@ -3,7 +3,7 @@
  * kas esate, kur esate ir ką siūlote (Google Maps, išplėstiniai paieškos rezultatai).
  */
 import { site } from '@/config/site';
-import type { City } from '@/data/cities';
+import { cities, type City } from '@/data/cities';
 
 export const ORG_ID = `${site.url}/#organization`;
 const WEBSITE_ID = `${site.url}/#website`;
@@ -45,7 +45,8 @@ export function siteGraph() {
       department: site.locations.map((loc) => ({ '@id': `${site.url}/#${slug(loc.city)}` })),
     },
     ...site.locations.map((loc) => ({
-      '@type': ['LocalBusiness', 'AutomotiveBusiness'],
+      // Vilniuje – tik pastatų plėvelės, automobiliai – Kupiškyje, Rokiškyje, Panevėžyje
+      '@type': cities.find((c) => c.location === loc.city)?.cars ? ['LocalBusiness', 'AutomotiveBusiness'] : 'LocalBusiness',
       '@id': `${site.url}/#${slug(loc.city)}`,
       name: `${site.name} – ${loc.city}`,
       url: `${site.url}/stiklu-tamsinimas-${slug(loc.city)}`,
@@ -57,7 +58,7 @@ export function siteGraph() {
       priceRange: '€€',
       address: { '@type': 'PostalAddress', streetAddress: loc.street, addressLocality: loc.city, addressCountry: 'LT' },
       ...('lat' in loc && loc.lat ? { geo: { '@type': 'GeoCoordinates', latitude: loc.lat, longitude: loc.lng } } : {}),
-      areaServed: { '@type': 'City', name: loc.city },
+      areaServed: [loc.city, ...(cities.find((c) => c.location === loc.city)?.areas ?? [])].map((name) => ({ '@type': 'Place', name })),
       parentOrganization: { '@id': ORG_ID },
     })),
     {
@@ -139,22 +140,26 @@ export function articleSchema(opts: {
   };
 }
 
-/** Miesto puslapio paslauga: „Stiklų tamsinimas Vilniuje“ */
+/** Miesto puslapio paslauga: „Stiklų tamsinimas Kupiškyje“ / „Langų tamsinimas Vilniuje“ */
 export function cityServiceSchema(city: City, url: string) {
   const loc = site.locations.find((l) => l.city === city.location);
   return {
     '@type': 'Service',
-    name: `Stiklų tamsinimas ${city.nameIn}`,
-    serviceType: 'Stiklų tamsinimas',
+    name: `${city.keyword} ${city.nameIn}`,
+    serviceType: city.cars ? 'Automobilių stiklų tamsinimas' : 'Langų tamsinimas',
     description: city.seoDescription,
     url: new URL(url, site.url).href,
     provider: loc ? { '@id': `${site.url}/#${slug(loc.city)}` } : { '@id': ORG_ID },
-    areaServed: { '@type': 'City', name: city.name },
-    offers: {
-      '@type': 'Offer',
-      priceCurrency: 'EUR',
-      price: 90,
-      priceSpecification: { '@type': 'PriceSpecification', minPrice: 90, maxPrice: 180, priceCurrency: 'EUR' },
-    },
+    areaServed: [city.name, ...city.areas].map((name) => ({ '@type': 'Place', name })),
+    ...(city.cars
+      ? {
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'EUR',
+            price: 90,
+            priceSpecification: { '@type': 'PriceSpecification', minPrice: 90, maxPrice: 180, priceCurrency: 'EUR' },
+          },
+        }
+      : {}),
   };
 }

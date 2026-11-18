@@ -1,8 +1,10 @@
 # Cloudflare Pages saugumo antraštės.
 # SSL (HTTPS) sertifikatą Cloudflare suteikia ir atnaujina automatiškai.
 
+# Google adresai CSP – tik Google Ads žymai, kuri įkeliama TIK lankytojui paspaudus „Sutinku“ (CookieConsent.astro).
+# Kol site.ts googleAds.id tuščias, jokia Google žyma neįkeliama.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-src https://www.google.com https://maps.google.com https://www.youtube-nocookie.com; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://www.googletagmanager.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://www.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://www.googletagmanager.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://pagead2.googlesyndication.com https://ad.doubleclick.net https://www.google.com https://www.google.lt; font-src 'self'; connect-src 'self' https://www.googletagmanager.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://pagead2.googlesyndication.com https://ad.doubleclick.net https://www.google.com https://www.google.lt; frame-src https://www.google.com https://maps.google.com https://www.youtube-nocookie.com https://td.doubleclick.net https://bid.g.doubleclick.net https://www.googletagmanager.com; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
