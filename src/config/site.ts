@@ -25,7 +25,7 @@ export const site = {
   url: String(import.meta.env.SITE).replace(/\/$/, ''),
   tagline: 'Profesionalus klijavimas',
   description:
-    'Automobilių ir pastatų stiklų tamsinimas, žibintų tamsinimas ir poliravimas, matinės ir veidrodinės plėvelės, reklama. Automobiliai – Kupiškis, Rokiškis, Panevėžys; pastatai – ir Vilnius, Kaunas.',
+    'Automobilių ir pastatų stiklų tamsinimas, žibintų tamsinimas ir poliravimas, matinės ir veidrodinės plėvelės, reklama. Kupiškis, Rokiškis, Panevėžys – ir visa Lietuva.',
 
   phone,
   phoneDisplay: '+370 605 64933',

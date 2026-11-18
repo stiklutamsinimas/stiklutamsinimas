@@ -95,4 +95,4 @@ Galime dirbti ir pas jus – plačiau apie [mobilų stiklų tamsinimą](/mobilus
 
 ## Kur atliekame tamsinimą
 
-Automobilių stiklus tamsiname mūsų dirbtuvėse **[Kupiškyje](/stiklu-tamsinimas-kupiskis), [Rokiškyje](/stiklu-tamsinimas-rokiskis) ir [Panevėžyje](/stiklu-tamsinimas-panevezys)** – patogu atvykti iš viso Kupiškio, Rokiškio ir Panevėžio rajonų, taip pat iš Anykščių, Biržų, Pasvalio, Zarasų ar Utenos. Darbus atliekame **tik iš anksto susitarus** – paskambinkite ar parašykite, ir suderinsime jums patogų laiką.
+Automobilių stiklus tamsiname mūsų dirbtuvėse **[Kupiškyje](/stiklu-tamsinimas-kupiskis), [Rokiškyje](/stiklu-tamsinimas-rokiskis) ir [Panevėžyje](/stiklu-tamsinimas-panevezys)** – patogu atvykti iš viso Kupiškio, Rokiškio ir Panevėžio rajonų, taip pat iš Anykščių, Biržų, Pasvalio, Zarasų ar Utenos. Atvykti galite ir iš kitų Lietuvos miestų – darbas trunka 2–3 val., tad automobilį atsiimsite tą pačią dieną. Darbus atliekame **tik iš anksto susitarus** – paskambinkite ar parašykite, ir suderinsime jums patogų laiką.

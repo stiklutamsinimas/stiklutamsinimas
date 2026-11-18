@@ -65,6 +65,6 @@ Mobiliai tamsiname:
 - **Automobilius** mobiliai tamsiname Kupiškio, Rokiškio ir Panevėžio rajonuose.
 - **Pastatų langus**, duris ir pertvaras klijuojame šiuose rajonuose, taip pat [Vilniuje](/stiklu-tamsinimas-vilnius) ir [Kaune](/stiklu-tamsinimas-kaunas).
 
-Kitose vietovėse – pagal susitarimą.
+Kitur Lietuvoje – pagal susitarimą.
 
 Daugiau apie paslaugas: [automobilių stiklų tamsinimas](/automobilio-stiklu-tamsinimas) ir [pastatų langų tamsinimas](/langu-tamsinimas).

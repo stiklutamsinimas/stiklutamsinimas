@@ -20,7 +20,7 @@ import ContactForm from '@/components/sections/ContactForm.astro';
 import ContactInfo from '@/components/sections/ContactInfo.astro';
 import { site, telHref } from '@/config/site';
 import { galleryTitles } from '@/data/gallery-folders';
-import { cities as allCities, cityAnchor, cityUrl } from '@/data/cities';
+import { cities as allCities, carServices, cityAnchor, cityUrl } from '@/data/cities';
 import { getFolder, image } from '@/data/galleries';
 import { categories, serviceUrl, type Service } from '@/lib/content';
 import { breadcrumbSchema, faqSchema, serviceSchema } from '@/lib/schema';
@@ -34,6 +34,10 @@ const { Content } = await render(entry);
 const related = await getEntries(d.related);
 const url = serviceUrl(entry.id);
 const serviceCities = allCities.filter((c) => c.services.includes(entry.id));
+/** Visa Lietuva, bet prioritetas – mūsų miestai */
+const wholeCountryNote = carServices.includes(entry.id)
+  ? 'Atvykti galite iš bet kurios Lietuvos vietos – laiką suderinsime iš anksto, kad nereikėtų laukti.'
+  : 'Kitur Lietuvoje – pagal susitarimą: paskambinkite ar parašykite.';
 
 const crumbs = [
   { name: 'Pradžia', url: '/' },
@@ -297,6 +301,7 @@ const schema = [
               </li>
             ))}
           </ul>
+          <p class="mt-4 text-muted">{wholeCountryNote}</p>
         </div>
       </section>
     )
@@ -315,6 +320,7 @@ const schema = [
               </li>
             ))}
           </ul>
+          <p class="mt-4 text-muted">{wholeCountryNote}</p>
         </div>
       </section>
     )
