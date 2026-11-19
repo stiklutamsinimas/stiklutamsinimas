@@ -80,12 +80,12 @@ export const site = {
  */
 export const googleAds = {
   /** Įrašykite čia, pvz. 'AW-123456789' */
-  id: (import.meta.env.PUBLIC_GOOGLE_ADS_ID as string | undefined)?.trim() || '',
+  id: (import.meta.env.PUBLIC_GOOGLE_ADS_ID as string | undefined)?.trim() || 'AW-473972961',
   labels: {
     /** Paspaudimas ant telefono numerio */
-    call: '',
+    call: 'OGumCLOgxrsdEOGBgeIB',
     /** Žinutė: WhatsApp, Viber, Messenger, el. paštas, užklausos forma */
-    lead: '',
+    lead: 'xAv5CLagxrsdEOGBgeIB',
   },
 };
 
