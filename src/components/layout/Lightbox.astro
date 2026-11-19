@@ -10,7 +10,7 @@ import { ChevronLeft, ChevronRight, X } from '@lucide/astro';
 <dialog id="lightbox" class="lightbox m-auto max-h-none max-w-none bg-transparent p-0" aria-label="Nuotraukų peržiūra">
   <div class="lightbox-stage relative flex h-dvh w-screen items-center justify-center p-4 sm:p-12">
     <figure class="flex max-h-full max-w-6xl flex-col items-center">
-      <img class="lightbox-img max-h-[78dvh] w-auto rounded-2xl object-contain shadow-2xl" src="data:," alt="" decoding="async" />
+      {/* Nuotrauka sukuriama tik atidarius – tuščias img HTML kode SEO auditams atrodo kaip paveikslėlis be alt */}
       <figcaption class="lightbox-caption mt-4 max-w-2xl text-center text-sm text-[#cfe0ec]"></figcaption>
     </figure>
     <button type="button" class="lightbox-close absolute top-4 right-4 grid size-12 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20" aria-label="Uždaryti">
@@ -28,14 +28,20 @@ import { ChevronLeft, ChevronRight, X } from '@lucide/astro';
 
 <script>
   const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
-  const img = dialog?.querySelector<HTMLImageElement>('.lightbox-img');
   const caption = dialog?.querySelector('.lightbox-caption');
   const counter = dialog?.querySelector('.lightbox-counter');
+  let img: HTMLImageElement | null = null;
   let items: { src: string; alt: string }[] = [];
   let current = 0;
 
   const show = (i: number) => {
-    if (!img || !caption || !counter || items.length === 0) return;
+    if (!caption || !counter || items.length === 0) return;
+    if (!img) {
+      img = document.createElement('img');
+      img.className = 'lightbox-img max-h-[78dvh] w-auto rounded-2xl object-contain shadow-2xl';
+      img.decoding = 'async';
+      caption.before(img);
+    }
     current = (i + items.length) % items.length;
     const item = items[current]!;
     img.src = item.src;

@@ -13,9 +13,16 @@ Kad ChatGPT, Google AI apžvalgos (Gemini), Microsoft Copilot, Perplexity ir Cla
 - **Sitemap su straipsnių datomis** – Bing (ChatGPT, Copilot) ir Google žino, kas nauja.
 - Svetainė statinė – AI robotai mato visą tekstą be JavaScript.
 
-> Kol svetainė veikia laikiname adrese (*.pages.dev), ji sąmoningai neindeksuojama. Visas poveikis – **prijungus domeną stiklutamsinimas.eu**. AI paieškose rezultatai paprastai pasirodo po 2–8 savaičių.
+> Domenas stiklutamsinimas.eu prijungtas 2026-11-19 (laikinas *.pages.dev adresas lieka neindeksuojamas). AI paieškose rezultatai paprastai pasirodo po 2–8 savaičių.
 
 ## Ką padaryti jums (prijungus domeną)
+
+### 0. www → be www (Cloudflare, 1 min.)
+Dabar `www.stiklutamsinimas.eu` ir `stiklutamsinimas.eu` rodo tą patį puslapį – SEO auditai (pvz. Seobility) tai žymi kaip „labai svarbu“.
+Kodu to sutvarkyti negalima, tik Cloudflare:
+1. Cloudflare → `stiklutamsinimas.eu` → **Rules → Overview → Create rule → Redirect Rule**.
+2. Pasirinkite šabloną **„Redirect from WWW to Root“** (jis viską užpildo pats) → **Deploy**.
+3. Patikrinkite: atidarius `https://www.stiklutamsinimas.eu/kontaktai` turi persimesti į `https://stiklutamsinimas.eu/kontaktai`.
 
 ### 1. Bing Webmaster Tools – SVARBIAUSIA ChatGPT ir Copilot
 ChatGPT paieška ir Microsoft Copilot remiasi **Bing** paieška.
