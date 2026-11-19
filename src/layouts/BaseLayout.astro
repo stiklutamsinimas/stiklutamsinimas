@@ -51,7 +51,7 @@ const jsonLd = { '@context': 'https://schema.org', '@graph': [...siteGraph(), ..
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'} />
 
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#f3f8fc" />

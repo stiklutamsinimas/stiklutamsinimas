@@ -1,0 +1,227 @@
+---
+/**
+ * Apie mus – visi svarbiausi faktai vienoje vietoje.
+ * Padeda Google ir dirbtinio intelekto paieškoms (ChatGPT, Gemini, Perplexity) suprasti, kas mes esame.
+ * Tik patikrinti faktai iš src/config/site.ts, src/data/*.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import Steps from '@/components/sections/Steps.astro';
+import GoogleReviews from '@/components/sections/GoogleReviews.astro';
+import CtaBand from '@/components/sections/CtaBand.astro';
+import SocialIcon from '@/components/ui/SocialIcon.astro';
+import { mapsUrl, site, telHref } from '@/config/site';
+import { cities, cityAnchor, cityUrl } from '@/data/cities';
+import { carPriceFrom } from '@/data/prices';
+import { getServicesByCategory, serviceUrl } from '@/lib/content';
+import { ORG_ID, breadcrumbSchema } from '@/lib/schema';
+
+const groups = await getServicesByCategory();
+const crumbs = [
+  { name: 'Pradžia', url: '/' },
+  { name: 'Apie mus', url: '/apie-mus' },
+];
+const carCities = cities.filter((c) => c.cars);
+const objectCities = cities.filter((c) => !c.cars);
+const join = (a: string[]) => a.join(', ').replace(/, ([^,]*)$/, ' ir $1');
+
+const why = [
+  {
+    title: `Patirtis nuo ${site.foundedYear} m.`,
+    text: `Tamsiname automobilius ir klijuojame plėveles pastatams jau daugiau nei ${Math.floor((new Date().getFullYear() - site.foundedYear) / 5) * 5} metų – žinome, kaip elgiasi kiekviena plėvelė ir stiklas.`,
+  },
+  { title: site.warranty.short, text: `Garantija priklauso nuo plėvelės rūšies. Dirbame su ${join([...site.filmBrands])} plėvelėmis.` },
+  {
+    title: 'Pagal įstatymus',
+    text: 'Priekinį stiklą ir priekinius šoninius langus tamsiname tik tiek, kiek leidžiama: jie turi praleisti ne mažiau kaip 70 % šviesos. Galinius – kaip norite.',
+  },
+  {
+    title: 'Ryšys netrikdomas',
+    text: 'Automobiliams siūlome plėveles be metalo dalelių – jos netrikdo GPS, mobiliojo ryšio ir radijo signalo.',
+  },
+  { title: 'Kaina iš anksto', text: `Galinių stiklų tamsinimas – nuo ${carPriceFrom} €. Tikslią kainą pasakome prieš darbą pagal automobilio modelį ir plėvelę.` },
+  { title: 'Ir žiemą', text: 'Plėvelę klijuojame šiltoje patalpoje, todėl tamsinti galima bet kuriuo metų laiku.' },
+];
+---
+
+<BaseLayout
+  title={`Apie mus – stiklų tamsinimas nuo ${site.foundedYear} m. | stiklutamsinimas.eu`}
+  description={`Stiklų tamsinimas nuo ${site.foundedYear} m.: dirbtuvės ${join(carCities.map((c) => c.nameIn))}, langų plėvelės ir ${join(objectCities.map((c) => c.nameIn))}. ${site.warranty.short}, darbai tik iš anksto susitarus.`}
+  schema={[
+    breadcrumbSchema(crumbs),
+    {
+      '@type': 'AboutPage',
+      '@id': `${site.url}/apie-mus#page`,
+      url: `${site.url}/apie-mus`,
+      name: `Apie mus – ${site.name}`,
+      inLanguage: 'lt-LT',
+      about: { '@id': ORG_ID },
+      mainEntity: { '@id': ORG_ID },
+    },
+  ]}
+>
+  <section class="relative isolate overflow-hidden">
+    <div class="pointer-events-none absolute -top-48 -right-48 -z-10 size-[40rem] rounded-full border-[56px] border-logo/[0.06]"></div>
+    <div class="container-site pt-8 pb-6">
+      <Breadcrumbs items={crumbs} />
+      <SectionHeading
+        as="h1"
+        eyebrow="Apie mus"
+        title={`Stiklų tamsinimas nuo ${site.foundedYear} m.`}
+        lead={`Esame ${site.domain} – tamsiname automobilių stiklus ir klijuojame plėveles namų, biurų bei įmonių langams. Automobilius tamsiname dirbtuvėse ${join(carCities.map((c) => c.nameIn))}, o pastatų langus – atvykę į objektą, taip pat ${join(objectCities.map((c) => c.nameIn))}.`}
+        class="mt-10"
+      />
+    </div>
+  </section>
+
+  <!-- Trumpai – faktai, kuriuos lengva rasti ir cituoti -->
+  <section class="section !pt-8">
+    <div class="container-site">
+      <div class="card p-6 sm:p-8">
+        <h2 class="text-2xl sm:text-3xl">Trumpai apie mus</h2>
+        <dl class="mt-6 grid gap-x-10 gap-y-5 sm:grid-cols-2">
+          <div>
+            <dt class="text-sm font-bold tracking-wide text-muted uppercase">Veikla nuo</dt>
+            <dd class="mt-1 text-lg font-semibold text-text">{site.foundedYear} m.</dd>
+          </div>
+          <div>
+            <dt class="text-sm font-bold tracking-wide text-muted uppercase">Darbo laikas</dt>
+            <dd class="mt-1 text-lg font-semibold text-text">{site.appointmentNote}</dd>
+          </div>
+          <div>
+            <dt class="text-sm font-bold tracking-wide text-muted uppercase">Dirbtuvės (automobiliai ir pastatai)</dt>
+            <dd class="mt-1 space-y-1 text-text">
+              {
+                carCities.map((c) => {
+                  const loc = site.locations.find((l) => l.city === c.location);
+                  return (
+                    <p>
+                      <a href={cityUrl(c.slug)} class="font-semibold text-link hover:underline">
+                        {c.name}
+                      </a>
+                      {loc && (
+                        <>
+                          {' – '}
+                          <a href={mapsUrl(loc)} target="_blank" rel="noopener" class="hover:underline">
+                            {loc.street}
+                          </a>
+                        </>
+                      )}
+                    </p>
+                  );
+                })
+              }
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-bold tracking-wide text-muted uppercase">Tik pastatams</dt>
+            <dd class="mt-1 text-text">
+              {/* prettier-ignore */}
+              {objectCities.map((c, i) => <>{i > 0 && ', '}<a href={cityUrl(c.slug)} class="font-semibold text-link hover:underline">{c.name}</a></>)}; kitur Lietuvoje – pagal susitarimą
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-bold tracking-wide text-muted uppercase">Automobilio galinių stiklų tamsinimas</dt>
+            <dd class="mt-1 text-lg font-semibold text-text">nuo {carPriceFrom} €, per 2–3 val.</dd>
+          </div>
+          <div>
+            <dt class="text-sm font-bold tracking-wide text-muted uppercase">Garantija</dt>
+            <dd class="mt-1 text-lg font-semibold text-text">{site.warranty.full}</dd>
+          </div>
+          <div>
+            <dt class="text-sm font-bold tracking-wide text-muted uppercase">Plėvelės</dt>
+            <dd class="mt-1 text-lg font-semibold text-text">{join([...site.filmBrands])}</dd>
+          </div>
+          <div>
+            <dt class="text-sm font-bold tracking-wide text-muted uppercase">Kontaktai</dt>
+            <dd class="mt-1 text-text">
+              <a href={telHref} class="text-lg font-semibold text-link hover:underline">{site.phoneDisplay}</a>
+              <span class="text-muted"> (taip pat WhatsApp, Viber)</span>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-bg-2">
+    <div class="container-site">
+      <SectionHeading eyebrow="Kodėl mes" title="Kuo galime padėti" />
+      <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          why.map((w) => (
+            <li class="card reveal p-6">
+              <h3 class="text-lg font-extrabold">{w.title}</h3>
+              <p class="mt-2 leading-relaxed text-muted">{w.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container-site">
+      <SectionHeading eyebrow="Paslaugos" title="Ką darome" />
+      <div class="mt-10 grid gap-8 md:grid-cols-3">
+        {
+          groups.map((g) => (
+            <div>
+              <h3 class="text-lg font-extrabold">{g.label}</h3>
+              <ul class="mt-3 space-y-2">
+                {g.items.map((s) => (
+                  <li>
+                    <a href={serviceUrl(s.id)} class="text-link hover:underline">
+                      {s.data.h1 ?? s.data.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+      <h3 class="mt-12 text-lg font-extrabold">Miestai</h3>
+      <ul class="mt-4 flex flex-wrap gap-2.5">
+        {
+          cities.map((c) => (
+            <li>
+              <a href={cityUrl(c.slug)} class="chip">
+                {cityAnchor(c)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section bg-bg-2">
+    <div class="container-site">
+      <SectionHeading eyebrow="Kaip dirbame" title="Nuo skambučio iki garantijos" />
+      <div class="mt-10"><Steps /></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container-site">
+      <SectionHeading eyebrow="Atsiliepimai" title="Ką sako klientai" />
+      <div class="mt-10"><GoogleReviews /></div>
+
+      <h2 class="mt-16 text-2xl sm:text-3xl">Sekite mūsų darbus</h2>
+      <ul class="mt-6 flex flex-wrap gap-3">
+        {
+          site.social.map((s) => (
+            <li>
+              <a href={s.url} target="_blank" rel="noopener me" class="btn btn-outline">
+                <SocialIcon name={s.name} size={18} /> {s.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mt-14"><CtaBand /></div>
+    </div>
+  </section>
+</BaseLayout>

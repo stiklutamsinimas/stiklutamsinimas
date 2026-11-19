@@ -4,6 +4,7 @@
  */
 import { site } from '@/config/site';
 import { cities, type City } from '@/data/cities';
+import { carPrices } from '@/data/prices';
 
 export const ORG_ID = `${site.url}/#organization`;
 const WEBSITE_ID = `${site.url}/#website`;
@@ -34,6 +35,28 @@ export function siteGraph() {
       slogan: site.tagline,
       foundingDate: String(site.foundedYear),
       areaServed: { '@type': 'Country', name: 'Lietuva' },
+      knowsAbout: [
+        'Automobilių stiklų tamsinimas',
+        'Priekinių stiklų tamsinimas aterminėmis plėvelėmis',
+        'Langų tamsinimas',
+        'Saulės kontrolės plėvelės',
+        'Veidrodinės plėvelės langams',
+        'Matinės plėvelės',
+        'Apsauginės (saugos) plėvelės stiklui',
+        'Žibintų tamsinimas',
+        'Žibintų poliravimas',
+        'Lipdukų gamyba ir reklama ant automobilių',
+      ],
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Automobilio galinių stiklų tamsinimo kainos',
+        itemListElement: carPrices.map((p) => ({
+          '@type': 'Offer',
+          name: `Galinių stiklų tamsinimas – ${p.type.toLowerCase()}`,
+          itemOffered: { '@type': 'Service', name: 'Automobilio stiklų tamsinimas', url: `${site.url}/automobilio-stiklu-tamsinimas` },
+          priceSpecification: { '@type': 'PriceSpecification', minPrice: p.from, maxPrice: p.to, priceCurrency: 'EUR' },
+        })),
+      },
       sameAs: site.social.map((s) => s.url),
       contactPoint: {
         '@type': 'ContactPoint',
@@ -66,6 +89,7 @@ export function siteGraph() {
       '@id': WEBSITE_ID,
       url: site.url,
       name: site.name,
+      description: site.description,
       inLanguage: 'lt-LT',
       publisher: { '@id': ORG_ID },
     },

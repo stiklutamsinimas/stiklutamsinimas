@@ -25,6 +25,9 @@ npm run preview    # peržiūrėti dist/ versiją
 | Plėvelių pavyzdžiai (pavadinimai, tamsumo %) | `src/data/films.ts` |
 | Miestų puslapiai (/stiklu-tamsinimas-panevezys ir kt.) – tekstai, DUK, aplinkinės vietovės. Automobiliai – tik Kupiškis, Rokiškis, Panevėžys (`cars: true`); Vilnius, Kaunas – tik pastatai | `src/data/cities.ts` |
 | Google Ads raktažodžių ir skelbimų planas | `docs/google-ads-planas.md` |
+| Dirbtinio intelekto paieška (ChatGPT, Gemini, Copilot, Perplexity) – kas padaryta ir ką nustatyti | `docs/ai-paieska.md` |
+| AI santrauka `/llms.txt` (generuojama automatiškai) | `src/pages/llms.txt.ts` |
+| Dažniausi klausimai (pradžia, /apie-mus, /llms.txt) | `src/data/faq.ts` |
 | Nuotraukų aprašymai (alt tekstai) | `src/data/galleries.ts` |
 | Automobilių tamsinimo kainos (visur svetainėje) | `src/data/prices.ts` |
 | Garantija, veiklos pradžios metai | `src/config/site.ts` (`warranty`, `foundedYear`) |
@@ -126,6 +129,7 @@ Kai svetainė bus baigta: Cloudflare → **Custom domains** → `stiklutamsinima
 ## Po paleidimo – SEO
 
 - [ ] **Google Search Console**: pridėti domeną, pateikti `https://stiklutamsinimas.eu/sitemap-index.xml`.
+- [ ] **Bing Webmaster Tools** (ChatGPT, Copilot) ir **Cloudflare AI Crawl Control** – žr. `docs/ai-paieska.md`.
 - [ ] **Google Business Profile** Rokiškiui ir Panevėžiui (Kupiškis jau yra), svetainės nuoroda – miesto puslapis, pvz. `/stiklu-tamsinimas-panevezys`.
 - [ ] Prašyti klientų atsiliepimų Google.
 - [ ] Patikrinti [Rich Results Test](https://search.google.com/test/rich-results) ir [PageSpeed Insights](https://pagespeed.web.dev).
