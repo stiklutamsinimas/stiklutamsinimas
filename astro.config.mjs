@@ -23,7 +23,7 @@ const newestArticle = new Date(Math.max(...Object.values(articleDates).map((d) =
  * kitaip Facebook rodo „Website Builder 404“.
  * PRIJUNGUS DOMENĄ PRIE CLOUDFLARE – pakeisti į true.
  */
-const DOMAIN_LIVE = false;
+const DOMAIN_LIVE = true;
 const SITE = DOMAIN_LIVE ? 'https://stiklutamsinimas.eu' : 'https://stiklutamsinimas.pages.dev';
 
 export default defineConfig({
