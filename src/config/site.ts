@@ -106,7 +106,7 @@ export const googleAds = {
  */
 export const googleAnalytics = {
   /** Įrašykite čia, pvz. 'G-ABC123DEF4' */
-  id: (import.meta.env.PUBLIC_GA4_ID as string | undefined)?.trim() || '',
+  id: (import.meta.env.PUBLIC_GA4_ID as string | undefined)?.trim() || 'G-JMZYX9RFC0',
 };
 
 export const metaPixel = {

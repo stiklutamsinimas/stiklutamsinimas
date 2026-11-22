@@ -179,8 +179,8 @@ Kaip įjungti:
 | Kas | Ką rodo | Būsena |
 |---|---|---|
 | **Cloudflare Web Analytics** | VISI lankytojai (ir paspaudę „Nesutinku“): kiek jų buvo, kokie puslapiai, iš kur atėjo, kokia šalis ir įrenginys. Be slapukų. | Svetainė paruošta, įjungiama Cloudflare skydelyje: Workers & Pages → `stiklutamsinimas` → Metrics → Web Analytics → Enable |
-| **Google Analytics 4** | Sutikusių lankytojų kelias: iš kurios reklamos atėjo, ką žiūrėjo, ar paskambino. Įvykis `generate_lead` (method: telefonas / zinute / forma). | Laukia G- ID → `src/config/site.ts` → `googleAnalytics.id` |
-| **Google Ads auditorija** | „Svetainės lankytojai“, kuriems galima rodyti reklamą dar kartą. Sutikus slapukams įjungiama `ad_personalization`. | Veikia. Google Ads → Įrankiai → Auditorijų tvarkytuvė |
+| **Google Analytics 4** | Sutikusių lankytojų kelias: iš kurios reklamos atėjo, ką žiūrėjo, ar paskambino. Įvykis `generate_lead` (method: telefonas / zinute / forma). | Veikia nuo 2026-11-22: G-JMZYX9RFC0 (susieta su Google Ads 343-785-7299). Pažymėkite `generate_lead` kaip „Pagrindinį įvykį“, kai jis pasirodys GA4 |
+| **Google Ads auditorija** | „Svetainės lankytojai“, kuriems galima rodyti reklamą dar kartą. Sutikus slapukams įjungiama `ad_personalization`. | Veikia: „Visi lankytojai (Google Ads)“ pridėta kampanijai A režimu „Stebėjimas“ |
 
 Google Ads kampanijose auditoriją pridėkite kaip **„Stebėjimas“ (Observation)**, NE „Taikymas“. Taip reklama rodoma visiems, kaip ir anksčiau, o jūs matote, ar grįžę lankytojai skambina dažniau. Paieškos reklamai auditorija pradeda veikti, kai joje susikaupia ~1000 žmonių.
 
