@@ -12,7 +12,8 @@ Paruošta pagal tikrus Google paieškos pasiūlymus (2026-11).
 
 ## Biudžetas (atnaujinta 2026-11-22)
 
-**Facebook / Instagram reklama kol kas išjungta – visas reklamos biudžetas skiriamas Google Ads.** Meta Pixel svetainėje įdiegtas iš anksto: jis renka auditoriją (kas lankėsi svetainėje), kad įjungus Facebook reklamą vėliau ją būtų galima rodyti jau apsilankiusiems.
+**Faktiškai nuo 2026-11-22:** Google Ads yra tik viena kampanija („Paieška – Kupiškis, Rokiškis, Panevėžys“) su **4,50 €/d.** biudžetu (buvo 6,50 €). B kampanijos dar nėra, ją verta sukurti kovą.
+**Facebook / Instagram:** atlaisvinti ~2 €/d. skiriami **14 dienų bandymui**: žibintų poliravimo vaizdo įrašas, tikslas „Žinutės“, 40 km aplink Kupiškį, Rokiškį ir Panevėžį, su pabaigos data. Jei viena žinutė kainuoja iki ~5 €, tęsti; jei daugiau nei ~10 €, sustabdyti iki kovo. Meta Pixel (1125077553684301) renka auditoriją, kad pavasarį reklamą būtų galima rodyti jau apsilankiusiems.
 
 | Laikotarpis | A kampanija (3 rajonai) | B kampanija (visa Lietuva) | Iš viso per dieną | ~Per mėnesį |
 |---|---|---|---|---|
