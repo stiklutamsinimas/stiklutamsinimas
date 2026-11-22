@@ -99,7 +99,7 @@ export const googleAds = {
  */
 export const metaPixel = {
   /** Įrašykite čia, pvz. '1234567890123456' */
-  id: (import.meta.env.PUBLIC_META_PIXEL_ID as string | undefined)?.trim() || '',
+  id: (import.meta.env.PUBLIC_META_PIXEL_ID as string | undefined)?.trim() || '1125077553684301',
 };
 
 /** Funkcijos, kurias galima įjungti vėliau */
