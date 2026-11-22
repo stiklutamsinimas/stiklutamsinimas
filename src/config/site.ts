@@ -89,6 +89,19 @@ export const googleAds = {
   },
 };
 
+/**
+ * Meta Pixel (Facebook / Instagram reklama).
+ * Kol `id` tuščias – Meta žyma neįkeliama. Įrašius ID, ji įkeliama TIK lankytojui paspaudus „Sutinku“
+ * (tame pačiame slapukų lange kaip Google Ads).
+ * ID – 15–16 skaitmenų: Meta Events Manager → Duomenų šaltiniai → jūsų Pixel → „Nustatymai“ → Dataset ID / Pixel ID.
+ * ID galima nurodyti ir Cloudflare Pages kintamuoju PUBLIC_META_PIXEL_ID.
+ * Siunčiami įvykiai: PageView, Contact (telefonas, WhatsApp, Viber, Messenger, el. paštas), Lead (užklausos forma).
+ */
+export const metaPixel = {
+  /** Įrašykite čia, pvz. '1234567890123456' */
+  id: (import.meta.env.PUBLIC_META_PIXEL_ID as string | undefined)?.trim() || '',
+};
+
 /** Funkcijos, kurias galima įjungti vėliau */
 export const features = {
   /** Internetinė parduotuvė (/parduotuve). Kol `false` – puslapiai negeneruojami ir nerodomi meniu. */

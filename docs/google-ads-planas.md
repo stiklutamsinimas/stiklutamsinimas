@@ -10,14 +10,27 @@ Paruošta pagal tikrus Google paieškos pasiūlymus (2026-11).
 
 > Kodėl dvi kampanijos, o ne viena su „+50 % savo miestams“? Automatinės strategijos (pvz. „Maksimaliai padidinti paspaudimų skaičių“) vietovių koregavimų **nepaiso**. Atskiros kampanijos su atskirais biudžetais – vienintelis patikimas būdas užtikrinti, kad daugiausia pinigų atitektų jūsų miestams.
 
-> Svarbu: reklamą verta paleisti **prijungus domeną stiklutamsinimas.eu** (kol kas svetainė laikiname adrese).
+## Biudžetas (atnaujinta 2026-11-22)
+
+**Facebook / Instagram reklama kol kas išjungta – visas reklamos biudžetas skiriamas Google Ads.** Meta Pixel svetainėje įdiegtas iš anksto: jis renka auditoriją (kas lankėsi svetainėje), kad įjungus Facebook reklamą vėliau ją būtų galima rodyti jau apsilankiusiems.
+
+| Laikotarpis | A kampanija (3 rajonai) | B kampanija (visa Lietuva) | Iš viso per dieną | ~Per mėnesį |
+|---|---|---|---|---|
+| **Lapkritis–vasaris** (ne sezonas) | 3 € | 1,5 € | **4,5 €** | ~140 € |
+| **Kovas–rugpjūtis** (sezonas) | 6,5–8,5 € | 3,5–4,5 € | **10–13 €** | ~300–400 € |
+| Rugsėjis–spalis | 5 € | 2,5 € | **7,5 €** | ~230 € |
+
+- Google kai kurią dieną gali išleisti iki 2× dienos biudžeto, bet per mėnesį ne daugiau nei dienos biudžetas × 30,4.
+- **Žiemą** neišjunkite žibintų poliravimo ir žibintų tamsinimo grupių: tamsu, žibintai pageltę, artėja techninė apžiūra. Šiai paslaugai žiema tinka geriausiai.
+- Kovo pradžioje padidinkite biudžetą iki sezoninio, nelaukite gegužės: žmonės stiklus tamsinti pradeda planuoti anksčiau.
+- Vienas klientas iš reklamos turėtų kainuoti ne daugiau kaip **20–25 €** (vidutinis darbas ~110 €). Kiekvieno skambinusio paklauskite „Kaip mus radote?“.
 
 ## Kampanijų struktūra
 
 | | **A. Prioritetas: Kupiškis–Rokiškis–Panevėžys** | **B. Visa Lietuva** |
 |---|---|---|
 | Vietovės | Spindulys: Kupiškis 35 km, Rokiškis 35 km, Panevėžys 35 km + miestai Anykščiai, Biržai, Pasvalys, Utena, Zarasai, Kėdainiai | **Lietuva**, bet **išskirkite** (Exclude) visas A kampanijos vietoves |
-| Biudžetas | ~65 % (pvz. 6 € iš 9 € per dieną) | ~35 % (pvz. 3 € per dieną) |
+| Biudžetas | ~65 % (žr. lentelę „Biudžetas“ aukščiau) | ~35 % |
 | Didžiausia paspaudimo kaina | ~1–1,2 € | ~0,5 € |
 | Paslaugos | Visos: automobiliai, priekiniai stiklai, žibintai, langai ir plėvelės, lipdukai | Visos, bet raktažodžiai **be** jūsų miestų pavadinimų + Vilniaus ir Kauno pastatų grupės |
 
@@ -110,11 +123,11 @@ Miestų pavadinimų neigiamais **nežymime** – reklama rodoma visur. Jei po ke
 
 > Jei nenorite, kad reklama būtų rodoma ieškantiems „įstatymas / taisyklės“, palikite šiuos žodžius sąraše. Jei norite (jie dažnai vėliau užsako) – išimkite: svetainėje yra straipsnis „Tamsinti stiklai ir techninė apžiūra“.
 
-## Konversijų sekimas (jau įdiegta svetainėje – laukia jūsų ID)
+## Konversijų sekimas (veikia nuo 2026-11-19)
 
-Svetainėje jau įdiegta Google Ads žyma ir slapukų sutikimo langas (ES reikalavimas), bet **jie išjungti, kol neįrašytas jūsų Google Ads ID**. Kol ID nėra – jokių slapukų ir jokio lango.
+Svetainėje veikia Google Ads žyma (AW-473972961) ir slapukų sutikimo langas (ES reikalavimas). Žyma įkeliama tik lankytojui paspaudus „Sutinku“.
 
-Kaip įjungti:
+Kaip buvo įjungta (jei reikės pakeisti ID ar žymes):
 1. Google Ads → **Tikslai → Konversijos → Naujas konversijos veiksmas → Svetainė**. Sukurkite du veiksmus:
    - **„Skambutis iš svetainės“** (kategorija: Kontaktas),
    - **„Užklausa / žinutė“** (kategorija: Potencialaus kliento formos pateikimas / Kontaktas).
@@ -144,3 +157,19 @@ Svetainė sutvarkyta taip pat: **visoje Lietuvoje** randama pagal bendrus žodž
 | /zibintu-poliravimas, /zibintu-tamsinimas, /lipduku-spausdinimas | visa Lietuva | žibintų poliravimas, žibintų tamsinimas, lipdukų gamyba |
 | /stiklu-tamsinimas-vilnius, /stiklu-tamsinimas-kaunas | Vilnius, Kaunas | langų tamsinimas Vilnius / Kaunas (tik pastatai) |
 | /naujienos (27 straipsniai) | visa Lietuva | informaciniai klausimai: „ar galima tamsinti priekinius langus“, „kiek kainuoja“ ir pan. |
+
+## Meta Pixel (Facebook / Instagram) – įdiegta, laukia ID
+
+Facebook reklama kol kas išjungta, bet Pixel verta įjungti jau dabar: jis pradės kaupti auditoriją (kas lankėsi svetainėje), ir įjungus reklamą sezone ją bus galima rodyti jau apsilankiusiems.
+
+Pixel įkeliamas tame pačiame slapukų lange kaip Google Ads, **tik lankytojui paspaudus „Sutinku“**. Siunčiami įvykiai:
+- `PageView` – puslapio peržiūra,
+- `Contact` – paspaudimas ant telefono, WhatsApp, Viber, Messenger ar el. pašto,
+- `Lead` – išsiųsta užklausos forma.
+
+Kaip įjungti:
+1. Atidarykite **business.facebook.com → Events Manager → Prijungti duomenų šaltinius → Žiniatinklis**. Pavadinkite „stiklutamsinimas.eu“ ir pasirinkite **„Įdiegti kodą rankiniu būdu“**. Jei Pixel jau turite, tiesiog atidarykite jį.
+2. Nukopijuokite **Pixel ID** (15–16 skaitmenų).
+3. Atsiųskite jį man arba įrašykite `src/config/site.ts` → `metaPixel.id`. Taip pat tinka Cloudflare Pages kintamasis `PUBLIC_META_PIXEL_ID` (po jo pakeitimo reikia naujo deploy).
+4. Events Manager → Pixel nustatymuose **išjunkite „Automatic advanced matching“**, kad Meta nerinktų formos laukų (vardo, telefono).
+5. Patikrinkite su „Meta Pixel Helper“ (Chrome plėtinys): atidarykite svetainę, paspauskite „Sutinku“, turi matytis `PageView`.
