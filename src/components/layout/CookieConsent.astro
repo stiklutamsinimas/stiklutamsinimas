@@ -5,21 +5,27 @@
  * Google žyma (gtag.js) ir Meta Pixel (fbevents.js) įkeliami TIK paspaudus „Sutinku“
  * (Google – Consent Mode v2, „basic“ režimas). Atsisakius – jokių slapukų.
  */
-import { googleAds, metaPixel } from '@/config/site';
+import { consentNeeded, googleAds, googleAnalytics, metaPixel } from '@/config/site';
 
 const { id, labels } = googleAds;
 const call = labels.call || labels.lead;
 const lead = labels.lead || labels.call;
+const gaId = googleAnalytics.id;
 const metaId = metaPixel.id;
 
-const who = [id && 'Google', metaId && 'Meta (Facebook, Instagram)'].filter(Boolean).join(' ir ');
-const why = metaId
-  ? 'padės mums matuoti, kiek žmonių susisiekia atėję iš reklamos, ir rodyti mūsų reklamą jau apsilankiusiems'
-  : 'padės mums matuoti, kiek žmonių susisiekia atėję iš reklamos';
+const who = [(id || gaId) && 'Google', metaId && 'Meta (Facebook, Instagram)'].filter(Boolean).join(' ir ');
+const why = [
+  gaId && 'skaičiuoti svetainės lankomumą',
+  id || metaId ? 'matuoti, kiek žmonių susisiekia atėję iš reklamos' : '',
+  'rodyti mūsų reklamą jau apsilankiusiems',
+]
+  .filter(Boolean)
+  .join(', ')
+  .replace(/, ([^,]*)$/, ' ir $1');
 ---
 
 {
-  (id || metaId) && (
+  consentNeeded && (
     <div
       id="slapuku-langas"
       class="cookie-banner card fixed inset-x-3 bottom-3 z-[60] hidden p-5 sm:inset-x-auto sm:bottom-6 sm:left-6 sm:max-w-md"
@@ -30,10 +36,11 @@ const why = metaId
       data-label-call={call}
       data-label-lead={lead}
       data-meta-id={metaId || undefined}
+      data-ga-id={gaId || undefined}
     >
       <p class="text-base font-extrabold text-text">Slapukai</p>
       <p class="mt-1.5 text-sm leading-relaxed text-muted">
-        Svetainė veikia ir be slapukų. Sutikus, {who} reklamos slapukai {why}. Sutikimą galite bet kada atšaukti puslapio apačioje
+        Svetainė veikia ir be slapukų. Sutikus, {who} slapukai padės mums {why}. Sutikimą galite bet kada atšaukti puslapio apačioje
         („Slapukų nustatymai“).{' '}
         <a href="/privatumo-politika#slapukai" class="font-semibold text-link underline underline-offset-2">
           Plačiau
@@ -81,7 +88,8 @@ const why = metaId
     document.head.appendChild(s);
   };
 
-  function loadGoogleTag(adsId: string) {
+  /** Google žyma: Google Ads (konversijos + „Svetainės lankytojų“ auditorija) ir/ar Google Analytics 4 */
+  function loadGoogleTag(adsId?: string, gaId?: string) {
     w.dataLayer = w.dataLayer || [];
     w.gtag = function gtag() {
       // gtag.js tikisi būtent `arguments` objekto
@@ -94,11 +102,17 @@ const why = metaId
       ad_personalization: 'denied',
       analytics_storage: 'denied',
     });
-    // Lankytojas sutiko – leidžiame tik konversijų matavimą (be reklamos personalizavimo ir analitikos)
-    w.gtag('consent', 'update', { ad_storage: 'granted', ad_user_data: 'granted' });
+    // Lankytojas sutiko: konversijų matavimas, reklama jau apsilankiusiems ir (jei įjungta) lankomumo statistika
+    w.gtag('consent', 'update', {
+      ad_storage: 'granted',
+      ad_user_data: 'granted',
+      ad_personalization: 'granted',
+      ...(gaId ? { analytics_storage: 'granted' } : {}),
+    });
     w.gtag('js', new Date());
-    w.gtag('config', adsId);
-    addScript(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(adsId)}`);
+    if (adsId) w.gtag('config', adsId);
+    if (gaId) w.gtag('config', gaId);
+    addScript(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent((adsId || gaId)!)}`);
   }
 
   /** Oficialus Meta Pixel įkėlimo kodas, tik be įterpto (inline) skripto – kad veiktų su CSP */
@@ -126,7 +140,8 @@ const why = metaId
   function clearAdCookies() {
     const host = location.hostname;
     const apex = host.replace(/^www\./, '');
-    ['_gcl_au', '_fbp', '_fbc'].forEach((name) => {
+    const ga = document.cookie.match(/(?:^|; )(_ga[^=]*)=/g)?.map((c) => c.replace(/^; /, '').replace(/=$/, '')) ?? [];
+    ['_gcl_au', '_fbp', '_fbc', ...ga].forEach((name) => {
       [undefined, host, `.${apex}`].forEach((domain) => {
         document.cookie = `${name}=; Max-Age=0; path=/${domain ? `; domain=${domain}` : ''}`;
       });
@@ -134,13 +149,13 @@ const why = metaId
   }
 
   if (banner) {
-    const { adsId, labelCall, labelLead, metaId } = banner.dataset;
+    const { adsId, labelCall, labelLead, metaId, gaId } = banner.dataset;
     let loaded = false;
 
     const load = () => {
       if (loaded) return;
       loaded = true;
-      if (adsId) loadGoogleTag(adsId);
+      if (adsId || gaId) loadGoogleTag(adsId, gaId);
       if (metaId) loadMetaPixel(metaId);
     };
 
@@ -181,6 +196,10 @@ const why = metaId
       if (!loaded) return;
       const label = kind === 'call' ? labelCall : labelLead;
       if (adsId && label && w.gtag) w.gtag('event', 'conversion', { send_to: `${adsId}/${label}` });
+      // GA4: generate_lead – rekomenduojamas įvykis, kurį galima pažymėti „Pagrindiniu įvykiu“
+      if (gaId && w.gtag) {
+        w.gtag('event', 'generate_lead', { send_to: gaId, method: kind === 'call' ? 'telefonas' : meta === 'Lead' ? 'forma' : 'zinute' });
+      }
       if (metaId && w.fbq) w.fbq('track', meta);
     };
 

@@ -2,7 +2,7 @@
 import { Contrast, Mail, MapPin, Phone } from '@lucide/astro';
 import Logo from './Logo.astro';
 import SocialIcon from '@/components/ui/SocialIcon.astro';
-import { features, googleAds, mailHref, mapsUrl, metaPixel, site, telHref } from '@/config/site';
+import { consentNeeded, features, mailHref, mapsUrl, site, telHref } from '@/config/site';
 import { getServices, serviceUrl } from '@/lib/content';
 import { cities, cityAnchor, cityUrl } from '@/data/cities';
 
@@ -124,7 +124,7 @@ const pages = [
         <span class="mx-2 text-white/20">|</span>
         <a href="/privatumo-politika" class="hover:text-white">Privatumo politika</a>
         {
-          (googleAds.id || metaPixel.id) && (
+          consentNeeded && (
             <>
               <span class="mx-2 text-white/20">|</span>
               <a href="/privatumo-politika#slapukai" class="hover:text-white" data-cookie-settings>

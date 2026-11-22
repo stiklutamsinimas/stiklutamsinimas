@@ -1,16 +1,17 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
-import { googleAds, mailHref, metaPixel, site } from '@/config/site';
+import { consentNeeded, googleAds, googleAnalytics, mailHref, metaPixel, site } from '@/config/site';
 
 const crumbs = [
   { name: 'Pradžia', url: '/' },
   { name: 'Privatumo politika', url: '/privatumo-politika' },
 ];
 const google = Boolean(googleAds.id);
+const ga = Boolean(googleAnalytics.id);
 const meta = Boolean(metaPixel.id);
-const ads = google || meta;
-const tags = [google && 'Google', meta && 'Meta'].filter(Boolean).join(' ir ');
+const ads = consentNeeded;
+const tags = [(google || ga) && 'Google', meta && 'Meta'].filter(Boolean).join(' ir ');
 ---
 
 <BaseLayout title="Privatumo politika | stiklutamsinimas.eu" description="Kaip svetainėje stiklutamsinimas.eu tvarkomi duomenys: slapukai, trečiųjų šalių paslaugos ir kontaktai.">
@@ -39,12 +40,18 @@ const tags = [google && 'Google', meta && 'Meta'].filter(Boolean).join(' ir ');
               {google && (
                 <li>
                   <strong>Google Ads</strong> (Google Ireland Ltd.) – matuoja, kiek lankytojų, atėjusių iš mūsų reklamos Google paieškoje,
-                  paskambina ar parašo mums (paspaudimai ant telefono numerio, WhatsApp, Viber, Messenger, el. pašto ir užklausos formos).
-                  Slapukai (pvz. <code>_gcl_au</code>) galioja iki 90 dienų. Google tai tvarko pagal savo{' '}
+                  paskambina ar parašo mums (paspaudimai ant telefono numerio, WhatsApp, Viber, Messenger, el. pašto ir užklausos formos), ir
+                  leidžia rodyti mūsų reklamą Google jau apsilankiusiems svetainėje. Slapukai (pvz. <code>_gcl_au</code>) galioja iki 90 dienų. Google tai tvarko pagal savo{' '}
                   <a href="https://policies.google.com/privacy?hl=lt" target="_blank" rel="noopener">
                     privatumo politiką
                   </a>
                   .
+                </li>
+              )}
+              {ga && (
+                <li>
+                  <strong>Google Analytics</strong> (Google Ireland Ltd.) – anoniminė lankomumo statistika: kiek lankytojų, iš kur atėjo, kokius
+                  puslapius žiūrėjo. IP adresai nesaugomi. Slapukai (pvz. <code>_ga</code>) galioja iki 14 mėnesių.
                 </li>
               )}
               {meta && (
@@ -61,8 +68,7 @@ const tags = [google && 'Google', meta && 'Meta'].filter(Boolean).join(' ir ');
             </ul>
             <p>
               Sutikimą galite bet kada pakeisti ar atšaukti: <a href="#slapukai" data-cookie-settings>slapukų nustatymai</a> (nuoroda yra ir
-              kiekvieno puslapio apačioje). Atšaukus sutikimą, reklamos slapukai ištrinami.
-              {meta ? 'Analitikos slapukų nenaudojame.' : 'Analitikos slapukų nenaudojame, reklamos pagal jūsų naršymą nepersonalizuojame.'}
+              kiekvieno puslapio apačioje). Atšaukus sutikimą, šie slapukai ištrinami.
             </p>
           </>
         ) : (
@@ -85,7 +91,10 @@ const tags = [google && 'Google', meta && 'Meta'].filter(Boolean).join(' ir ');
           <strong>Facebook Messenger, WhatsApp, Viber</strong> – paspaudus nuorodą atidaroma atitinkama programėlė; joje taikomos tų paslaugų
           taisyklės.
         </li>
-        <li><strong>Cloudflare</strong> – svetainės talpinimas ir apsauga; renkama tik techninė, anoniminė informacija.</li>
+        <li>
+          <strong>Cloudflare</strong> – svetainės talpinimas ir apsauga; renkama tik techninė, anoniminė informacija ir bendra lankomumo
+          statistika (Cloudflare Web Analytics) – be slapukų ir be jūsų atpažinimo.
+        </li>
       </ul>
       <h2>Jūsų teisės</h2>
       <p>

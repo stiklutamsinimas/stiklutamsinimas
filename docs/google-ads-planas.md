@@ -173,3 +173,15 @@ Kaip įjungti:
 3. Atsiųskite jį man arba įrašykite `src/config/site.ts` → `metaPixel.id`. Taip pat tinka Cloudflare Pages kintamasis `PUBLIC_META_PIXEL_ID` (po jo pakeitimo reikia naujo deploy).
 4. Events Manager → Pixel nustatymuose **išjunkite „Automatic advanced matching“**, kad Meta nerinktų formos laukų (vardo, telefono).
 5. Patikrinkite su „Meta Pixel Helper“ (Chrome plėtinys): atidarykite svetainę, paspauskite „Sutinku“, turi matytis `PageView`.
+
+## Lankomumas ir auditorijos (paruošta 2026-11-22)
+
+| Kas | Ką rodo | Būsena |
+|---|---|---|
+| **Cloudflare Web Analytics** | VISI lankytojai (ir paspaudę „Nesutinku“): kiek jų buvo, kokie puslapiai, iš kur atėjo, kokia šalis ir įrenginys. Be slapukų. | Svetainė paruošta, įjungiama Cloudflare skydelyje: Workers & Pages → `stiklutamsinimas` → Metrics → Web Analytics → Enable |
+| **Google Analytics 4** | Sutikusių lankytojų kelias: iš kurios reklamos atėjo, ką žiūrėjo, ar paskambino. Įvykis `generate_lead` (method: telefonas / zinute / forma). | Laukia G- ID → `src/config/site.ts` → `googleAnalytics.id` |
+| **Google Ads auditorija** | „Svetainės lankytojai“, kuriems galima rodyti reklamą dar kartą. Sutikus slapukams įjungiama `ad_personalization`. | Veikia. Google Ads → Įrankiai → Auditorijų tvarkytuvė |
+
+Google Ads kampanijose auditoriją pridėkite kaip **„Stebėjimas“ (Observation)**, NE „Taikymas“. Taip reklama rodoma visiems, kaip ir anksčiau, o jūs matote, ar grįžę lankytojai skambina dažniau. Paieškos reklamai auditorija pradeda veikti, kai joje susikaupia ~1000 žmonių.
+
+GA4 ir Google Ads susiekite: GA4 → Administratorius → Produktų nuorodos → Google Ads.

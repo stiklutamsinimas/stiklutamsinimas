@@ -97,10 +97,25 @@ export const googleAds = {
  * ID galima nurodyti ir Cloudflare Pages kintamuoju PUBLIC_META_PIXEL_ID.
  * Siunčiami įvykiai: PageView, Contact (telefonas, WhatsApp, Viber, Messenger, el. paštas), Lead (užklausos forma).
  */
+/**
+ * Google Analytics 4 (lankomumo statistika).
+ * Kol `id` tuščias – GA4 neįkeliama. Įrašius ID, ji įkeliama kartu su Google Ads žyma TIK lankytojui paspaudus „Sutinku“.
+ * ID formatas 'G-XXXXXXXXXX': analytics.google.com → Administratorius → Duomenų srautai → svetainė → „Matavimo ID“.
+ * ID galima nurodyti ir Cloudflare Pages kintamuoju PUBLIC_GA4_ID.
+ * Lankytojus be sutikimo (be slapukų) skaičiuoja Cloudflare Web Analytics – įjungiama Cloudflare skydelyje.
+ */
+export const googleAnalytics = {
+  /** Įrašykite čia, pvz. 'G-ABC123DEF4' */
+  id: (import.meta.env.PUBLIC_GA4_ID as string | undefined)?.trim() || '',
+};
+
 export const metaPixel = {
   /** Įrašykite čia, pvz. '1234567890123456' */
   id: (import.meta.env.PUBLIC_META_PIXEL_ID as string | undefined)?.trim() || '1125077553684301',
 };
+
+/** Ar reikia slapukų sutikimo lango (įjungta bent viena žyma) */
+export const consentNeeded = Boolean(googleAds.id || googleAnalytics.id || metaPixel.id);
 
 /** Funkcijos, kurias galima įjungti vėliau */
 export const features = {
