@@ -81,19 +81,45 @@ const naujienos = defineCollection({
 /**
  * PARDUOTUVĖ – paruošta ateičiai (įjungiama src/config/site.ts → features.shop).
  */
+/**
+ * PARDUOTUVĖS PREKĖS – src/content/produktai/*.md (keliamos per /admin → „Parduotuvė – prekės“).
+ * Adresas: /parduotuve/<kategorija>/<failo-pavadinimas>. Kategorijos – src/lib/shop.ts.
+ */
 const produktai = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/produktai' }),
   schema: ({ image }) =>
     z.object({
-      title: z.string(),
-      description: z.string().max(320),
+      title: z.string().min(3).max(100),
+      category: z.enum(['pleveles', 'irankiai']),
+      /** Trumpas aprašymas – kortelėje ir Google paieškoje */
+      description: z.string().min(20).max(320),
+      /** Kaina eurais (galutinė pirkėjui) */
       price: z.number().nonnegative(),
-      oldPrice: z.number().nonnegative().optional(),
-      category: z.string(),
+      /** Sena kaina – rodoma perbraukta (akcija) */
+      oldPrice: z.number().nonnegative().nullish(),
+      unit: z.enum(['vnt.', 'm', 'm²', 'ritinys', 'komplektas']).default('vnt.'),
+      minQty: z.number().int().min(1).default(1),
       images: z.array(image()).min(1),
+      imageAlt: z.string().nullish(),
+      /** Variantai, pvz. tamsumas (5 %, 15 %, 35 %) ar plotis (76 cm, 152 cm). Kaina neprivaloma – tada imama pagrindinė */
+      variantLabel: z.string().nullish(),
+      variants: z
+        .array(z.object({ name: z.string().min(1), price: z.number().nonnegative().nullish(), inStock: z.boolean().default(true) }))
+        .nullish()
+        .transform((v) => v ?? []),
+      /** Techniniai duomenys, pvz. „Šviesos pralaidumas: 35 %“ */
+      specs: z
+        .array(z.object({ label: z.string(), value: z.string() }))
+        .nullish()
+        .transform((v) => v ?? []),
+      brand: z.string().nullish(),
+      sku: z.string().nullish(),
       inStock: z.boolean().default(true),
-      sku: z.string().optional(),
-      draft: z.boolean().default(true),
+      /** Rodyti parduotuvės pradžioje */
+      featured: z.boolean().default(false),
+      /** Rikiavimas (mažesnis – pirmiau) */
+      order: z.number().default(100),
+      draft: z.boolean().default(false),
     }),
 });
 

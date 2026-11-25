@@ -1,0 +1,13 @@
+{
+  "delivery": [
+    { "name": "Atsiėmimas Kupiškyje – Gedimino g. 67", "type": "atsiemimas", "price": 0, "note": "Atsiimti galima iš anksto susitarus telefonu." },
+    { "name": "Atsiėmimas Rokiškyje – Miškininkų g. 5c", "type": "atsiemimas", "price": 0, "note": "Atsiimti galima iš anksto susitarus telefonu." },
+    { "name": "Atsiėmimas Panevėžyje – Molainių g. 15", "type": "atsiemimas", "price": 0, "note": "Atsiimti galima iš anksto susitarus telefonu." },
+    { "name": "Į paštomatą (LP Express, Omniva, DPD)", "type": "pastomatas", "price": 3.5, "note": "Išsiunčiame per 1–2 darbo dienas." },
+    { "name": "Kurjeriu į namus ar biurą", "type": "kurjeris", "price": 5.9, "note": "Išsiunčiame per 1–2 darbo dienas." }
+  ],
+  "freeShippingFrom": 0,
+  "payOnPickup": true,
+  "bank": { "receiver": "", "iban": "", "bank": "" },
+  "seller": { "name": "", "code": "", "vatCode": "", "address": "" }
+}

@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ShopListing from '@/components/shop/ShopListing.astro';
+import { getProducts, shopUrl } from '@/lib/shop';
+import { breadcrumbSchema } from '@/lib/schema';
+import { features } from '@/config/site';
+
+// Parduotuvė išjungta (site.ts features.shop = false) – nukreipiame į pradžią
+if (!features.shop) return Astro.redirect('/');
+const products = await getProducts();
+const crumbs = [
+  { name: 'Pradžia', url: '/' },
+  { name: 'Parduotuvė', url: shopUrl },
+];
+const featured = [...products].sort((a, b) => Number(b.data.featured) - Number(a.data.featured));
+---
+
+<BaseLayout
+  title="Parduotuvė – plėvelės ir įrankiai | stiklutamsinimas.eu"
+  description="Plėvelės stiklams ir automobiliams bei įrankiai jų klijavimui. Pristatymas į paštomatą visoje Lietuvoje, atsiėmimas Kupiškyje, Rokiškyje ir Panevėžyje."
+  noindex={products.length === 0}
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <ShopListing
+    title="Plėvelės ir įrankiai"
+    lead="Tos pačios plėvelės ir įrankiai, kuriais dirbame patys. Pristatome į paštomatą visoje Lietuvoje arba atsiimkite mūsų dirbtuvėse."
+    products={featured}
+    crumbs={crumbs}
+  />
+</BaseLayout>

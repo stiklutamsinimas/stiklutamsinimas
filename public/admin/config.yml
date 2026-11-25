@@ -1,4 +1,4 @@
-# Sveltia CMS nustatymai – straipsnių (naujienų) rašymas per naršyklę: https://stiklutamsinimas.eu/admin
+# Sveltia CMS nustatymai – straipsnių ir parduotuvės prekių redagavimas per naršyklę: https://stiklutamsinimas.eu/admin
 # Prisijungimas: „Sign In Using Access Token“ + GitHub raktas (žr. README.md → „Naujo straipsnio rašymas“).
 # Išsaugojus straipsnį, jis įrašomas į GitHub, o Cloudflare per ~2 min. atnaujina svetainę.
 
@@ -7,9 +7,9 @@ backend:
   repo: stiklutamsinimas/stiklutamsinimas
   branch: main
   commit_messages:
-    create: 'Naujas straipsnis: {{slug}}'
-    update: 'Atnaujintas straipsnis: {{slug}}'
-    delete: 'Ištrintas straipsnis: {{slug}}'
+    create: 'Naujas įrašas ({{collection}}): {{slug}}'
+    update: 'Atnaujinta ({{collection}}): {{slug}}'
+    delete: 'Ištrinta ({{collection}}): {{slug}}'
     uploadMedia: 'Įkelta nuotrauka: {{path}}'
     deleteMedia: 'Ištrinta nuotrauka: {{path}}'
 
@@ -96,9 +96,127 @@ collections:
         widget: markdown
         hint: Naudokite antraštes (H2, H3), sąrašus ir nuorodas į paslaugas, pvz. /automobilio-stiklu-tamsinimas
 
+  - name: produktai
+    label: 'Parduotuvė – prekės'
+    label_singular: 'Prekė'
+    description: 'Prekės adresas sudaromas iš pavadinimo (pvz. /parduotuve/pleveles/saules-kontroles-plevele). Pažymėjus „Juodraštis“ prekė svetainėje nerodoma. Parduotuvė meniu atsiranda, kai paskelbiama bent viena prekė.'
+    folder: src/content/produktai
+    # Nuotraukų kelias – santykinis (../../assets/produktai/...), kad Astro jas optimizuotų
+    media_folder: ../../assets/produktai
+    public_folder: ../../assets/produktai
+    create: true
+    delete: true
+    extension: md
+    format: frontmatter
+    slug: '{{title}}'
+    summary: '{{title}} – {{price}} €'
+    sortable_fields: [title, price, order]
+    view_filters:
+      - { label: 'Plėvelės', field: category, pattern: pleveles }
+      - { label: 'Įrankiai', field: category, pattern: irankiai }
+      - { label: 'Juodraščiai', field: draft, pattern: true }
+    fields:
+      - label: 'Pavadinimas'
+        name: title
+        widget: string
+        hint: 'Pvz. „Saulės kontrolės plėvelė Silver 20“ arba „Mentelė plėvelėms klijuoti“. 3–100 simbolių.'
+        pattern: ['^.{3,100}$', 'Pavadinimas turi būti nuo 3 iki 100 simbolių']
+      - label: 'Kategorija'
+        name: category
+        widget: select
+        options:
+          - { label: 'Plėvelės', value: pleveles }
+          - { label: 'Įrankiai', value: irankiai }
+      - label: 'Kaina, €'
+        name: price
+        widget: number
+        value_type: float
+        min: 0
+        step: 0.01
+        hint: 'Galutinė kaina pirkėjui. Jei variantų kainos skiriasi – įrašykite mažiausią.'
+      - label: 'Sena kaina, € (akcijai, nebūtina)'
+        name: oldPrice
+        widget: number
+        value_type: float
+        min: 0
+        step: 0.01
+        required: false
+        hint: 'Rodoma perbraukta šalia kainos.'
+      - label: 'Matavimo vienetas'
+        name: unit
+        widget: select
+        default: 'vnt.'
+        options: ['vnt.', 'm', 'm²', 'ritinys', 'komplektas']
+        hint: 'Plėvelėms metrais – „m“ (kaina už 1 metrą).'
+      - label: 'Mažiausias kiekis'
+        name: minQty
+        widget: number
+        value_type: int
+        min: 1
+        default: 1
+      - label: 'Turime sandėlyje'
+        name: inStock
+        widget: boolean
+        default: true
+      - label: 'Nuotraukos'
+        name: images
+        widget: list
+        min: 1
+        field: { label: 'Nuotrauka', name: image, widget: image }
+        hint: 'Pirma nuotrauka – pagrindinė. Geriausia kvadratinės (pvz. 1200×1200).'
+      - label: 'Nuotraukos aprašymas (nebūtina)'
+        name: imageAlt
+        widget: string
+        required: false
+        hint: 'Kas nuotraukoje – svarbu Google ir neregiams.'
+      - label: 'Trumpas aprašymas'
+        name: description
+        widget: text
+        hint: 'Rodomas prekės viršuje ir Google paieškoje. 20–320 simbolių.'
+        pattern: ['^[\s\S]{20,320}$', 'Aprašymas turi būti nuo 20 iki 320 simbolių']
+      - label: 'Variantų pavadinimas'
+        name: variantLabel
+        widget: string
+        required: false
+        default: 'Variantas'
+        hint: 'Pvz. „Tamsumas“, „Plotis“, „Spalva“. Rodomas virš pasirinkimo.'
+      - label: 'Variantai (nebūtina)'
+        name: variants
+        widget: list
+        required: false
+        summary: '{{fields.name}}'
+        hint: 'Pvz. 5 %, 15 %, 35 % arba 76 cm, 152 cm. Jei kaina nenurodyta – imama pagrindinė.'
+        fields:
+          - { label: 'Pavadinimas', name: name, widget: string }
+          - { label: 'Kaina, € (jei kitokia)', name: price, widget: number, value_type: float, min: 0, step: 0.01, required: false }
+          - { label: 'Turime', name: inStock, widget: boolean, default: true }
+      - label: 'Techniniai duomenys (nebūtina)'
+        name: specs
+        widget: list
+        required: false
+        summary: '{{fields.label}}: {{fields.value}}'
+        hint: 'Pvz. „Šviesos pralaidumas“ – „35 %“, „Plotis“ – „152 cm“, „Garantija“ – „5 metai“.'
+        fields:
+          - { label: 'Savybė', name: label, widget: string }
+          - { label: 'Reikšmė', name: value, widget: string }
+      - { label: 'Gamintojas (nebūtina)', name: brand, widget: string, required: false }
+      - { label: 'Prekės kodas (nebūtina)', name: sku, widget: string, required: false }
+      - { label: 'Populiari prekė (rodyti pirmiau)', name: featured, widget: boolean, default: false }
+      - label: 'Eiliškumas'
+        name: order
+        widget: number
+        value_type: int
+        default: 100
+        hint: 'Mažesnis skaičius – rodoma pirmiau.'
+      - { label: 'Juodraštis (nerodoma svetainėje)', name: draft, widget: boolean, default: false }
+      - label: 'Išsamus aprašymas'
+        name: body
+        widget: markdown
+        hint: 'Kam tinka, kaip naudoti, kuo ypatinga. Galite naudoti antraštes ir sąrašus.'
+
   - name: nustatymai
-    label: Atsiliepimai
-    description: Google atsiliepimai, rodomi svetainėje. Atsiradus naujam atsiliepimui Google – pridėkite jį čia ir atnaujinkite skaičių.
+    label: Nustatymai
+    description: Google atsiliepimai ir parduotuvės nustatymai (pristatymas, apmokėjimas, rekvizitai).
     files:
       - name: atsiliepimai
         label: Google atsiliepimai
@@ -133,3 +251,47 @@ collections:
               - { label: Vardas (pvz. Žilvinas S.), name: author, widget: string }
               - { label: Įvertinimas, name: rating, widget: number, value_type: int, min: 1, max: 5, default: 5 }
               - { label: Tekstas, name: text, widget: text }
+      - name: parduotuve
+        label: 'Parduotuvė – pristatymas, apmokėjimas, rekvizitai'
+        file: src/data/parduotuve.json
+        format: json
+        fields:
+          - label: 'Pristatymo būdai'
+            name: delivery
+            widget: list
+            summary: '{{fields.name}} – {{fields.price}} €'
+            fields:
+              - { label: 'Pavadinimas', name: name, widget: string, hint: 'Pvz. „Į paštomatą (LP Express, Omniva, DPD)“' }
+              - label: 'Tipas'
+                name: type
+                widget: select
+                options:
+                  - { label: 'Atsiėmimas dirbtuvėse', value: atsiemimas }
+                  - { label: 'Paštomatas', value: pastomatas }
+                  - { label: 'Kurjeris į adresą', value: kurjeris }
+              - { label: 'Kaina, €', name: price, widget: number, value_type: float, min: 0, step: 0.01, default: 0 }
+              - { label: 'Pastaba (nebūtina)', name: note, widget: string, required: false }
+          - label: 'Nemokamas pristatymas nuo, € (0 – išjungta)'
+            name: freeShippingFrom
+            widget: number
+            value_type: float
+            min: 0
+            default: 0
+          - { label: 'Leisti apmokėti atsiimant', name: payOnPickup, widget: boolean, default: true }
+          - label: 'Banko rekvizitai (pavedimams)'
+            name: bank
+            widget: object
+            hint: 'Užpildžius pirkėjas rekvizitus pamatys iškart po užsakymo. Jei tuščia – rašoma, kad sąskaitą atsiųsite el. paštu.'
+            fields:
+              - { label: 'Gavėjas', name: receiver, widget: string, required: false }
+              - { label: 'Sąskaita (IBAN)', name: iban, widget: string, required: false }
+              - { label: 'Bankas', name: bank, widget: string, required: false }
+          - label: 'Pardavėjo rekvizitai (pirkimo taisyklėms)'
+            name: seller
+            widget: object
+            hint: 'Įstatymas reikalauja nurodyti pardavėją. Užpildykite prieš paskelbdami pirmą prekę.'
+            fields:
+              - { label: 'Pavadinimas (įmonė arba vardas ir pavardė)', name: name, widget: string, required: false }
+              - { label: 'Įmonės kodas arba individualios veiklos pažymos nr.', name: code, widget: string, required: false }
+              - { label: 'PVM mokėtojo kodas (jei yra)', name: vatCode, widget: string, required: false }
+              - { label: 'Adresas', name: address, widget: string, required: false }

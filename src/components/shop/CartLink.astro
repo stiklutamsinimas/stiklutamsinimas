@@ -1,0 +1,44 @@
+---
+/** Krepšelio nuoroda su prekių skaičiumi (atnaujinamas naršyklėje) */
+import { ShoppingCart } from '@lucide/astro';
+
+interface Props {
+  class?: string;
+  /** Kompaktiška (tik ikona) – antraštei */
+  compact?: boolean;
+}
+const { class: cls = '', compact = false } = Astro.props;
+---
+
+<a
+  href="/parduotuve/krepselis"
+  class:list={[
+    'cart-link relative inline-flex shrink-0 items-center gap-2',
+    compact ? 'grid size-11 place-items-center rounded-full border border-border bg-card text-text' : 'btn btn-outline !px-4 !py-2.5 text-sm',
+    cls,
+  ]}
+  aria-label="Krepšelis"
+>
+  <ShoppingCart size={compact ? 19 : 17} aria-hidden="true" />
+  {!compact && <span>Krepšelis</span>}
+  <span
+    class="cart-count absolute -top-1 -right-1 hidden min-w-5 rounded-full bg-primary px-1.5 text-center text-[0.7rem] leading-5 font-extrabold text-on-primary"
+    aria-live="polite"></span>
+</a>
+
+<script>
+  import { CART_EVENT, cartCount } from '@/scripts/cart';
+  const update = () => {
+    const n = cartCount();
+    document.querySelectorAll<HTMLElement>('.cart-link').forEach((a) => {
+      const badge = a.querySelector<HTMLElement>('.cart-count');
+      if (!badge) return;
+      badge.textContent = n > 99 ? '99+' : String(n);
+      badge.classList.toggle('hidden', n === 0);
+      a.setAttribute('aria-label', n ? `Krepšelis, prekių: ${n}` : 'Krepšelis');
+    });
+  };
+  update();
+  document.addEventListener(CART_EVENT, update);
+  window.addEventListener('storage', update);
+</script>

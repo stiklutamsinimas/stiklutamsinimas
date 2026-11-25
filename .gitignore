@@ -19,3 +19,7 @@ Thumbs.db
 
 # Sveltia CMS kopijuojama automatiškai (scripts/copy-cms.mjs)
 public/admin/sveltia-cms.js
+
+# Cloudflare vietinis serveris (wrangler pages dev) ir jo slapti kintamieji
+.wrangler/
+.dev.vars

@@ -1,0 +1,77 @@
+---
+import { CircleCheck } from '@lucide/astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { shopSettings, shopUrl } from '@/lib/shop';
+import { features, site, telHref } from '@/config/site';
+
+if (!features.shop) return Astro.redirect('/');
+const { bank } = shopSettings;
+---
+
+<BaseLayout title="Ačiū už užsakymą | stiklutamsinimas.eu" description="Užsakymas gautas." noindex>
+  <div class="container-site max-w-2xl pt-16 pb-24 text-center">
+    <span class="icon-bubble mx-auto size-20 text-[#128c4a] dark:text-[#4ade80]"><CircleCheck size={40} aria-hidden="true" /></span>
+    <h1 class="mt-6 text-4xl">Ačiū už užsakymą!</h1>
+    <p class="order-line mt-4 text-lg text-muted">Užsakymą gavome. Netrukus su jumis susisieksime.</p>
+    <p class="paid-line mt-3 text-muted" hidden>
+      Jei apmokėjimas pavyko, patvirtinimą gausite el. paštu. Jei laiško negausite per kelias valandas – paskambinkite
+      <a href={telHref} class="font-semibold text-link">{site.phoneDisplay}</a>.
+    </p>
+
+    <div class="bank-box card mt-10 p-6 text-left sm:p-8" hidden>
+      <h2 class="text-xl">Apmokėjimas pavedimu</h2>
+      {
+        bank.iban ? (
+          <dl class="mt-5 grid gap-3 text-sm sm:grid-cols-[10rem_1fr]">
+            <dt class="text-muted">Gavėjas</dt>
+            <dd class="font-semibold text-text">{bank.receiver}</dd>
+            <dt class="text-muted">Sąskaita (IBAN)</dt>
+            <dd class="font-semibold text-text tabular-nums">{bank.iban}</dd>
+            {bank.bank && (
+              <>
+                <dt class="text-muted">Bankas</dt>
+                <dd class="font-semibold text-text">{bank.bank}</dd>
+              </>
+            )}
+            <dt class="text-muted">Suma</dt>
+            <dd class="bank-sum font-semibold text-text" />
+            <dt class="text-muted">Mokėjimo paskirtis</dt>
+            <dd class="bank-purpose font-semibold text-text" />
+          </dl>
+        ) : (
+          <p class="mt-3 text-muted">Sąskaitą apmokėjimui atsiųsime el. paštu. Prekes išsiųsime gavę apmokėjimą.</p>
+        )
+      }
+    </div>
+
+    <div class="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
+      <a href={shopUrl} class="btn btn-primary">Grįžti į parduotuvę</a>
+      <a href={telHref} class="btn btn-outline">{site.phoneDisplay}</a>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { clearCart } from '@/scripts/cart';
+  import { money } from '@/lib/shop-core';
+
+  clearCart();
+  const q = new URLSearchParams(location.search);
+  let last: { orderNo?: string; total?: number; payment?: string } = {};
+  try {
+    last = JSON.parse(sessionStorage.getItem('paskutinis-uzsakymas') ?? '{}');
+  } catch {
+    /* nėra */
+  }
+  const nr = q.get('nr') || last.orderNo;
+  const line = document.querySelector('.order-line');
+  if (nr && line) line.textContent = `Užsakymo numeris: ${nr}. Patvirtinimą gausite el. paštu arba susisieksime telefonu.`;
+  if (q.get('b') === 'apmoketa') document.querySelector<HTMLElement>('.paid-line')!.hidden = false;
+  if (last.payment === 'pavedimas' && last.orderNo === nr) {
+    document.querySelector<HTMLElement>('.bank-box')!.hidden = false;
+    const sum = document.querySelector('.bank-sum');
+    const purpose = document.querySelector('.bank-purpose');
+    if (sum && typeof last.total === 'number') sum.textContent = money(last.total);
+    if (purpose) purpose.textContent = `Užsakymas ${nr}`;
+  }
+</script>

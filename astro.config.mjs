@@ -17,6 +17,12 @@ for (const f of fs.readdirSync(ARTICLES)) {
 }
 const newestArticle = new Date(Math.max(...Object.values(articleDates).map((d) => d.getTime())));
 
+/** Ar parduotuvėje yra paskelbtų prekių – tuščia parduotuvė į sitemap nededama */
+const PRODUCTS = './src/content/produktai';
+const hasProducts =
+  fs.existsSync(PRODUCTS) &&
+  fs.readdirSync(PRODUCTS).some((f) => f.endsWith('.md') && !/^draft:\s*true\s*$/m.test(fs.readFileSync(`${PRODUCTS}/${f}`, 'utf8')));
+
 /**
  * DOMENAS. Kol stiklutamsinimas.eu dar rodo seną (Hostinger) svetainę, visos nuorodos
  * (Facebook dalinimasis, paveikslėliai, Google duomenys) turi vesti į laikiną adresą,
@@ -51,7 +57,10 @@ export default defineConfig({
 
   integrations: [
     sitemap({
-      filter: (page) => !/\/(404|admin)(\/|$)/.test(page),
+      filter: (page) =>
+        !/\/(404|admin)(\/|$)/.test(page) &&
+        !/\/parduotuve\/(krepselis|aciu)$/.test(page) &&
+        (hasProducts || !/\/(parduotuve|pirkimo-taisykles)(\/|$)/.test(page)),
       serialize(item) {
         const path = new URL(item.url).pathname.replace(/^\//, '');
         if (articleDates[path]) item.lastmod = articleDates[path].toISOString();

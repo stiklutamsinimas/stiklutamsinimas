@@ -1,0 +1,27 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ShopListing from '@/components/shop/ShopListing.astro';
+import { categoryUrl, getProducts, shopCategories, shopUrl } from '@/lib/shop';
+import { features } from '@/config/site';
+import { breadcrumbSchema } from '@/lib/schema';
+
+export const getStaticPaths = (() => (features.shop ? shopCategories.map((c) => ({ params: { kategorija: c.slug }, props: { category: c } })) : [])) satisfies GetStaticPaths;
+
+const { category } = Astro.props;
+const products = await getProducts(category.slug);
+const crumbs = [
+  { name: 'Pradžia', url: '/' },
+  { name: 'Parduotuvė', url: shopUrl },
+  { name: category.name, url: categoryUrl(category.slug) },
+];
+---
+
+<BaseLayout
+  title={`${category.title} | stiklutamsinimas.eu`}
+  description={category.description}
+  noindex={products.length === 0}
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <ShopListing title={category.title} lead={category.description} products={products} current={category.slug} crumbs={crumbs} />
+</BaseLayout>

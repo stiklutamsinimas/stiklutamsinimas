@@ -1,0 +1,46 @@
+---
+import { Image } from 'astro:assets';
+import { priceRange, productUrl, type Product } from '@/lib/shop';
+import { money, toCents } from '@/lib/shop-core';
+
+interface Props {
+  product: Product;
+  /** Pirmos kortelės įkeliamos iš karto (ne „lazy“) */
+  eager?: boolean;
+}
+const { product: p, eager = false } = Astro.props;
+const { min, max } = priceRange(p);
+const out = !p.data.inStock || (p.data.variants.length > 0 && p.data.variants.every((v) => !v.inStock));
+---
+
+<a href={productUrl(p)} class="card card-hover group flex h-full flex-col overflow-hidden">
+  <div class="relative aspect-square overflow-hidden bg-soft">
+    <Image
+      src={p.data.images[0]!}
+      alt={p.data.imageAlt ?? p.data.title}
+      widths={[320, 480, 640]}
+      sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw"
+      class="size-full object-cover transition duration-500 group-hover:scale-105"
+      loading={eager ? 'eager' : 'lazy'}
+      layout="none"
+    />
+    {
+      p.data.oldPrice && p.data.oldPrice > min && (
+        <span class="absolute top-3 left-3 rounded-full bg-primary px-3 py-1 text-xs font-extrabold text-on-primary">Akcija</span>
+      )
+    }
+    {out && <span class="absolute top-3 right-3 rounded-full bg-card/90 px-3 py-1 text-xs font-bold text-muted">Laikinai nėra</span>}
+  </div>
+  <div class="flex flex-1 flex-col p-5">
+    {p.data.brand && <p class="text-xs font-bold tracking-[0.14em] text-muted uppercase">{p.data.brand}</p>}
+    <h3 class="mt-1 text-base leading-snug font-bold text-text group-hover:text-link">{p.data.title}</h3>
+    <p class="mt-auto flex flex-wrap items-baseline gap-x-2 pt-3">
+      <span class="text-lg font-extrabold text-link">
+        {min !== max && 'nuo '}
+        {money(toCents(min))}
+      </span>
+      {p.data.unit !== 'vnt.' && <span class="text-sm text-muted">/ {p.data.unit}</span>}
+      {p.data.oldPrice && p.data.oldPrice > min && <s class="text-sm text-muted">{money(toCents(p.data.oldPrice))}</s>}
+    </p>
+  </div>
+</a>

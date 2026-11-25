@@ -1,0 +1,470 @@
+---
+/**
+ * KREPŠELIS IR UŽSAKYMAS.
+ * Užsakymas siunčiamas į /api/uzsakymas (Cloudflare Pages Function), kuris perskaičiuoja kainas pagal katalogą ir:
+ *  – jei pasirinktas el. mokėjimas (Paysera / Stripe) – grąžina nuorodą į apmokėjimą;
+ *  – jei įjungti el. laiškai (RESEND_API_KEY) – išsiunčia užsakymą jums ir pirkėjui;
+ *  – kitaip – pirkėjas užsakymą išsiunčia pats (el. paštu, WhatsApp ar Viber), kaip užklausos formoje.
+ * Jei serveris nepasiekiamas – veikia tas pats rankinis siuntimas.
+ */
+import { ArrowLeft, Lock, ShoppingCart } from '@lucide/astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import SocialIcon from '@/components/ui/SocialIcon.astro';
+import { deliveryOptions, shopSettings, shopUrl } from '@/lib/shop';
+import { money } from '@/lib/shop-core';
+import { features, site } from '@/config/site';
+
+if (!features.shop) return Astro.redirect('/');
+
+const crumbs = [
+  { name: 'Pradžia', url: '/' },
+  { name: 'Parduotuvė', url: shopUrl },
+  { name: 'Krepšelis', url: '/parduotuve/krepselis' },
+];
+const field =
+  'mt-2 block w-full rounded-xl border border-border bg-bg px-4 py-3 text-text placeholder:text-muted/70 transition focus:border-primary focus:ring-4 focus:ring-primary/15 focus:outline-none';
+const label = 'text-sm font-bold text-text';
+const radio = 'flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-bg px-4 py-3 transition has-[:checked]:border-primary has-[:checked]:bg-soft';
+const bankText = shopSettings.bank.iban ? 'Rekvizitus pamatysite iškart po užsakymo.' : 'Atsiųsime sąskaitą apmokėjimui el. paštu.';
+---
+
+<BaseLayout title="Krepšelis | stiklutamsinimas.eu" description="Prekių krepšelis ir užsakymo pateikimas." noindex>
+  <div class="container-site pt-8 pb-24">
+    <Breadcrumbs items={crumbs} />
+    <h1 class="mt-10 text-4xl">Krepšelis</h1>
+
+    <p class="cancelled-note mt-6 hidden rounded-xl bg-soft px-5 py-4 text-sm font-semibold text-text" role="status">
+      Apmokėjimas nutrauktas – prekės liko krepšelyje. Galite bandyti dar kartą arba pasirinkti kitą apmokėjimo būdą.
+    </p>
+
+    <div class="cart-empty card mt-8 flex flex-col items-center px-6 py-16 text-center" hidden>
+      <span class="icon-bubble size-16"><ShoppingCart size={28} aria-hidden="true" /></span>
+      <h2 class="mt-5 text-2xl">Krepšelis tuščias</h2>
+      <p class="mt-3 text-muted">Išsirinkite plėvelių ar įrankių parduotuvėje.</p>
+      <a href={shopUrl} class="btn btn-primary mt-6"><ArrowLeft size={18} aria-hidden="true" /> Į parduotuvę</a>
+    </div>
+
+    <p class="cart-loading mt-8 text-muted">Kraunama…</p>
+
+    <div class="cart-full mt-8 gap-10 lg:grid lg:grid-cols-[1fr_26rem]" hidden>
+      <section aria-labelledby="krepselio-prekes">
+        <h2 id="krepselio-prekes" class="sr-only">Prekės</h2>
+        <ul class="cart-lines card divide-y divide-border"></ul>
+        <a href={shopUrl} class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-link"><ArrowLeft size={16} aria-hidden="true" /> Tęsti apsipirkimą</a>
+      </section>
+
+      <form class="checkout mt-10 grid content-start gap-6 lg:mt-0" novalidate>
+        <fieldset class="card grid gap-4 p-6">
+          <legend class="float-left mb-1 text-lg font-extrabold text-text">Pirkėjas</legend>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="c-first" class={label}>Vardas *</label>
+              <input id="c-first" name="firstName" required maxlength="60" autocomplete="given-name" class={field} />
+            </div>
+            <div>
+              <label for="c-last" class={label}>Pavardė *</label>
+              <input id="c-last" name="lastName" required maxlength="60" autocomplete="family-name" class={field} />
+            </div>
+          </div>
+          <div>
+            <label for="c-phone" class={label}>Telefonas *</label>
+            <input id="c-phone" name="phone" type="tel" required maxlength="30" autocomplete="tel" placeholder="+370 …" class={field} />
+          </div>
+          <div>
+            <label for="c-email" class={label}>El. paštas *</label>
+            <input id="c-email" name="email" type="email" required maxlength="120" autocomplete="email" class={field} />
+          </div>
+          <div>
+            <label for="c-company" class={label}>Įmonė (jei reikia sąskaitos įmonei)</label>
+            <input id="c-company" name="company" maxlength="160" autocomplete="organization" placeholder="Pavadinimas, įmonės kodas, PVM kodas" class={field} />
+          </div>
+          <div class="hidden" aria-hidden="true">
+            <label for="c-website">Svetainė</label>
+            <input id="c-website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+        </fieldset>
+
+        <fieldset class="card grid gap-3 p-6">
+          <legend class="float-left mb-1 text-lg font-extrabold text-text">Pristatymas</legend>
+          {
+            deliveryOptions.map((d, i) => (
+              <label class={radio}>
+                <input type="radio" name="delivery" value={d.id} data-type={d.type} data-price={d.price} checked={i === 0} class="mt-1 accent-[var(--c-primary)]" />
+                <span class="flex-1">
+                  <span class="flex justify-between gap-3 font-semibold text-text">
+                    {d.name}
+                    <span class="shrink-0">{d.price ? money(d.price) : 'Nemokamai'}</span>
+                  </span>
+                  {d.note && <span class="mt-0.5 block text-sm text-muted">{d.note}</span>}
+                </span>
+              </label>
+            ))
+          }
+          <div class="delivery-pastomatas" hidden>
+            <label for="c-locker" class={label}>Paštomatas *</label>
+            <input id="c-locker" name="locker" maxlength="160" placeholder="Pvz. LP Express, Kupiškio Maxima, Gedimino g. 7" class={field} />
+          </div>
+          <div class="delivery-kurjeris grid gap-4" hidden>
+            <div>
+              <label for="c-address" class={label}>Adresas *</label>
+              <input id="c-address" name="address" maxlength="160" autocomplete="street-address" placeholder="Gatvė, namo ir buto nr." class={field} />
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label for="c-city" class={label}>Miestas *</label>
+                <input id="c-city" name="city" maxlength="60" autocomplete="address-level2" class={field} />
+              </div>
+              <div>
+                <label for="c-post" class={label}>Pašto kodas</label>
+                <input id="c-post" name="postCode" maxlength="12" autocomplete="postal-code" placeholder="LT-40001" class={field} />
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="card grid gap-3 p-6">
+          <legend class="float-left mb-1 text-lg font-extrabold text-text">Apmokėjimas</legend>
+          <label class:list={[radio, 'pay-paysera']} hidden>
+            <input type="radio" name="payment" value="paysera" class="mt-1 accent-[var(--c-primary)]" />
+            <span>
+              <span class="block font-semibold text-text">El. bankininkystė arba kortelė</span>
+              <span class="block text-sm text-muted">Swedbank, SEB, Luminor, Šiaulių bankas, Revolut ir kt. (Paysera)</span>
+            </span>
+          </label>
+          <label class:list={[radio, 'pay-stripe']} hidden>
+            <input type="radio" name="payment" value="stripe" class="mt-1 accent-[var(--c-primary)]" />
+            <span>
+              <span class="block font-semibold text-text">Mokėjimo kortelė</span>
+              <span class="block text-sm text-muted">Visa, Mastercard, Apple Pay, Google Pay (Stripe)</span>
+            </span>
+          </label>
+          <label class={radio}>
+            <input type="radio" name="payment" value="pavedimas" checked class="mt-1 accent-[var(--c-primary)]" />
+            <span>
+              <span class="block font-semibold text-text">Bankinis pavedimas</span>
+              <span class="block text-sm text-muted">{bankText} Prekes išsiunčiame gavę apmokėjimą.</span>
+            </span>
+          </label>
+          {
+            shopSettings.payOnPickup && (
+              <label class:list={[radio, 'pay-pickup']}>
+                <input type="radio" name="payment" value="atsiimant" class="mt-1 accent-[var(--c-primary)]" />
+                <span>
+                  <span class="block font-semibold text-text">Apmokėjimas atsiimant</span>
+                  <span class="block text-sm text-muted">Tik atsiimant prekes mūsų dirbtuvėse.</span>
+                </span>
+              </label>
+            )
+          }
+        </fieldset>
+
+        <div class="card grid gap-4 p-6">
+          <div>
+            <label for="c-comment" class={label}>Pastabos (nebūtina)</label>
+            <textarea id="c-comment" name="comment" rows="3" maxlength="1000" class={field} placeholder="Pvz. kada patogu atsiimti, kokiam stiklui reikia plėvelės"></textarea>
+          </div>
+
+          <dl class="grid gap-2 border-t border-border pt-4 text-sm">
+            <div class="flex justify-between"><dt class="text-muted">Prekės</dt><dd class="sum-subtotal font-semibold text-text"></dd></div>
+            <div class="flex justify-between"><dt class="text-muted">Pristatymas</dt><dd class="sum-shipping font-semibold text-text"></dd></div>
+            <div class="flex justify-between border-t border-border pt-3 text-lg"><dt class="font-extrabold text-text">Iš viso</dt><dd class="sum-total font-extrabold text-link"></dd></div>
+          </dl>
+
+          <label class="flex items-start gap-3 text-sm text-muted">
+            <input type="checkbox" name="terms" required class="mt-0.5 size-4 accent-[var(--c-primary)]" />
+            <span>
+              Susipažinau su <a href="/pirkimo-taisykles" target="_blank" class="font-semibold text-link underline underline-offset-2">pirkimo taisyklėmis</a> ir
+              <a href="/privatumo-politika" target="_blank" class="font-semibold text-link underline underline-offset-2">privatumo politika</a> *
+            </span>
+          </label>
+
+          <p class="form-error hidden rounded-xl bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 dark:bg-red-950/40 dark:text-red-300" role="alert"></p>
+
+          <button type="submit" class="submit btn btn-primary w-full !py-4 text-base">
+            <Lock size={18} aria-hidden="true" /> <span class="submit-label">Pateikti užsakymą</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <section class="manual-send card mx-auto mt-8 hidden max-w-2xl p-6 sm:p-8" aria-live="polite">
+      <h2 class="text-2xl">Liko paskutinis žingsnis</h2>
+      <p class="mt-3 text-muted">
+        Užsakymas <strong class="manual-no text-text"></strong> paruoštas. Išsiųskite jį mums vienu paspaudimu – patvirtinsime ir susitarsime dėl
+        apmokėjimo bei pristatymo.
+      </p>
+      <pre class="manual-text mt-5 max-h-64 overflow-auto rounded-xl bg-soft p-4 text-xs whitespace-pre-wrap text-text"></pre>
+      <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <button type="button" class="btn btn-primary" data-send="email">Siųsti el. paštu</button>
+        <button type="button" class="btn border border-[#25d366]/50 text-[#128c4a] hover:bg-[#25d366]/10 dark:text-[#4ade80]" data-send="whatsapp">
+          <SocialIcon name="WhatsApp" size={18} /> Siųsti per WhatsApp
+        </button>
+        <button type="button" class="btn border border-[#7360f2]/50 text-[#5b47e0] hover:bg-[#7360f2]/10 dark:text-[#a99cff]" data-send="viber">
+          <SocialIcon name="Viber" size={18} /> Siųsti per Viber
+        </button>
+      </div>
+      <p class="manual-done mt-5 hidden rounded-xl bg-soft px-4 py-3 text-sm font-semibold text-text">
+        Ačiū! Gavę užsakymą susisieksime ir patvirtinsime. Jei žinutė neišsiuntė – skambinkite <a href={`tel:${site.phone}`} class="text-link">{site.phoneDisplay}</a>.
+      </p>
+    </section>
+  </div>
+
+  <div hidden data-shop-config data-phone={site.phone.replace('+', '')} data-email={site.email}></div>
+</BaseLayout>
+
+<script>
+  import { clearCart, loadCatalog, readCart, setQty, CART_EVENT } from '@/scripts/cart';
+  import { allowedPayments, lineKey, money, newOrderNo, orderText, priceOrder, type Catalog, type Customer, type OrderRequest, type PaymentMethod } from '@/lib/shop-core';
+
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector<T>(s);
+  const cfg = $('[data-shop-config]')!.dataset;
+  const form = $<HTMLFormElement>('.checkout')!;
+  const errorBox = $('.form-error')!;
+  let catalog: Catalog | null = null;
+  let online: PaymentMethod[] = [];
+
+  if (new URLSearchParams(location.search).has('atsaukta')) $('.cancelled-note')?.classList.remove('hidden');
+
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+  const selectedDelivery = () => form.querySelector<HTMLInputElement>('input[name="delivery"]:checked')?.value ?? '';
+  const selectedPayment = () => (form.querySelector<HTMLInputElement>('input[name="payment"]:checked')?.value ?? 'pavedimas') as PaymentMethod;
+
+  function showError(msg: string) {
+    errorBox.textContent = msg;
+    errorBox.classList.toggle('hidden', !msg);
+  }
+
+  function render() {
+    if (!catalog) return;
+    const cart = readCart();
+    // Prekės, kurių nebėra kataloge, išmetamos
+    const valid = cart.filter((l) => catalog!.products.some((p) => p.id === l.id));
+    $('.cart-loading')?.classList.add('hidden');
+    $('.cart-empty')!.hidden = valid.length > 0;
+    $('.cart-full')!.hidden = valid.length === 0;
+    if (!valid.length) return;
+
+    $('.cart-lines')!.innerHTML = valid
+      .map((l) => {
+        const p = catalog!.products.find((x) => x.id === l.id)!;
+        const v = p.variants.find((x) => x.name === l.v);
+        const price = v?.price ?? p.price;
+        return `<li class="flex gap-4 p-4 sm:p-5" data-key="${esc(lineKey(l.id, l.v))}">
+          <a href="${esc(p.url)}" class="shrink-0"><img src="${esc(p.image)}" alt="" width="80" height="80" class="size-20 rounded-xl object-cover" loading="lazy"></a>
+          <div class="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center">
+            <div class="min-w-0 flex-1">
+              <a href="${esc(p.url)}" class="font-bold text-text hover:text-link">${esc(p.title)}</a>
+              ${l.v ? `<p class="text-sm text-muted">${esc(l.v)}</p>` : ''}
+              <p class="text-sm text-muted">${money(price)}${p.unit !== 'vnt.' ? ` / ${esc(p.unit)}` : ''}</p>
+              ${(v && !v.inStock) || !p.inStock ? '<p class="text-sm font-semibold text-red-600">Šiuo metu neturime – pašalinkite iš krepšelio</p>' : ''}
+            </div>
+            <div class="flex items-center gap-4">
+              <input type="number" min="${p.minQty}" max="999" step="1" value="${l.q}" aria-label="Kiekis" data-qty
+                class="w-20 rounded-xl border border-border bg-bg px-3 py-2 text-center font-bold text-text">
+              <span class="w-24 text-right font-extrabold text-text">${money(price * l.q)}</span>
+              <button type="button" data-remove class="text-sm font-semibold text-muted underline underline-offset-2 hover:text-link">Pašalinti</button>
+            </div>
+          </div>
+        </li>`;
+      })
+      .join('');
+    updateSummary();
+  }
+
+  function updateSummary() {
+    if (!catalog) return;
+    const delivery = catalog.delivery.find((d) => d.id === selectedDelivery());
+    const type = delivery?.type;
+    $('.delivery-pastomatas')!.hidden = type !== 'pastomatas';
+    $('.delivery-kurjeris')!.hidden = type !== 'kurjeris';
+
+    // Apmokėjimo būdai pagal pristatymą
+    const allowed = allowedPayments(catalog, delivery, online);
+    form.querySelectorAll<HTMLInputElement>('input[name="payment"]').forEach((r) => {
+      const ok = allowed.includes(r.value as PaymentMethod);
+      r.disabled = !ok;
+      const lbl = r.closest('label');
+      if (lbl) lbl.hidden = !ok;
+      if (!ok && r.checked) form.querySelector<HTMLInputElement>('input[name="payment"][value="pavedimas"]')!.checked = true;
+    });
+
+    const res = priceOrder(catalog, readCart().filter((l) => catalog!.products.some((p) => p.id === l.id)), selectedDelivery());
+    if (res.ok) {
+      $('.sum-subtotal')!.textContent = money(res.order.subtotal);
+      $('.sum-shipping')!.textContent = res.order.shipping ? money(res.order.shipping) : 'Nemokamai';
+      $('.sum-total')!.textContent = money(res.order.total);
+      const pay = selectedPayment();
+      $('.submit-label')!.textContent = pay === 'paysera' || pay === 'stripe' ? `Apmokėti ${money(res.order.total)}` : 'Pateikti užsakymą';
+    }
+  }
+
+  $('.cart-lines')?.addEventListener('change', (e) => {
+    const input = (e.target as HTMLElement).closest<HTMLInputElement>('[data-qty]');
+    const li = input?.closest<HTMLElement>('[data-key]');
+    if (!input || !li) return;
+    const [id, v] = li.dataset.key!.split('::');
+    setQty(id!, v ?? '', Math.max(Number(input.min) || 1, Math.round(Number(input.value)) || 1));
+  });
+  $('.cart-lines')?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('[data-remove]');
+    const li = btn?.closest<HTMLElement>('[data-key]');
+    if (!li) return;
+    const [id, v] = li.dataset.key!.split('::');
+    setQty(id!, v ?? '', 0);
+  });
+  document.addEventListener(CART_EVENT, render);
+  form.addEventListener('change', (e) => {
+    if ((e.target as HTMLInputElement).name === 'delivery' || (e.target as HTMLInputElement).name === 'payment') updateSummary();
+  });
+
+  // ---- Pateikimas
+  function readCustomer(): Customer {
+    const d = new FormData(form);
+    const g = (k: string) => String(d.get(k) ?? '').trim();
+    const type = catalog?.delivery.find((x) => x.id === selectedDelivery())?.type;
+    return {
+      firstName: g('firstName'),
+      lastName: g('lastName'),
+      phone: g('phone'),
+      email: g('email'),
+      company: g('company'),
+      comment: g('comment'),
+      address: type === 'pastomatas' ? g('locker') : type === 'kurjeris' ? g('address') : '',
+      city: type === 'kurjeris' ? g('city') : '',
+      postCode: type === 'kurjeris' ? g('postCode') : '',
+    };
+  }
+
+  function localCheck(): string | null {
+    const type = catalog?.delivery.find((x) => x.id === selectedDelivery())?.type;
+    const required = ['firstName', 'lastName', 'phone', 'email', ...(type === 'pastomatas' ? ['locker'] : []), ...(type === 'kurjeris' ? ['address', 'city'] : [])];
+    for (const name of required) {
+      const el = form.querySelector<HTMLInputElement>(`[name="${name}"]`);
+      if (el && !el.value.trim()) {
+        el.focus();
+        return 'Užpildykite visus pažymėtus (*) laukus.';
+      }
+    }
+    const email = form.querySelector<HTMLInputElement>('[name="email"]')!;
+    if (!email.checkValidity()) {
+      email.focus();
+      return 'Patikrinkite el. pašto adresą.';
+    }
+    if (!form.querySelector<HTMLInputElement>('[name="terms"]')!.checked) return 'Pažymėkite, kad susipažinote su pirkimo taisyklėmis.';
+    return null;
+  }
+
+  interface LastOrder {
+    orderNo: string;
+    total: number;
+    payment: PaymentMethod;
+    delivery: string;
+  }
+  const remember = (o: LastOrder) => {
+    try {
+      sessionStorage.setItem('paskutinis-uzsakymas', JSON.stringify(o));
+    } catch {
+      /* nebūtina */
+    }
+  };
+
+  function showManual(orderNo: string, text: string, last: LastOrder) {
+    $('.cart-full')!.hidden = true;
+    const box = $('.manual-send')!;
+    box.classList.remove('hidden');
+    $('.manual-no')!.textContent = orderNo;
+    $('.manual-text')!.textContent = text;
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    box.querySelectorAll<HTMLButtonElement>('[data-send]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const via = b.dataset.send;
+        if (via === 'whatsapp') window.open(`https://wa.me/${cfg.phone}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+        else if (via === 'viber') {
+          navigator.clipboard?.writeText(text).catch(() => {});
+          location.href = `viber://chat?number=%2B${cfg.phone}&draft=${encodeURIComponent(text)}`;
+        } else location.href = `mailto:${cfg.email}?subject=${encodeURIComponent(`Užsakymas ${orderNo}`)}&body=${encodeURIComponent(text)}`;
+        remember(last);
+        clearCart();
+        $('.manual-done')?.classList.remove('hidden');
+      }),
+    );
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!catalog) return;
+    const problem = localCheck();
+    if (problem) return showError(problem);
+    showError('');
+
+    const payment = selectedPayment();
+    const req: OrderRequest = {
+      items: readCart(),
+      delivery: selectedDelivery(),
+      payment,
+      customer: readCustomer(),
+      terms: true,
+      website: String(new FormData(form).get('website') ?? ''),
+    };
+    const priced = priceOrder(catalog, req.items, req.delivery);
+    if (!priced.ok) return showError(priced.error);
+
+    const btn = form.querySelector<HTMLButtonElement>('.submit')!;
+    btn.disabled = true;
+    const label = $('.submit-label')!;
+    const oldLabel = label.textContent;
+    label.textContent = 'Siunčiama…';
+
+    const last = (orderNo: string, total: number): LastOrder => ({ orderNo, total, payment, delivery: priced.order.delivery.name });
+    try {
+      const r = await fetch('/api/uzsakymas', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(req) });
+      const data = r.headers.get('content-type')?.includes('json') ? await r.json() : null;
+      if (!data) throw new Error('no-api');
+      if (!data.ok) {
+        showError(data.error || 'Nepavyko pateikti užsakymo. Pabandykite dar kartą arba paskambinkite.');
+        return;
+      }
+      document.dispatchEvent(new CustomEvent('st:uzklausa', { detail: { via: 'parduotuve' } }));
+      remember(last(data.orderNo, data.total));
+      if (data.next === 'redirect' && data.url) {
+        location.href = data.url;
+        return;
+      }
+      if (data.next === 'send') {
+        showManual(data.orderNo, data.text, last(data.orderNo, data.total));
+        return;
+      }
+      clearCart();
+      location.href = `/parduotuve/aciu?nr=${encodeURIComponent(data.orderNo)}`;
+    } catch {
+      // Serveris nepasiekiamas – užsakymą pirkėjas išsiunčia pats
+      if (payment === 'paysera' || payment === 'stripe') {
+        showError('Šiuo metu el. mokėjimai neveikia. Pasirinkite bankinį pavedimą arba bandykite vėliau.');
+        return;
+      }
+      const orderNo = newOrderNo();
+      document.dispatchEvent(new CustomEvent('st:uzklausa', { detail: { via: 'parduotuve' } }));
+      showManual(orderNo, orderText(priced.order, req.customer, payment, orderNo), last(orderNo, priced.order.total));
+    } finally {
+      btn.disabled = false;
+      label.textContent = oldLabel;
+    }
+  });
+
+  // ---- Paleidimas
+  Promise.all([
+    loadCatalog(),
+    fetch('/api/mokejimai')
+      .then((r) => (r.headers.get('content-type')?.includes('json') ? r.json() : { online: [] }))
+      .catch(() => ({ online: [] })),
+  ])
+    .then(([cat, pay]) => {
+      catalog = cat;
+      online = Array.isArray(pay.online) ? pay.online.filter((m: string) => m === 'paysera' || m === 'stripe') : [];
+      render();
+    })
+    .catch(() => {
+      $('.cart-loading')!.textContent = 'Nepavyko įkelti krepšelio. Perkraukite puslapį.';
+    });
+</script>

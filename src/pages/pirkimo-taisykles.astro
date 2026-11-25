@@ -1,0 +1,94 @@
+---
+/**
+ * PIRKIMO TAISYKLĖS – privalomos internetinei parduotuvei.
+ * Pardavėjo rekvizitai – src/data/parduotuve.json („seller“), keičiami per /admin → Nustatymai → Parduotuvė.
+ * Prieš pradedant prekiauti tekstą verta peržiūrėti (pvz. su buhaltere ar teisininku).
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import { deliveryOptions, shopSettings } from '@/lib/shop';
+import { money, toCents } from '@/lib/shop-core';
+import { features, mailHref, site, telHref } from '@/config/site';
+
+if (!features.shop) return Astro.redirect('/');
+
+const { seller, freeShippingFrom } = shopSettings;
+const crumbs = [
+  { name: 'Pradžia', url: '/' },
+  { name: 'Pirkimo taisyklės', url: '/pirkimo-taisykles' },
+];
+const sellerName = seller.name || site.name;
+---
+
+<BaseLayout title="Pirkimo taisyklės | stiklutamsinimas.eu" description="Internetinės parduotuvės stiklutamsinimas.eu pirkimo, apmokėjimo, pristatymo ir grąžinimo taisyklės.">
+  <div class="container-site max-w-3xl pt-8 pb-24">
+    <Breadcrumbs items={crumbs} />
+    <h1 class="mt-10 text-4xl">Pirkimo taisyklės</h1>
+    <div class="prose-site mt-8">
+      <h2>1. Pardavėjas</h2>
+      <p>
+        <strong>{sellerName}</strong>
+        {seller.code && <><br />Kodas: {seller.code}</>}
+        {seller.vatCode && <><br />PVM mokėtojo kodas: {seller.vatCode}</>}
+        {seller.address && <><br />Adresas: {seller.address}</>}
+        <br />Tel.: <a href={telHref}>{site.phoneDisplay}</a>, el. paštas: <a href={mailHref}>{site.email}</a>
+      </p>
+
+      <h2>2. Užsakymas ir sutarties sudarymas</h2>
+      <p>
+        Prekes užsakote svetainėje {site.domain}: įdedate į krepšelį, nurodote savo duomenis, pristatymo ir apmokėjimo būdą ir pateikiate
+        užsakymą. Pirkimo–pardavimo sutartis laikoma sudaryta, kai patvirtiname užsakymą el. paštu arba telefonu. Jei prekės neturime, apie tai
+        pranešame ir grąžiname sumokėtus pinigus.
+      </p>
+
+      <h2>3. Kainos ir apmokėjimas</h2>
+      <p>
+        Kainos nurodytos eurais ir yra galutinės prekės kainos. Pristatymo kaina nurodoma atskirai ir matoma krepšelyje prieš pateikiant
+        užsakymą. Apmokėti galima svetainėje nurodytais būdais: bankiniu pavedimu, el. bankininkyste ar kortele (jei šis būdas siūlomas) arba
+        atsiimant prekes mūsų dirbtuvėse.
+      </p>
+
+      <h2>4. Pristatymas</h2>
+      <ul>
+        {deliveryOptions.map((d) => <li>{d.name} – {d.price ? money(d.price) : 'nemokamai'}{d.note ? `. ${d.note}` : ''}</li>)}
+      </ul>
+      {freeShippingFrom > 0 && <p>Užsakymams nuo {money(toCents(freeShippingFrom))} pristatymas nemokamas.</p>}
+      <p>
+        Prekes išsiunčiame gavę apmokėjimą (jei pasirinktas išankstinis apmokėjimas). Pristatymo terminai priklauso nuo vežėjo. Gavę siuntą,
+        apžiūrėkite ją – pastebėję pažeidimų, užfiksuokite juos kartu su kurjeriu arba nedelsdami praneškite mums.
+      </p>
+
+      <h2>5. Teisė atsisakyti sutarties (grąžinimas)</h2>
+      <p>
+        Pirkėjas – vartotojas turi teisę per <strong>14 dienų</strong> nuo prekės gavimo atsisakyti sutarties nenurodydamas priežasties. Apie tai
+        praneškite el. paštu <a href={mailHref}>{site.email}</a>, nurodydami užsakymo numerį. Prekė turi būti nenaudota, nesugadinta, originalioje
+        pakuotėje. Pinigus grąžiname ne vėliau kaip per 14 dienų nuo pranešimo gavimo (galime palaukti, kol gausime grąžinamą prekę). Prekės
+        grąžinimo išlaidas apmoka pirkėjas.
+      </p>
+      <p>
+        Teisė atsisakyti sutarties netaikoma prekėms, pagamintoms pagal pirkėjo nurodymus ar aiškiai pritaikytoms jo poreikiams – pavyzdžiui,
+        <strong>plėvelei, atkirptai pagal pirkėjo nurodytą ilgį ar matmenis</strong>. Tokios prekės keičiamos ar grąžinamos tik tuo atveju, jei jos
+        netinkamos kokybės.
+      </p>
+
+      <h2>6. Prekių kokybė</h2>
+      <p>
+        Jei prekė yra su trūkumais ar neatitinka aprašymo, praneškite mums – prekę pakeisime, pataisysime, sumažinsime kainą arba grąžinsime
+        pinigus, kaip numato Lietuvos Respublikos civilinis kodeksas. Pretenzijas galite pareikšti per įstatymų nustatytus terminus.
+      </p>
+
+      <h2>7. Asmens duomenys</h2>
+      <p>
+        Užsakymo duomenis (vardą, kontaktus, adresą) naudojame tik užsakymui įvykdyti ir apskaitai. Plačiau – <a href="/privatumo-politika">privatumo
+        politikoje</a>.
+      </p>
+
+      <h2>8. Ginčai</h2>
+      <p>
+        Ginčus stengiamės išspręsti geranoriškai – parašykite ar paskambinkite. Jei nepavyksta, vartotojas gali kreiptis į Valstybinę vartotojų
+        teisių apsaugos tarnybą (<a href="https://vvtat.lt" target="_blank" rel="noopener">vvtat.lt</a>) arba į
+        teismą. Taikoma Lietuvos Respublikos teisė.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

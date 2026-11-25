@@ -2,11 +2,13 @@
 import { Contrast, Mail, MapPin, Phone } from '@lucide/astro';
 import Logo from './Logo.astro';
 import SocialIcon from '@/components/ui/SocialIcon.astro';
-import { consentNeeded, features, mailHref, mapsUrl, site, telHref } from '@/config/site';
+import { consentNeeded, mailHref, mapsUrl, site, telHref } from '@/config/site';
+import { shopVisible } from '@/lib/shop';
 import { getServices, serviceUrl } from '@/lib/content';
 import { cities, cityAnchor, cityUrl } from '@/data/cities';
 
 const services = await getServices();
+const shop = await shopVisible();
 const year = new Date().getFullYear();
 const pages = [
   { href: '/paslaugos', label: 'Visos paslaugos' },
@@ -16,7 +18,7 @@ const pages = [
   { href: '/naujienos', label: 'Naujienos' },
   { href: '/#duk', label: 'DUK' },
   { href: '/kontaktai', label: 'Kontaktai' },
-  ...(features.shop ? [{ href: '/parduotuve', label: 'Parduotuvė' }] : []),
+  ...(shop ? [{ href: '/parduotuve', label: 'Parduotuvė' }, { href: '/pirkimo-taisykles', label: 'Pirkimo taisyklės' }] : []),
 ];
 ---
 

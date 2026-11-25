@@ -119,8 +119,11 @@ export const consentNeeded = Boolean(googleAds.id || googleAnalytics.id || metaP
 
 /** Funkcijos, kurias galima įjungti vėliau */
 export const features = {
-  /** Internetinė parduotuvė (/parduotuve). Kol `false` – puslapiai negeneruojami ir nerodomi meniu. */
-  shop: false,
+  /**
+   * Internetinė parduotuvė (/parduotuve). Kol `false` – puslapiai negeneruojami.
+   * Meniu nuoroda ir krepšelis atsiranda tik paskelbus bent vieną prekę (/admin → „Parduotuvė – prekės“).
+   */
+  shop: true,
 } as const;
 
 /** Lietuvos vidurys – automatinės temos (saulėtekis / saulėlydis) skaičiavimui */

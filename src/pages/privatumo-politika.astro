@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
 import { consentNeeded, googleAds, googleAnalytics, mailHref, metaPixel, site } from '@/config/site';
+import { shopVisible } from '@/lib/shop';
 
 const crumbs = [
   { name: 'Pradžia', url: '/' },
@@ -11,6 +12,7 @@ const google = Boolean(googleAds.id);
 const ga = Boolean(googleAnalytics.id);
 const meta = Boolean(metaPixel.id);
 const ads = consentNeeded;
+const shop = await shopVisible();
 const tags = [(google || ga) && 'Google', meta && 'Meta'].filter(Boolean).join(' ir ');
 ---
 
@@ -28,6 +30,26 @@ const tags = [(google || ga) && 'Google', meta && 'Meta'].filter(Boolean).join('
         Svetainė neturi vartotojų paskyrų ir nesaugo jūsų užklausų. Užpildžius užklausos formą, žinutė tik paruošiama jūsų el. pašto
         programoje, WhatsApp arba Viber – ją išsiunčiate patys. Gautus kontaktus naudojame tik atsakyti į jūsų užklausą.
       </p>
+      {
+        shop && (
+          <>
+            <h2 id="uzsakymai">Užsakymai parduotuvėje</h2>
+            <p>
+              Pateikiant užsakymą prašome vardo, pavardės, telefono, el. pašto ir (jei prekes siunčiame) pristatymo adreso ar paštomato. Šiuos
+              duomenis naudojame tik užsakymui įvykdyti, susisiekti su jumis ir apskaitai; saugome tiek, kiek reikalauja apskaitos įstatymai.
+              Užsakymas mums ateina el. paštu – svetainėje jis nesaugomas.
+            </p>
+            <ul>
+              <li><strong>Resend</strong> – išsiunčia užsakymo patvirtinimo laiškus.</li>
+              <li>
+                <strong>Paysera, Stripe</strong> – jei mokate el. bankininkyste ar kortele, mokėjimą tvarko šie mokėjimų paslaugų teikėjai
+                pagal savo taisykles. Mokėjimo kortelės duomenų mes negauname.
+              </li>
+              <li><strong>Vežėjai</strong> (LP Express, Omniva, DPD) – gauna tik siuntai pristatyti reikalingus duomenis.</li>
+            </ul>
+          </>
+        )
+      }
 
       <h2 id="slapukai">Slapukai</h2>
       {

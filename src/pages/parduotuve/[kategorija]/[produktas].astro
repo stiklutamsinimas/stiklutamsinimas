@@ -1,0 +1,278 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
+import { Check, Minus, Phone, Plus, ShoppingCart, Store, Truck } from '@lucide/astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import ProductCard from '@/components/shop/ProductCard.astro';
+import CartLink from '@/components/shop/CartLink.astro';
+import { categoryBySlug, categoryUrl, getProducts, priceRange, productUrl, shopUrl, type Product } from '@/lib/shop';
+import { money, toCents } from '@/lib/shop-core';
+import { breadcrumbSchema, ORG_ID } from '@/lib/schema';
+import { site, telHref } from '@/config/site';
+
+export const getStaticPaths = (async () => {
+  const products = await getProducts();
+  return products.map((p) => ({ params: { kategorija: p.data.category, produktas: p.id }, props: { product: p, all: products } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  product: Product;
+  all: Product[];
+}
+const { product: p, all } = Astro.props;
+const d = p.data;
+const category = categoryBySlug(d.category)!;
+const url = productUrl(p);
+const { Content } = await render(p);
+
+const crumbs = [
+  { name: 'Pradžia', url: '/' },
+  { name: 'Parduotuvė', url: shopUrl },
+  { name: category.name, url: categoryUrl(category.slug) },
+  { name: d.title, url },
+];
+
+const alt = d.imageAlt ?? d.title;
+const large = await Promise.all(d.images.map(async (img) => (await getImage({ src: img, width: 1600, format: 'webp', quality: 82 })).src));
+const variants = d.variants.map((v) => ({ name: v.name, price: v.price ?? d.price, inStock: v.inStock && d.inStock }));
+const firstAvailable = variants.find((v) => v.inStock) ?? variants[0];
+const startPrice = firstAvailable?.price ?? d.price;
+const { min, max } = priceRange(p);
+const available = d.inStock && (variants.length === 0 || variants.some((v) => v.inStock));
+const related = all.filter((x) => x.data.category === d.category && x.id !== p.id).slice(0, 4);
+
+const absolute = (path: string) => new URL(path, site.url).href;
+const availability = `https://schema.org/${available ? 'InStock' : 'OutOfStock'}`;
+const productSchema = {
+  '@type': 'Product',
+  '@id': `${absolute(url)}#product`,
+  name: d.title,
+  description: d.description,
+  image: large.map(absolute),
+  category: category.name,
+  ...(d.sku && { sku: d.sku }),
+  ...(d.brand && { brand: { '@type': 'Brand', name: d.brand } }),
+  offers:
+    min === max
+      ? { '@type': 'Offer', url: absolute(url), price: min.toFixed(2), priceCurrency: 'EUR', availability, seller: { '@id': ORG_ID } }
+      : {
+          '@type': 'AggregateOffer',
+          url: absolute(url),
+          lowPrice: min.toFixed(2),
+          highPrice: max.toFixed(2),
+          offerCount: variants.length,
+          priceCurrency: 'EUR',
+          availability,
+          seller: { '@id': ORG_ID },
+        },
+};
+---
+
+<BaseLayout
+  title={`${d.title} – ${money(toCents(min))} | stiklutamsinimas.eu`}
+  description={d.description}
+  image={d.images[0]}
+  imageAlt={alt}
+  schema={[breadcrumbSchema(crumbs), productSchema]}
+>
+  <div class="container-site pt-8 pb-24">
+    <div class="flex items-center justify-between gap-4">
+      <Breadcrumbs items={crumbs} />
+      <CartLink />
+    </div>
+
+    <div class="mt-10 grid gap-10 lg:grid-cols-2 lg:gap-14">
+      <div data-lb-root>
+        <button type="button" class="card block w-full overflow-hidden" data-lb-open="0" aria-label={`Padidinti: ${alt}`}>
+          <Image
+            src={d.images[0]!}
+            alt={alt}
+            widths={[480, 720, 960]}
+            sizes="(min-width:1024px) 45vw, 100vw"
+            class="aspect-square w-full object-cover"
+            loading="eager"
+            fetchpriority="high"
+            layout="none"
+          />
+        </button>
+        {
+          d.images.length > 1 && (
+            <ul class="mt-3 grid grid-cols-4 gap-3 sm:grid-cols-5">
+              {d.images.map((img, i) => (
+                <li>
+                  <button type="button" class="block w-full overflow-hidden rounded-xl border border-border" data-lb-open={i} aria-label={`Nuotrauka ${i + 1}`}>
+                    <Image src={img} alt="" widths={[160, 240]} sizes="120px" class="aspect-square w-full object-cover" layout="none" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        <template data-lb-items>
+          {large.map((src) => <span data-src={src} data-alt={alt} />)}
+        </template>
+      </div>
+
+      <div>
+        {d.brand && <p class="text-sm font-bold tracking-[0.14em] text-muted uppercase">{d.brand}</p>}
+        <h1 class="mt-2 text-3xl sm:text-4xl">{d.title}</h1>
+
+        <p class="mt-5 flex flex-wrap items-baseline gap-x-3">
+          <span class="product-price text-3xl font-extrabold text-link">{money(toCents(startPrice))}</span>
+          {d.unit !== 'vnt.' && <span class="text-muted">/ {d.unit}</span>}
+          {d.oldPrice && d.oldPrice > startPrice && <s class="text-lg text-muted">{money(toCents(d.oldPrice))}</s>}
+        </p>
+        <p class:list={['product-stock mt-2 inline-flex items-center gap-1.5 text-sm font-semibold', available ? 'text-[#128c4a] dark:text-[#4ade80]' : 'text-muted']}>
+          {available && <Check size={16} aria-hidden="true" />}
+          {available ? 'Turime' : 'Laikinai neturime'}
+        </p>
+
+        <p class="mt-6 text-lg leading-relaxed text-muted">{d.description}</p>
+
+        <form
+          class="add-to-cart mt-8 grid gap-5"
+          data-id={p.id}
+          data-variants={JSON.stringify(variants.map((v) => ({ ...v, price: money(toCents(v.price)) })))}
+          data-min={d.minQty}
+        >
+          {
+            variants.length > 0 && (
+              <div>
+                <label for="variantas" class="text-sm font-bold text-text">
+                  {d.variantLabel || 'Variantas'}
+                </label>
+                <select
+                  id="variantas"
+                  name="variantas"
+                  class="mt-2 block w-full rounded-xl border border-border bg-bg px-4 py-3 text-text focus:border-primary focus:ring-4 focus:ring-primary/15 focus:outline-none"
+                >
+                  {variants.map((v) => (
+                    <option value={v.name} selected={v === firstAvailable} disabled={!v.inStock}>
+                      {v.name}
+                      {min !== max ? ` – ${money(toCents(v.price))}` : ''}
+                      {!v.inStock ? ' (nėra)' : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )
+          }
+          <div class="flex flex-wrap items-end gap-3">
+            <div>
+              <label for="kiekis" class="text-sm font-bold text-text">Kiekis ({d.unit})</label>
+              <div class="mt-2 flex items-center rounded-full border border-border bg-bg">
+                <button type="button" class="qty-minus grid size-12 place-items-center text-text hover:text-link" aria-label="Mažiau">
+                  <Minus size={18} aria-hidden="true" />
+                </button>
+                <input
+                  id="kiekis"
+                  name="kiekis"
+                  type="number"
+                  inputmode="numeric"
+                  min={d.minQty}
+                  max="999"
+                  step="1"
+                  value={d.minQty}
+                  class="w-14 bg-transparent text-center font-bold text-text [appearance:textfield] focus:outline-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
+                <button type="button" class="qty-plus grid size-12 place-items-center text-text hover:text-link" aria-label="Daugiau">
+                  <Plus size={18} aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary flex-1 !py-3.5" disabled={!available}>
+              <ShoppingCart size={18} aria-hidden="true" />
+              {available ? 'Į krepšelį' : 'Laikinai nėra'}
+            </button>
+          </div>
+          {d.minQty > 1 && <p class="text-sm text-muted">Mažiausias užsakymo kiekis – {d.minQty} {d.unit}</p>}
+          <p class="added-note hidden rounded-xl bg-soft px-4 py-3 text-sm font-semibold text-text" role="status">
+            Pridėta į krepšelį. <a href="/parduotuve/krepselis" class="text-link underline underline-offset-2">Peržiūrėti krepšelį ir užsakyti →</a>
+          </p>
+        </form>
+
+        <ul class="mt-8 grid gap-3 border-t border-border pt-6 text-sm text-muted">
+          <li class="flex items-center gap-3"><Truck size={18} class="text-link" aria-hidden="true" /> Pristatymas į paštomatą arba kurjeriu visoje Lietuvoje</li>
+          <li class="flex items-center gap-3"><Store size={18} class="text-link" aria-hidden="true" /> Nemokamas atsiėmimas Kupiškyje, Rokiškyje ir Panevėžyje</li>
+          <li class="flex items-center gap-3">
+            <Phone size={18} class="text-link" aria-hidden="true" /> Klausimų? <a href={telHref} class="font-semibold text-link">{site.phoneDisplay}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-16 grid gap-10 lg:grid-cols-3">
+      <div class="prose-site lg:col-span-2">
+        <h2>Aprašymas</h2>
+        <Content />
+      </div>
+      {
+        d.specs.length > 0 && (
+          <div>
+            <h2 class="text-2xl">Techniniai duomenys</h2>
+            <dl class="card mt-5 divide-y divide-border">
+              {d.specs.map((s) => (
+                <div class="flex justify-between gap-4 px-5 py-3 text-sm">
+                  <dt class="text-muted">{s.label}</dt>
+                  <dd class="text-right font-semibold text-text">{s.value}</dd>
+                </div>
+              ))}
+              {d.sku && (
+                <div class="flex justify-between gap-4 px-5 py-3 text-sm">
+                  <dt class="text-muted">Prekės kodas</dt>
+                  <dd class="text-right font-semibold text-text">{d.sku}</dd>
+                </div>
+              )}
+            </dl>
+          </div>
+        )
+      }
+    </div>
+
+    {
+      related.length > 0 && (
+        <section class="mt-20">
+          <h2 class="text-3xl">Taip pat siūlome</h2>
+          <ul class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {related.map((r) => (
+              <li>
+                <ProductCard product={r} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<script>
+  import { addToCart } from '@/scripts/cart';
+
+  document.querySelectorAll<HTMLFormElement>('.add-to-cart').forEach((form) => {
+    const qty = form.querySelector<HTMLInputElement>('input[name="kiekis"]')!;
+    const select = form.querySelector<HTMLSelectElement>('select[name="variantas"]');
+    const note = form.querySelector<HTMLElement>('.added-note');
+    const priceEl = document.querySelector<HTMLElement>('.product-price');
+    const variants: { name: string; price: string }[] = JSON.parse(form.dataset.variants || '[]');
+    const min = Number(form.dataset.min) || 1;
+
+    const clamp = (n: number) => Math.max(min, Math.min(999, Math.round(n) || min));
+    form.querySelector('.qty-minus')?.addEventListener('click', () => (qty.value = String(clamp(Number(qty.value) - 1))));
+    form.querySelector('.qty-plus')?.addEventListener('click', () => (qty.value = String(clamp(Number(qty.value) + 1))));
+    qty.addEventListener('change', () => (qty.value = String(clamp(Number(qty.value)))));
+
+    select?.addEventListener('change', () => {
+      const v = variants.find((x) => x.name === select.value);
+      if (v && priceEl) priceEl.textContent = v.price;
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      addToCart(form.dataset.id!, select?.value ?? '', clamp(Number(qty.value)));
+      note?.classList.remove('hidden');
+    });
+  });
+</script>
