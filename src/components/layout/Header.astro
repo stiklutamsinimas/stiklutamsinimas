@@ -15,6 +15,8 @@ const path = Astro.url.pathname.replace(/\.html$/, '');
 
 const links = [
   { href: '/#kainos', label: 'Kainos' },
+  // Plačiuose ekranuose – atskiras meniu punktas (siauresniuose netelpa; mobiliame meniu rodomas visada)
+  { href: '/skaiciuokle', label: 'Skaičiuoklė', wide: true },
   { href: '/naujienos', label: 'Naujienos' },
   { href: '/#duk', label: 'DUK' },
   { href: '/kontaktai', label: 'Kontaktai' },
@@ -83,6 +85,7 @@ const isActive = (href: string) => !href.includes('#') && (path === href || path
             class:list={[
               'rounded-full px-3.5 py-2 text-[0.95rem] font-semibold transition hover:text-link',
               isActive(l.href) ? 'text-link' : 'text-text/80',
+              'wide' in l && l.wide && 'hidden xl:inline-block',
             ]}
             aria-current={isActive(l.href) ? 'page' : undefined}
           >
@@ -96,9 +99,10 @@ const isActive = (href: string) => !href.includes('#') && (path === href || path
 
     {shop && <CartLink compact />}
 
-    <a href={telHref} class="btn btn-primary hidden !px-5 !py-2.5 text-sm md:inline-flex">
+    <!-- 1024–1279 px pločio ekranuose meniu užima daug vietos – rodoma tik telefono ikona -->
+    <a href={telHref} class="btn btn-primary hidden !px-5 !py-2.5 text-sm md:inline-flex lg:max-xl:!px-3" title={site.phoneDisplay}>
       <Phone size={16} aria-hidden="true" />
-      {site.phoneDisplay}
+      <span class="lg:max-xl:sr-only">{site.phoneDisplay}</span>
     </a>
 
     <a href={telHref} class="grid size-11 place-items-center rounded-full bg-primary text-on-primary md:hidden" aria-label={`Skambinti ${site.phoneDisplay}`}>

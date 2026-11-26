@@ -1,0 +1,174 @@
+---
+/**
+ * KAINŲ SKAIČIUOKLĖ – /skaiciuokle
+ * Kainos: src/data/kainos.json (keičiama per /admin → Nustatymai → Kainų skaičiuoklė).
+ * Tą patį puslapį rodo ir Android programėlė, todėl kainos atsinaujina visur kartu.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { BuildingComplex, Car, Check, Clock, Download, MessageCircle, Phone, Search, Send, ShieldCheck, Tag } from '@lucide/astro';
+import { site, telHref } from '@/config/site';
+import { breadcrumbSchema } from '@/lib/schema';
+import kainos from '@/data/kainos.json';
+import '@/styles/skaiciuokle.css';
+
+const crumbs = [
+  { name: 'Pradžia', url: '/' },
+  { name: 'Kainų skaičiuoklė', url: '/skaiciuokle' },
+];
+
+// Duomenys perduodami naršyklei kaip JSON (ne vykdomas kodas – tinka griežtai CSP)
+const duomenys = JSON.stringify(kainos).replace(/</g, '\\u003c');
+const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+---
+
+<BaseLayout
+  title="Kainų skaičiuoklė – stiklų tamsinimas, plėvelės, lipdukai | stiklutamsinimas.eu"
+  description="Apskaičiuokite automobilio stiklų tamsinimo, pastato langų plėvelių ir ploteriuotų lipdukų kainą per minutę. 185 automobilių modeliai, Kupiškis, Rokiškis, Panevėžys."
+  schema={[breadcrumbSchema(crumbs)]}
+>
+  <section class="relative isolate overflow-hidden">
+    <div class="pointer-events-none absolute -top-48 -right-48 -z-10 size-[40rem] rounded-full border-[56px] border-logo/[0.06]"></div>
+    <div
+      class="container-site pt-8 pb-16"
+      id="skaiciuokle"
+      data-wa={site.phone.replace('+', '')}
+      data-viber={site.phone}
+    >
+      <Breadcrumbs items={crumbs} />
+      <div class="mt-10">
+        <SectionHeading
+          as="h1"
+          eyebrow="Kainų skaičiuoklė"
+          title="Sužinokite kainą per minutę"
+          lead="Pasirinkite automobilį arba įveskite stiklų plotą – orientacinę kainą pamatysite iš karto. Tikslią kainą pasakysime iš anksto, prieš darbus."
+        />
+      </div>
+
+      <div class="sk-banner" id="sk-atnaujinimas" hidden>
+        <span>Yra nauja programėlės versija.</span>
+        <a class="btn btn-primary !px-5 !py-2" href="/programele/stiklutamsinimas.apk">Atnaujinti</a>
+      </div>
+
+      <div class="sk-tabs" role="tablist" aria-label="Paslauga">
+        <button class="chip" role="tab" id="sk-t-auto" aria-controls="sk-p-auto" aria-selected="true" data-sk-tab="auto"><Car size={18} aria-hidden="true" />Automobiliai</button>
+        <button class="chip" role="tab" id="sk-t-pastatai" aria-controls="sk-p-pastatai" aria-selected="false" tabindex="-1" data-sk-tab="pastatai"><BuildingComplex size={18} aria-hidden="true" />Pastatų stiklai</button>
+        <button class="chip" role="tab" id="sk-t-lipdukai" aria-controls="sk-p-lipdukai" aria-selected="false" tabindex="-1" data-sk-tab="lipdukai"><Tag size={18} aria-hidden="true" />Lipdukai</button>
+      </div>
+
+      <div class="sk-layout">
+        <div>
+          <!-- AUTOMOBILIAI -->
+          <section class="card sk-panel" id="sk-p-auto" role="tabpanel" aria-labelledby="sk-t-auto">
+            <div class="sk-step"><span class="sk-step-n">1</span><h2>Jūsų automobilis</h2></div>
+            <div class="sk-field sk-search">
+              <label for="sk-paieska" class="sr-only">Paieška pagal modelį</label>
+              <Search size={18} aria-hidden="true" />
+              <input class="sk-input" id="sk-paieska" type="search" placeholder="Modelis, pvz. Passat, X5" autocomplete="off" enterkeyhint="search" />
+            </div>
+            <div class="sk-or">arba</div>
+            <div class="sk-field">
+              <label class="sk-label" for="sk-marke">Markė</label>
+              <select class="sk-input" id="sk-marke"><option value="">Pasirinkite markę…</option></select>
+            </div>
+            <p class="sk-hint" id="sk-modeliu-hint">Pasirinkite markę arba įveskite modelį paieškoje.</p>
+            <div class="sk-grid2" id="sk-modeliai" role="radiogroup" aria-label="Modelis"></div>
+            <p class="mt-3"><button type="button" class="sk-link" id="sk-nerandu">Nerandate savo modelio? Pasirinkite kėbulo tipą</button></p>
+            <div id="sk-kebulai-wrap" hidden>
+              <p class="sk-hint mt-3">Kėbulo tipo kaina – „nuo“. Tikslią kainą patikslinsime pagal modelį.</p>
+              <div class="sk-grid2" id="sk-kebulai" role="radiogroup" aria-label="Kėbulo tipas"></div>
+            </div>
+
+            <div class="sk-step"><span class="sk-step-n">2</span><h2>Ką tamsinti?</h2></div>
+            <div class="sk-row" role="group" aria-label="Greitas pasirinkimas">
+              <button type="button" class="chip" data-sk-preset="galas" aria-pressed="false">Tik galas</button>
+              <button type="button" class="chip" data-sk-preset="priekis" aria-pressed="false">Visas priekis</button>
+              <button type="button" class="chip" data-sk-preset="visas" aria-pressed="false">Visas automobilis</button>
+            </div>
+            <div class="sk-choices">
+              <label class="sk-choice"><input type="checkbox" id="sk-d-galas" checked /><span class="sk-tick" set:html={check} /><span><span class="sk-ctitle">Galiniai stiklai</span><span class="sk-csub">Galinis stiklas ir galiniai šoniniai langai</span></span><span class="sk-cprice" data-sk-kaina="galas">–</span></label>
+              <label class="sk-choice"><input type="checkbox" id="sk-d-durys" /><span class="sk-tick" set:html={check} /><span><span class="sk-ctitle">Priekinės durelės</span><span class="sk-csub">2 priekiniai šoniniai langai</span></span><span class="sk-cprice" data-sk-kaina="durys">–</span></label>
+              <label class="sk-choice"><input type="checkbox" id="sk-d-priekinis" /><span class="sk-tick" set:html={check} /><span><span class="sk-ctitle">Priekinis stiklas</span><span class="sk-csub">Visas priekinis (vėjo) stiklas</span></span><span class="sk-cprice" data-sk-kaina="priekinis">–</span></label>
+            </div>
+            <div id="sk-plevele-wrap" class="mt-4" hidden>
+              <span class="sk-label" id="sk-plevele-lbl">Plėvelė priekiui</span>
+              <div class="sk-row mt-2" role="group" aria-labelledby="sk-plevele-lbl">
+                <button type="button" class="chip" data-sk-plevele="std" aria-pressed="false">Standartinė</button>
+                <button type="button" class="chip" data-sk-plevele="sol" aria-pressed="true">Aterminė (soliarinė)</button>
+              </div>
+              <p class="sk-note">Aterminė (soliarinė, Spectra, chameleono) plėvelė geriau sulaiko karštį. <a class="font-semibold text-link" href="/priekiniu-stiklu-tamsinimas">Plėvelių pavyzdžiai</a></p>
+            </div>
+            <label class="sk-choice mt-4"><input type="checkbox" id="sk-d-sena" /><span class="sk-tick" set:html={check} /><span><span class="sk-ctitle">Ant stiklų yra sena plėvelė</span><span class="sk-csub">Nuimsime ir nuvalysime klijus</span></span><span class="sk-cprice" data-sk-kaina="sena">–</span></label>
+          </section>
+
+          <!-- PASTATAI -->
+          <section class="card sk-panel" id="sk-p-pastatai" role="tabpanel" aria-labelledby="sk-t-pastatai" hidden>
+            <div class="sk-step"><span class="sk-step-n">1</span><h2>Plėvelės tipas</h2></div>
+            <div class="sk-grid2" id="sk-pastatu-pleveles" role="radiogroup" aria-label="Plėvelės tipas"></div>
+            <div class="sk-step"><span class="sk-step-n">2</span><h2>Stiklų plotas</h2></div>
+            <div data-sk-plotas="pastatai" data-vnt="langą"></div>
+            <div class="sk-step"><span class="sk-step-n">3</span><h2>Papildomai</h2></div>
+            <label class="sk-choice"><input type="checkbox" id="sk-p-sena" /><span class="sk-tick" set:html={check} /><span><span class="sk-ctitle">Nuimti seną plėvelę</span><span class="sk-csub">Seno sluoksnio nuėmimas ir klijų valymas</span></span><span class="sk-cprice" data-sk-kaina="p-sena">–</span></label>
+            <p class="sk-note">Pastatų darbams atvykstame įvertinti ir pamatuoti vietoje. <a class="font-semibold text-link" href="/langu-tamsinimas">Plačiau apie plėveles</a></p>
+          </section>
+
+          <!-- LIPDUKAI -->
+          <section class="card sk-panel" id="sk-p-lipdukai" role="tabpanel" aria-labelledby="sk-t-lipdukai" hidden>
+            <div class="sk-step"><span class="sk-step-n">1</span><h2>Lipdukų plėvelė</h2></div>
+            <div class="sk-grid2" id="sk-lipduku-tipai" role="radiogroup" aria-label="Lipdukų plėvelė"></div>
+            <div class="sk-step"><span class="sk-step-n">2</span><h2>Lipdukų dydis</h2></div>
+            <div data-sk-plotas="lipdukai" data-vnt="lipduką"></div>
+            <div class="sk-step"><span class="sk-step-n">3</span><h2>Papildomai</h2></div>
+            <div class="sk-choices">
+              <label class="sk-choice"><input type="checkbox" id="sk-l-klijavimas" checked /><span class="sk-tick" set:html={check} /><span><span class="sk-ctitle">Su klijavimu</span><span class="sk-csub">Paviršiaus paruošimas ir tikslus užklijavimas</span></span><span class="sk-cprice" data-sk-kaina="l-klijavimas">–</span></label>
+              <label class="sk-choice"><input type="checkbox" id="sk-l-maketas" /><span class="sk-tick" set:html={check} /><span><span class="sk-ctitle">Reikia paruošti maketą</span><span class="sk-csub">Teksto ar logotipo paruošimas ploteriui</span></span><span class="sk-cprice" data-sk-kaina="l-maketas">–</span></label>
+              <label class="sk-choice"><input type="checkbox" id="sk-l-senu" /><span class="sk-tick" set:html={check} /><span><span class="sk-ctitle">Nuimti senus lipdukus</span><span class="sk-csub">Šildymas, nuėmimas ir klijų valymas</span></span><span class="sk-cprice" data-sk-kaina="l-senu">–</span></label>
+            </div>
+          </section>
+        </div>
+
+        <aside class="card sk-summary" id="sk-suvestine" aria-labelledby="sk-suv-h">
+          <p class="eyebrow">Jūsų kaina</p>
+          <h2 id="sk-suv-h">Pasirinkite automobilį</h2>
+          <p class="sk-what" id="sk-suv-ka">Kainą parodysime iš karto</p>
+          <ul class="sk-lines" id="sk-suv-eilutes"></ul>
+          <div class="sk-total" aria-live="polite"><span>Iš viso</span><strong id="sk-suv-suma">–</strong></div>
+          <p class="sk-note" id="sk-suv-pastaba">{kainos.pastaba}</p>
+          <div class="sk-cta">
+            <a class="btn btn-primary" id="sk-cta-wa" href={`https://wa.me/${site.phone.replace('+', '')}`} target="_blank" rel="noopener"><MessageCircle size={18} aria-hidden="true" />Užsakyti per WhatsApp</a>
+            <div class="sk-cta-row">
+              <a class="btn btn-outline !px-4" id="sk-cta-viber" href={`viber://chat?number=${encodeURIComponent(site.phone)}`}><MessageCircle size={18} aria-hidden="true" />Viber</a>
+              <a class="btn btn-outline !px-4" href={telHref}><Phone size={18} aria-hidden="true" />Skambinti</a>
+            </div>
+            <a class="btn btn-outline" href="/kontaktai#uzklausa"><Send size={18} aria-hidden="true" />Rašyti užklausą</a>
+          </div>
+          <ul class="sk-badges">
+            <li><ShieldCheck size={15} aria-hidden="true" />{site.warranty.short}</li>
+            <li><Clock size={15} aria-hidden="true" />Automobilis per 2–3 val.</li>
+            <li><Check size={15} aria-hidden="true" />Nuo {site.foundedYear} m.</li>
+          </ul>
+        </aside>
+      </div>
+
+      <section class="card sk-app mt-8" id="sk-programele" aria-labelledby="sk-app-h">
+        <img src="/icon-192.png" alt="" width="64" height="64" loading="lazy" />
+        <div>
+          <h2 id="sk-app-h">Skaičiuoklė jūsų telefone</h2>
+          <p>Android programėlė – kainos visada naujausios, užsakyti galima vienu paspaudimu. Atsisiuntę atidarykite failą ir leiskite diegti.</p>
+        </div>
+        <a class="btn btn-primary" href="/programele/stiklutamsinimas.apk" download><Download size={18} aria-hidden="true" />Atsisiųsti Android programėlę</a>
+      </section>
+    </div>
+  </section>
+
+  <div class="sk-mbar" aria-hidden="true">
+    <div><span class="sk-mlbl">Orientacinė kaina</span><strong id="sk-mbar-suma">–</strong></div>
+    <a class="btn btn-primary !px-5 !py-2.5" href="#sk-suvestine" tabindex="-1">Peržiūrėti</a>
+  </div>
+
+  <script is:inline type="application/json" id="sk-kainos" set:html={duomenys} />
+  <script>
+    import '@/scripts/skaiciuokle.js';
+  </script>
+</BaseLayout>

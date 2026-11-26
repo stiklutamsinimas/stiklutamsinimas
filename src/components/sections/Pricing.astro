@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, BuildingComplex, Car, Check, Sun } from '@lucide/astro';
+import { ArrowRight, BuildingComplex, Calculator, Car, Check, Sun } from '@lucide/astro';
 import { site } from '@/config/site';
 import { carPrices, formatRange } from '@/data/prices';
 
@@ -29,11 +29,11 @@ const { compact = false } = Astro.props;
         {
           carPrices.map((p) => (
             <tr class="transition hover:bg-soft/40">
-              <th scope="row" class="px-6 py-4 font-bold text-text sm:px-8">
+              <th scope="row" class="px-4 py-4 font-bold text-text sm:px-8">
                 {p.type}
                 {p.note && <span class="ml-2 text-sm font-medium text-muted">{p.note}</span>}
               </th>
-              <td class="px-6 py-4 text-right text-lg font-extrabold whitespace-nowrap text-link tabular-nums sm:px-8">{formatRange(p)}</td>
+              <td class="px-4 py-4 text-right text-lg font-extrabold whitespace-nowrap text-link tabular-nums sm:px-8">{formatRange(p)}</td>
             </tr>
           ))
         }
@@ -52,6 +52,13 @@ const { compact = false } = Astro.props;
       </ul>
       <a href={compact ? '#uzklausa' : '#kontaktai'} class="btn btn-primary shrink-0">Užsakyti <ArrowRight size={17} aria-hidden="true" /></a>
     </div>
+    <a
+      href="/skaiciuokle"
+      class="group flex items-center justify-between gap-3 border-t border-border bg-soft/40 px-6 py-4 font-bold text-link transition hover:bg-soft sm:px-8"
+    >
+      <span class="inline-flex items-center gap-2.5"><Calculator size={18} aria-hidden="true" /> Tiksli kaina jūsų automobiliui – kainų skaičiuoklė</span>
+      <ArrowRight size={17} aria-hidden="true" class="transition group-hover:translate-x-0.5" />
+    </a>
   </div>
 
   {
