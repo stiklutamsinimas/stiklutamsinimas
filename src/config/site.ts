@@ -8,6 +8,8 @@ export interface Location {
   /** Vietininkas („Kupiškyje“) – tekstams */
   cityIn: string;
   street: string;
+  /** Pašto kodas (schema.org), pvz. „LT-49457“ */
+  postalCode?: string;
   /** Google Maps paieškos tekstas (žemėlapiui) */
   mapQuery: string;
   /** Koordinatės (schema.org) – tik tikslios, iš senos svetainės žemėlapio nuorodų */
@@ -68,6 +70,7 @@ export const site = {
     { city: 'Rokiškis', cityIn: 'Rokiškyje', street: 'Miškininkų g. 5c', mapQuery: 'Miškininkų g. 5c, Rokiškis', lat: 55.944588, lng: 25.598657 },
     { city: 'Panevėžys', cityIn: 'Panevėžyje', street: 'Molainių g. 15', mapQuery: 'Molainių g. 15, Panevėžys', lat: 55.7217528, lng: 24.3301278 },
     { city: 'Vilnius', cityIn: 'Vilniuje', street: 'Verkių g. 50', mapQuery: 'Verkių g. 50, Vilnius' },
+    { city: 'Kaunas', cityIn: 'Kaune', street: 'Partizanų g. 25', postalCode: 'LT-49457', mapQuery: 'Partizanų g. 25, 49457 Kaunas' },
   ] satisfies readonly Location[],
 } as const;
 

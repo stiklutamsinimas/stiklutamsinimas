@@ -79,7 +79,7 @@ export function siteGraph() {
       telephone: site.phone,
       email: site.email,
       priceRange: '€€',
-      address: { '@type': 'PostalAddress', streetAddress: loc.street, addressLocality: loc.city, addressCountry: 'LT' },
+      address: { '@type': 'PostalAddress', streetAddress: loc.street, addressLocality: loc.city, ...(loc.postalCode ? { postalCode: loc.postalCode } : {}), addressCountry: 'LT' },
       ...('lat' in loc && loc.lat ? { geo: { '@type': 'GeoCoordinates', latitude: loc.lat, longitude: loc.lng } } : {}),
       areaServed: [loc.city, ...(cities.find((c) => c.location === loc.city)?.areas ?? [])].map((name) => ({ '@type': 'Place', name })),
       parentOrganization: { '@id': ORG_ID },
