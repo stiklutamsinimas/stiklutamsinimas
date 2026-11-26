@@ -29,11 +29,11 @@ const { compact = false } = Astro.props;
         {
           carPrices.map((p) => (
             <tr class="transition hover:bg-soft/40">
-              <th scope="row" class="px-6 py-4 font-bold text-text sm:px-8">
+              <th scope="row" class="px-4 py-4 font-bold text-text sm:px-8">
                 {p.type}
                 {p.note && <span class="ml-2 text-sm font-medium text-muted">{p.note}</span>}
               </th>
-              <td class="px-6 py-4 text-right text-lg font-extrabold whitespace-nowrap text-link tabular-nums sm:px-8">{formatRange(p)}</td>
+              <td class="px-4 py-4 text-right text-lg font-extrabold whitespace-nowrap text-link tabular-nums sm:px-8">{formatRange(p)}</td>
             </tr>
           ))
         }
