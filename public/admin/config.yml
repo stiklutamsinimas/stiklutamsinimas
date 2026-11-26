@@ -216,7 +216,7 @@ collections:
 
   - name: nustatymai
     label: Nustatymai
-    description: Google atsiliepimai, kainų skaičiuoklė ir parduotuvės nustatymai (pristatymas, apmokėjimas, rekvizitai).
+    description: Google atsiliepimai ir parduotuvės nustatymai (pristatymas, apmokėjimas, rekvizitai).
     files:
       - name: atsiliepimai
         label: Google atsiliepimai
@@ -295,55 +295,3 @@ collections:
               - { label: 'Įmonės kodas arba individualios veiklos pažymos nr.', name: code, widget: string, required: false }
               - { label: 'PVM mokėtojo kodas (jei yra)', name: vatCode, widget: string, required: false }
               - { label: 'Adresas', name: address, widget: string, required: false }
-
-      - name: kainos
-        label: 'Kainų skaičiuoklė'
-        file: src/data/kainos.json
-        format: json
-        fields:
-          - { label: 'Kainos atnaujintos (data)', name: atnaujinta, widget: datetime, format: 'YYYY-MM-DD', time_format: false }
-          - { label: 'Kainų metai', name: kainu_metai, widget: number, value_type: int }
-          - { label: 'Pastaba po kaina', name: pastaba, widget: text }
-          - { label: 'PVM pastaba (nebūtina)', name: pvm_pastaba, widget: string, required: false }
-          - label: 'Automatinis kainų didinimas kasmet'
-            name: indeksavimas
-            widget: object
-            collapsed: true
-            fields:
-              - { label: 'Įjungta', name: ijungta, widget: boolean, hint: 'Įjungus, kiekvienų naujų metų sausio 1 d. visos kainos padidėja nurodytu procentu (skaičiuojama nuo bazės metų).' }
-              - { label: 'Bazės metai', name: bazes_metai, widget: number, value_type: int }
-              - { label: 'Didinimas per metus, %', name: metinis_proc, widget: number, value_type: float }
-              - { label: 'Apvalinti iki, €', name: apvalinti_iki, widget: number, value_type: int, hint: 'Pvz. 5 → 121 € tampa 120 €' }
-          - label: 'Pastatų stiklai'
-            name: pastatai
-            widget: object
-            collapsed: true
-            fields:
-              - { label: 'Senos plėvelės nuėmimas, €/m²', name: senos_nuemimas_m2, widget: number, value_type: int }
-              - label: 'Plėvelės'
-                name: pleveles
-                widget: list
-                summary: '{{fields.pavadinimas}} – {{fields.kaina_m2}} €/m²'
-                fields:
-                  - { label: 'Pavadinimas', name: pavadinimas, widget: string }
-                  - { label: 'Aprašymas', name: aprasymas, widget: string, required: false }
-                  - { label: 'Kaina, €/m²', name: kaina_m2, widget: number, value_type: int }
-                  - { label: 'Minimali užsakymo kaina, €', name: min_kaina, widget: number, value_type: int }
-          - label: 'Lipdukai'
-            name: lipdukai
-            widget: object
-            collapsed: true
-            fields:
-              - { label: 'Klijavimas, €/m²', name: klijavimas_m2, widget: number, value_type: int }
-              - { label: 'Minimalus užsakymas be klijavimo, €', name: min_be_klijavimo, widget: number, value_type: int }
-              - { label: 'Minimalus užsakymas su klijavimu, €', name: min_su_klijavimu, widget: number, value_type: int }
-              - { label: 'Maketo paruošimas, €', name: maketas, widget: number, value_type: int }
-              - { label: 'Senų lipdukų nuėmimas, €/m²', name: senu_nuemimas_m2, widget: number, value_type: int }
-              - label: 'Lipdukų plėvelės'
-                name: tipai
-                widget: list
-                summary: '{{fields.pavadinimas}} – {{fields.kaina_m2}} €/m²'
-                fields:
-                  - { label: 'Pavadinimas', name: pavadinimas, widget: string }
-                  - { label: 'Aprašymas', name: aprasymas, widget: string, required: false }
-                  - { label: 'Kaina, €/m²', name: kaina_m2, widget: number, value_type: int }

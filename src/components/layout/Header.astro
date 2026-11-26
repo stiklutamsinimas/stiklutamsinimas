@@ -15,8 +15,6 @@ const path = Astro.url.pathname.replace(/\.html$/, '');
 
 const links = [
   { href: '/#kainos', label: 'Kainos' },
-  // Plačiuose ekranuose – atskiras meniu punktas (siauresniuose netelpa; mobiliame meniu rodomas visada)
-  { href: '/skaiciuokle', label: 'Skaičiuoklė', wide: true },
   { href: '/naujienos', label: 'Naujienos' },
   { href: '/#duk', label: 'DUK' },
   { href: '/kontaktai', label: 'Kontaktai' },
@@ -85,7 +83,6 @@ const isActive = (href: string) => !href.includes('#') && (path === href || path
             class:list={[
               'rounded-full px-3.5 py-2 text-[0.95rem] font-semibold transition hover:text-link',
               isActive(l.href) ? 'text-link' : 'text-text/80',
-              'wide' in l && l.wide && 'hidden xl:inline-block',
             ]}
             aria-current={isActive(l.href) ? 'page' : undefined}
           >

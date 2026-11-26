@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, BuildingComplex, Calculator, Car, Check, Sun } from '@lucide/astro';
+import { ArrowRight, BuildingComplex, Car, Check, Sun } from '@lucide/astro';
 import { site } from '@/config/site';
 import { carPrices, formatRange } from '@/data/prices';
 
@@ -73,14 +73,9 @@ const { compact = false } = Astro.props;
           </span>
           <h3 class="mt-5 text-xl">Langų plėvelės pastatams</h3>
           <p class="mt-2 text-muted">Veidrodinės, matinės ir dekoratyvinės plėvelės. Kaina – pagal stiklų plotą, atvykstame įvertinti.</p>
-          <div class="mt-5 flex flex-wrap gap-x-6 gap-y-2">
-            <a href="/skaiciuokle" class="inline-flex items-center gap-1.5 font-bold text-link">
-              <Calculator size={16} aria-hidden="true" /> Apskaičiuoti kainą
-            </a>
-            <a href="/langu-tamsinimas" class="inline-flex items-center gap-1.5 font-bold text-link">
-              Plačiau <ArrowRight size={16} aria-hidden="true" />
-            </a>
-          </div>
+          <a href="/langu-tamsinimas" class="mt-5 inline-flex items-center gap-1.5 font-bold text-link">
+            Plačiau <ArrowRight size={16} aria-hidden="true" />
+          </a>
         </div>
       </div>
     )

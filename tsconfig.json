@@ -6,7 +6,6 @@
   ],
   "exclude": [
     "dist",
-    "android",
     "public/admin",
     "node_modules"
   ],

@@ -202,12 +202,13 @@ export const cities: City[] = [
     nameOf: 'Kauno',
     cars: false,
     keyword: 'Langų tamsinimas',
+    location: 'Kaunas',
     seoTitle: 'Langų tamsinimas Kaune – plėvelės pastatams',
     seoDescription:
       'Langų tamsinimas ir plėvelės pastatams Kaune – atvykstame į objektą: veidrodinės, saulės kontrolės, matinės ir apsauginės plėvelės namams ir biurams.',
     lead: 'Langų tamsinimas ir plėvelės pastatams Kaune – atvykstame į jūsų namus, biurą ar įmonę ir klijuojame plėveles langams, durims ir pertvaroms vietoje.',
     intro: [
-      'Kaune klijuojame **plėveles pastatams** – atvykstame į objektą su visa reikalinga įranga. Namams, biurams ir parduotuvėms klijuojame **veidrodines, saulės kontrolės, matines ir apsaugines** plėveles.',
+      'Kaune klijuojame **plėveles pastatams** – atvykstame į objektą su visa reikalinga įranga. Namams, biurams ir parduotuvėms klijuojame **veidrodines, saulės kontrolės, matines ir apsaugines** plėveles. Kontaktinis adresas Kaune – **Partizanų g. 25**.',
       'Didelius biurų langus ir stiklines pertvaras dažnai renkamasi apklijuoti **matine plėvele** – patalpa lieka šviesi, o vaizdas į vidų paslepiamas. Saulėtoje pusėje esantiems langams siūlome **saulės kontrolės plėveles**, kurios sumažina karštį ir akinimą.',
     ],
     areas: [],
@@ -225,7 +226,7 @@ export const cities: City[] = [
       'dekoravimas/matines-juostos-stiklo-durims',
     ],
     faq: [
-      { q: 'Ar turite dirbtuves Kaune?', a: 'Ne – Kaune dirbame atvykę į objektą. Darbai atliekami tik iš anksto susitarus.' },
+      { q: 'Kur jus rasti Kaune?', a: 'Kontaktinis adresas Kaune – Partizanų g. 25, Kaunas. Plėveles pastatams klijuojame atvykę į objektą. Darbai atliekami tik iš anksto susitarus.' },
       { q: 'Ar tamsinate automobilius Kaune?', a: `Kaune klijuojame tik plėveles pastatų langams, durims ir pertvaroms. ${objectsOnly} Iki Panevėžio – apie 1,5 val. kelio, o darbas trunka 2–3 val., todėl automobilį atsiimsite tą pačią dieną.` },
       { q: 'Kiek kainuoja langų tamsinimas Kaune?', a: 'Kaina priklauso nuo stiklų ploto, plėvelės rūšies ir atvykimo. Atsiųskite langų nuotraukas ar matmenis – pateiksime pasiūlymą iš anksto.' },
       { q: 'Ar klijuojate matines plėveles biurų pertvaroms Kaune?', a: 'Taip – matines, dekoratyvines ir spalvotas plėveles stiklinėms pertvaroms ir durims, taip pat logotipus ant stiklo.' },
