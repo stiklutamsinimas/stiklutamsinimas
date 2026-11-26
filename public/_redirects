@@ -6,3 +6,7 @@
 /tinklarastis                /naujienos                               301
 /blog                        /naujienos                               301
 /stiklo-pertvaros            /stiklo-dekoravimas                      301
+
+# Pašalinta kainų skaičiuoklė ir Android programėlė (2026-11) – seni adresai veda į kainas
+/skaiciuokle                 /#kainos                                 301
+/programele/*                /                                        301
