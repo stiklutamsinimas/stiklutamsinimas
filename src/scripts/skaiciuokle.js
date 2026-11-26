@@ -1,4 +1,4 @@
-/* Kainų skaičiuoklė (/skaiciuokle).
+/* Kainų skaičiuoklė (/skaiciuokle): pastatų stiklų plėvelės ir ploteriuoti lipdukai.
  * Kainos – src/data/kainos.json (įdedamos į puslapį kūrimo metu). Pakeitus jas per /admin,
  * Cloudflare perkuria svetainę ir naujos kainos atsiranda ir puslapyje, ir Android programėlėje. */
 
@@ -29,8 +29,7 @@ if (root && dataEl) {
   const APP_VER = appM ? +appM[1] : 0;
 
   const S = {
-    tab: 'auto',
-    auto: { sel: null, galas: true, durys: false, priekinis: false, plevele: 'sol', sena: false, marke: '', q: '' },
+    tab: 'pastatai',
     pastatai: { tipas: 0, sena: false },
     lipdukai: { tipas: 0, klijavimas: true, maketas: false, senu: false },
   };
@@ -54,9 +53,9 @@ if (root && dataEl) {
   };
 
   /* ---------- Skirtukai ---------- */
-  const TABS = ['auto', 'pastatai', 'lipdukai'];
+  const TABS = ['pastatai', 'lipdukai'];
   const setTab = (t, fokusas) => {
-    if (!TABS.includes(t)) t = 'auto';
+    if (!TABS.includes(t)) t = 'pastatai';
     S.tab = t;
     $$('[data-sk-tab]').forEach((b) => {
       const on = b.dataset.skTab === t;
@@ -65,7 +64,7 @@ if (root && dataEl) {
       if (on && fokusas) b.focus();
     });
     TABS.forEach((x) => ($('#sk-p-' + x).hidden = x !== t));
-    const h = t === 'auto' ? '' : '#' + t;
+    const h = t === 'pastatai' ? '' : '#' + t;
     if (location.hash !== h) history.replaceState(null, '', location.pathname + location.search + h);
     render();
   };
@@ -79,209 +78,9 @@ if (root && dataEl) {
     });
   });
 
-  /* ---------- AUTOMOBILIAI ---------- */
-  const modeliai = K.auto.modeliai;
-  const markes = [...new Set(modeliai.map((m) => m.marke))];
-  $('#sk-marke').insertAdjacentHTML('beforeend', markes.map((m) => '<option>' + esc(m) + '</option>').join(''));
-
-  const modelioKortele = (m, i, suMarke) => {
-    const on = S.auto.sel && S.auto.sel.k === 'm' && S.auto.sel.i === i;
-    const g = kaina(m.galas);
-    return (
-      '<label class="sk-choice"><input type="radio" name="sk-modelis" value="' + i + '"' + (on ? ' checked' : '') + '>' + TICK +
-      '<span><span class="sk-ctitle">' + esc(suMarke ? m.marke + ' ' + m.modelis : m.modelis) + '</span>' +
-      '<span class="sk-csub">' + esc([m.kebulas, m.metai].filter(Boolean).join(' · ')) + '</span></span>' +
-      '<span class="sk-cprice">' + (g == null ? '' : '<small>galas</small>' + eur(g)) + '</span></label>'
-    );
-  };
-
-  const renderKebulai = () => {
-    $('#sk-kebulai').innerHTML = K.auto.kebulai
-      .map((k, i) => {
-        const on = S.auto.sel && S.auto.sel.k === 'k' && S.auto.sel.i === i;
-        const nuo = kaina(k.galas_nuo);
-        const iki = kaina(k.galas_iki);
-        const kain = nuo == null ? '' : iki && iki > nuo ? nf.format(nuo) + '–' + eur(iki) : '<small>nuo</small>' + eur(nuo);
-        return (
-          '<label class="sk-choice"><input type="radio" name="sk-kebulas" value="' + i + '"' + (on ? ' checked' : '') + '>' + TICK +
-          '<span><span class="sk-ctitle">' + esc(k.pavadinimas) + '</span><span class="sk-csub">Galiniai stiklai</span></span>' +
-          '<span class="sk-cprice">' + kain + '</span></label>'
-        );
-      })
-      .join('');
-  };
-
-  const renderModeliai = () => {
-    const q = norm(S.auto.q).trim();
-    let list = [];
-    let suMarke = false;
-    let hint;
-    if (q.length >= 2) {
-      const zodziai = q.split(/\s+/);
-      const balai = {};
-      modeliai.forEach((m, i) => {
-        const t = norm(m.marke + ' ' + m.modelis + ' ' + m.kebulas + ' ' + m.metai);
-        if (!zodziai.every((z) => t.includes(z))) return;
-        const mm = norm(m.marke + ' ' + m.modelis);
-        const mo = norm(m.modelis);
-        // Tikslesni atitikmenys – aukščiau, „Kiti modeliai“ – gale
-        balai[i] = (mo.startsWith(q) ? 0 : mm.includes(q) ? 1 : 2) + (/^kiti/.test(mo) ? 3 : 0);
-        list.push(i);
-      });
-      list.sort((a, b) => balai[a] - balai[b] || a - b);
-      suMarke = true;
-      hint = list.length ? 'Rasta: ' + list.length + '. Pasirinkite savo modelį.' : '';
-      list = list.slice(0, 40);
-    } else if (S.auto.marke) {
-      modeliai.forEach((m, i) => m.marke === S.auto.marke && list.push(i));
-      hint = 'Pasirinkite modelį:';
-    } else {
-      hint = 'Pasirinkite markę arba įveskite modelį paieškoje.';
-      if (S.auto.sel && S.auto.sel.k === 'm') {
-        list = [S.auto.sel.i];
-        suMarke = true;
-        hint = 'Pasirinktas automobilis:';
-      }
-    }
-    $('#sk-modeliu-hint').textContent = hint;
-    if (!list.length && q.length >= 2) {
-      $('#sk-modeliai').innerHTML = '<div class="sk-empty">Tokio modelio sąraše nėra. Pasirinkite kėbulo tipą žemiau – arba tiesiog paskambinkite, pasakysime kainą.</div>';
-      $('#sk-kebulai-wrap').hidden = false;
-      renderKebulai();
-      return;
-    }
-    $('#sk-modeliai').innerHTML = list.map((i) => modelioKortele(modeliai[i], i, suMarke)).join('');
-  };
-
-  $('#sk-marke').addEventListener('change', (e) => {
-    S.auto.marke = e.target.value;
-    S.auto.q = '';
-    $('#sk-paieska').value = '';
-    renderModeliai();
-  });
-  $('#sk-paieska').addEventListener('input', (e) => {
-    S.auto.q = e.target.value;
-    if (S.auto.q.trim().length >= 2) {
-      S.auto.marke = '';
-      $('#sk-marke').value = '';
-    }
-    renderModeliai();
-  });
-  $('#sk-nerandu').addEventListener('click', () => {
-    const w = $('#sk-kebulai-wrap');
-    w.hidden = !w.hidden;
-    if (!w.hidden) {
-      renderKebulai();
-      w.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-  });
-  $('#sk-modeliai').addEventListener('change', (e) => {
-    if (e.target.name !== 'sk-modelis') return;
-    S.auto.sel = { k: 'm', i: +e.target.value };
-    renderKebulai();
-    render();
-  });
-  $('#sk-kebulai').addEventListener('change', (e) => {
-    if (e.target.name !== 'sk-kebulas') return;
-    S.auto.sel = { k: 'k', i: +e.target.value };
-    renderModeliai();
-    render();
-  });
-  ['galas', 'durys', 'priekinis', 'sena'].forEach((k) => {
-    $('#sk-d-' + k).addEventListener('change', (e) => {
-      S.auto[k] = e.target.checked;
-      render();
-    });
-  });
-  $$('[data-sk-preset]').forEach((b) =>
-    b.addEventListener('click', () => {
-      const p = b.dataset.skPreset;
-      S.auto.galas = p !== 'priekis';
-      S.auto.durys = p !== 'galas';
-      S.auto.priekinis = p !== 'galas';
-      ['galas', 'durys', 'priekinis'].forEach((k) => ($('#sk-d-' + k).checked = S.auto[k]));
-      render();
-    }),
-  );
-  $$('[data-sk-plevele]').forEach((b) =>
-    b.addEventListener('click', () => {
-      S.auto.plevele = b.dataset.skPlevele;
-      render();
-    }),
-  );
-
-  const autoDuom = () => {
-    const sel = S.auto.sel;
-    if (!sel) return null;
-    const sol = S.auto.plevele === 'sol';
-    const r = {};
-    let src;
-    if (sel.k === 'm') {
-      src = modeliai[sel.i];
-      r.pav = src.marke + ' ' + src.modelis;
-      r.ka = [src.kebulas, src.metai].filter(Boolean).join(' · ');
-      r.galas = kaina(src.galas);
-      r.nuo = false;
-    } else {
-      src = K.auto.kebulai[sel.i];
-      r.pav = src.pavadinimas;
-      r.ka = 'Kaina pagal kėbulo tipą';
-      r.galas = kaina(src.galas_nuo);
-      r.galasIki = kaina(src.galas_iki);
-      r.nuo = true;
-    }
-    r.durys = kaina(sol ? src.durys_sol : src.durys_std);
-    r.priekinis = kaina(sol ? src.priekinis_sol : src.priekinis_std);
-    return r;
-  };
-
   const setKaina = (k, html) => {
     const el = $('[data-sk-kaina="' + k + '"]');
     if (el) el.innerHTML = html;
-  };
-
-  const skaiciuotiAuto = () => {
-    const d = autoDuom();
-    const a = S.auto;
-    const sena = kaina(K.auto.senos_pleveles_nuemimas);
-    const plev = a.plevele === 'sol' ? 'aterminė' : 'standartinė';
-    const pref = d && d.nuo ? '<small>nuo</small>' : '';
-    setKaina('galas', d && d.galas != null ? pref + eur(d.galas) : '–');
-    setKaina('durys', d && d.durys != null ? pref + eur(d.durys) : '–');
-    setKaina('priekinis', d && d.priekinis != null ? pref + eur(d.priekinis) : '–');
-    setKaina('sena', sena == null ? '<small>kaina</small>derinama' : '<small>+</small>' + eur(sena));
-    $('#sk-plevele-wrap').hidden = !(a.durys || a.priekinis);
-    $$('[data-sk-plevele]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.skPlevele === a.plevele)));
-    const preset = a.galas && !a.durys && !a.priekinis ? 'galas' : !a.galas && a.durys && a.priekinis ? 'priekis' : a.galas && a.durys && a.priekinis ? 'visas' : '';
-    $$('[data-sk-preset]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.skPreset === preset)));
-
-    if (!d) return { pav: 'Pasirinkite automobilį', ka: 'Kainą parodysime iš karto', eil: [], suma: null, msg: 'Sveiki! Domina automobilio stiklų tamsinimas. Kokia būtų kaina?' };
-    const eil = [];
-    const darbai = [];
-    if (a.galas) {
-      eil.push(['Galiniai stiklai', d.galas, d.galasIki && d.galasIki > d.galas ? nf.format(d.galas) + '–' + eur(d.galasIki) : null]);
-      darbai.push('galiniai stiklai');
-    }
-    if (a.durys) {
-      eil.push(['Priekinės durelės (' + plev + ')', d.durys]);
-      darbai.push('priekinės durelės (' + plev + ' plėvelė)');
-    }
-    if (a.priekinis) {
-      eil.push(['Priekinis stiklas (' + plev + ')', d.priekinis]);
-      darbai.push('priekinis stiklas (' + plev + ' plėvelė)');
-    }
-    if (a.sena) {
-      eil.push(['Senos plėvelės nuėmimas', sena]);
-      darbai.push('senos plėvelės nuėmimas');
-    }
-    const r = sumuoti(eil, d.nuo);
-    r.pav = d.pav;
-    r.ka = darbai.length ? d.ka : 'Pažymėkite, ką tamsinti';
-    r.msg =
-      'Sveiki! Domina automobilio stiklų tamsinimas.\nAutomobilis: ' + d.pav + (d.ka ? ' (' + d.ka + ')' : '') +
-      (darbai.length ? '\nDarbai: ' + darbai.join(', ') : '') +
-      (r.suma != null ? '\nSkaičiuoklės kaina: ' + (r.nuo ? 'nuo ' : '') + eur(r.suma) : '');
-    return r;
   };
 
   /* ---------- Plotas (pastatai, lipdukai) ---------- */
@@ -476,7 +275,7 @@ if (root && dataEl) {
   }
 
   function render() {
-    const r = S.tab === 'pastatai' ? skaiciuotiPastatus() : S.tab === 'lipdukai' ? skaiciuotiLipdukus() : skaiciuotiAuto();
+    const r = S.tab === 'lipdukai' ? skaiciuotiLipdukus() : skaiciuotiPastatus();
     $('#sk-suv-h').textContent = r.pav;
     $('#sk-suv-ka').textContent = r.ka || '';
     $('#sk-suv-eilutes').innerHTML = r.eil
@@ -529,6 +328,5 @@ if (root && dataEl) {
 
   /* ---------- Paleidimas ---------- */
   $$('[data-sk-plotas]').forEach(initPlotas);
-  renderModeliai();
-  setTab((location.hash || '').slice(1) || 'auto');
+  setTab((location.hash || '').slice(1) || 'pastatai');
 }

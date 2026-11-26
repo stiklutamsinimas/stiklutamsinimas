@@ -52,13 +52,6 @@ const { compact = false } = Astro.props;
       </ul>
       <a href={compact ? '#uzklausa' : '#kontaktai'} class="btn btn-primary shrink-0">Užsakyti <ArrowRight size={17} aria-hidden="true" /></a>
     </div>
-    <a
-      href="/skaiciuokle"
-      class="group flex items-center justify-between gap-3 border-t border-border bg-soft/40 px-6 py-4 font-bold text-link transition hover:bg-soft sm:px-8"
-    >
-      <span class="inline-flex items-center gap-2.5"><Calculator size={18} aria-hidden="true" /> Tiksli kaina jūsų automobiliui – kainų skaičiuoklė</span>
-      <ArrowRight size={17} aria-hidden="true" class="transition group-hover:translate-x-0.5" />
-    </a>
   </div>
 
   {
@@ -80,9 +73,14 @@ const { compact = false } = Astro.props;
           </span>
           <h3 class="mt-5 text-xl">Langų plėvelės pastatams</h3>
           <p class="mt-2 text-muted">Veidrodinės, matinės ir dekoratyvinės plėvelės. Kaina – pagal stiklų plotą, atvykstame įvertinti.</p>
-          <a href="/langu-tamsinimas" class="mt-5 inline-flex items-center gap-1.5 font-bold text-link">
-            Plačiau <ArrowRight size={16} aria-hidden="true" />
-          </a>
+          <div class="mt-5 flex flex-wrap gap-x-6 gap-y-2">
+            <a href="/skaiciuokle" class="inline-flex items-center gap-1.5 font-bold text-link">
+              <Calculator size={16} aria-hidden="true" /> Apskaičiuoti kainą
+            </a>
+            <a href="/langu-tamsinimas" class="inline-flex items-center gap-1.5 font-bold text-link">
+              Plačiau <ArrowRight size={16} aria-hidden="true" />
+            </a>
+          </div>
         </div>
       </div>
     )

@@ -5,9 +5,9 @@ Excel kainininkas (stiklutamsinimas_eu_kainininkas-vX.xlsx) -> kainos.json
 Naudojimas:
     python3 scripts/xlsx-i-kainas.py kainininkas.xlsx src/data/kainos.json
 
-Jei kainos.json jau yra, išsaugomi jo nustatymai (pastabos, indeksavimas,
-papildomos kainos). Iš Excel perrašomos tik kainos:
-automobilių modeliai, kėbulų tipai, pastatų plėvelės ir lipdukai.
+Jei kainos.json jau yra, išsaugomi jo nustatymai (pastabos, indeksavimas).
+Iš Excel perrašomos tik pastatų plėvelių ir lipdukų kainos
+(automobilių lapas skaičiuoklėje nenaudojamas).
 Reikia: pip install openpyxl
 """
 import json
@@ -135,7 +135,6 @@ NUMATYTA = {
     "pastaba": "Kainos orientacinės – tiksli kaina priklauso nuo automobilio modelio ir pasirinktos plėvelės. Ją pasakysime iš anksto.",
     "pvm_pastaba": "",
     "indeksavimas": {"ijungta": False, "bazes_metai": 2026, "metinis_proc": 10, "apvalinti_iki": 5},
-    "auto": {"senos_pleveles_nuemimas": None},
 }
 
 
@@ -152,19 +151,15 @@ def main():
     if isinstance(infl, (int, float)):
         v = round(infl * 100, 2)
         duom["indeksavimas"]["metinis_proc"] = int(v) if float(v).is_integer() else v
-    modeliai = skaityti_auto(wb)
-    duom["auto"]["kebulai"] = kebulai_is_modeliu(modeliai)
-    duom["auto"]["modeliai"] = modeliai
     duom["pastatai"] = skaityti_pastatus(wb)
     duom["lipdukai"] = skaityti_lipdukus(wb)
     duom["atnaujinta"] = date.today().isoformat()
     # Raktų tvarka – kad failas būtų patogus skaityti
     tvarka = ["atnaujinta", "kainu_metai", "pastaba", "pvm_pastaba",
-              "indeksavimas", "auto", "pastatai", "lipdukai"]
+              "indeksavimas", "pastatai", "lipdukai"]
     duom = {k: duom[k] for k in tvarka if k in duom} | {k: v for k, v in duom.items() if k not in tvarka}
-    duom["auto"] = {k: duom["auto"][k] for k in ("senos_pleveles_nuemimas", "kebulai", "modeliai")}
     out.write_text(json.dumps(duom, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Įrašyta: {out}  (modelių: {len(modeliai)})")
+    print(f"Įrašyta: {out}")
 
 
 if __name__ == "__main__":
