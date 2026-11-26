@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, BuildingComplex, Car, Check, Sun } from '@lucide/astro';
+import { ArrowRight, BuildingComplex, Calculator, Car, Check, Sun } from '@lucide/astro';
 import { site } from '@/config/site';
 import { carPrices, formatRange } from '@/data/prices';
 
@@ -52,6 +52,13 @@ const { compact = false } = Astro.props;
       </ul>
       <a href={compact ? '#uzklausa' : '#kontaktai'} class="btn btn-primary shrink-0">Užsakyti <ArrowRight size={17} aria-hidden="true" /></a>
     </div>
+    <a
+      href="/skaiciuokle"
+      class="group flex items-center justify-between gap-3 border-t border-border bg-soft/40 px-6 py-4 font-bold text-link transition hover:bg-soft sm:px-8"
+    >
+      <span class="inline-flex items-center gap-2.5"><Calculator size={18} aria-hidden="true" /> Tiksli kaina jūsų automobiliui – kainų skaičiuoklė</span>
+      <ArrowRight size={17} aria-hidden="true" class="transition group-hover:translate-x-0.5" />
+    </a>
   </div>
 
   {

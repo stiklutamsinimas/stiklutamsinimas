@@ -30,6 +30,8 @@ npm run preview    # peržiūrėti dist/ versiją
 | Dažniausi klausimai (pradžia, /apie-mus, /llms.txt) | `src/data/faq.ts` |
 | Nuotraukų aprašymai (alt tekstai) | `src/data/galleries.ts` |
 | Automobilių tamsinimo kainos (visur svetainėje) | `src/data/prices.ts` |
+| Kainų skaičiuoklės kainos (/skaiciuokle ir Android programėlė): 185 modeliai, pastatai, lipdukai | **/admin → Nustatymai → Kainų skaičiuoklė** arba `src/data/kainos.json` |
+| Android programėlė (kodas) | `android/` → APK `public/programele/` |
 | Garantija, veiklos pradžios metai | `src/config/site.ts` (`warranty`, `foundedYear`) |
 | Spalvos (šviesi ir tamsi tema) | `src/styles/global.css` |
 | Logotipas ir ikonos | `src/assets/brand/` → `npm run icons` |
@@ -56,6 +58,13 @@ Nauja nuotrauka: įkelkite `.jpg` į aplanką (pavadinimas mažosiomis raidėmis
 2. Pirmą kartą: GitHub → *Settings → Developer settings → Fine-grained tokens → Generate new token*, pasirinkite saugyklą `stiklutamsinimas`, leidimas **Contents: Read and write**. Nukopijuotą raktą įklijuokite į „Sign In Using Access Token“.
 3. **Naujienos → New**: pavadinimas, aprašymas, nuotrauka, tekstas → **Save**.
 4. Straipsnis įrašomas į GitHub, o Cloudflare per ~2 min. paskelbia jį svetainėje adresu `/straipsnio-pavadinimas`. Kiekviename straipsnyje automatiškai atsiranda dalinimosi mygtukai (Facebook, Instagram, TikTok, YouTube ir nuorodos kopijavimas).
+
+## Kainų skaičiuoklė ir Android programėlė
+
+- **Puslapis** `/skaiciuokle` (`src/pages/skaiciuokle.astro`, logika `src/scripts/skaiciuokle.js`). Kainos – `src/data/kainos.json`, keičiamos per **/admin → Nustatymai → Kainų skaičiuoklė**. Po išsaugojimo Cloudflare per ~2 min. atnaujina puslapį – ir Android programėlę, nes ji rodo tą patį puslapį.
+- **Android programėlė** (`android/`) – atsisiunčiama iš `/programele/stiklutamsinimas.apk` (mygtukas skaičiuoklės puslapyje). Naujos versijos dėl kainų leisti nereikia. Pakeitus programėlės kodą – padidinkite `versionCode` (`android/app/build.gradle`): GitHub Actions (`.github/workflows/android-apk.yml`) surinks APK.
+- **Parašo raktas** laikomas ne saugykloje. Įrašius GitHub → *Settings → Secrets and variables → Actions* paslaptis `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`, pasirašytas APK ir `versija.json` į `public/programele/` įdedami automatiškai, o programėlėje atsiranda mygtukas „Atnaujinti“. Be jų surenkamas nepasirašytas APK į šaką `android-nepasirasytas`.
+- Excel kainininką į `kainos.json` galima perkelti `python3 scripts/xlsx-i-kainas.py kainininkas.xlsx src/data/kainos.json` (reikia `pip install openpyxl`).
 
 ## Google atsiliepimai ir Instagram įrašai
 
