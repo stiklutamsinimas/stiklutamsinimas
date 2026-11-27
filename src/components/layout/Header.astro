@@ -3,14 +3,16 @@ import { ChevronDown, Menu, Phone, X } from '@lucide/astro';
 import Logo from './Logo.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import Icon from '@/components/ui/Icon.astro';
-import { site, telHref } from '@/config/site';
+import { features, site, telHref } from '@/config/site';
 import { shopVisible } from '@/lib/shop';
 import CartLink from '@/components/shop/CartLink.astro';
 import { getServicesByCategory, serviceUrl } from '@/lib/content';
 import { cities, cityUrl } from '@/data/cities';
 
 const groups = await getServicesByCategory();
-const shop = await shopVisible();
+// Meniu nuoroda – kai parduotuvė įjungta; krepšelio ikona – kai yra bent viena prekė
+const shop = features.shop;
+const hasProducts = await shopVisible();
 const path = Astro.url.pathname.replace(/\.html$/, '');
 
 const links = [
@@ -94,7 +96,7 @@ const isActive = (href: string) => !href.includes('#') && (path === href || path
 
     <ThemeToggle class="hidden sm:inline-flex" />
 
-    {shop && <CartLink compact />}
+    {hasProducts && <CartLink compact />}
 
     <!-- 1024–1279 px pločio ekranuose meniu užima daug vietos – rodoma tik telefono ikona -->
     <a href={telHref} class="btn btn-primary hidden !px-5 !py-2.5 text-sm md:inline-flex lg:max-xl:!px-3" title={site.phoneDisplay}>

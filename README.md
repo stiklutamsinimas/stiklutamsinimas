@@ -53,9 +53,14 @@ Nauja nuotrauka: įkelkite `.jpg` į aplanką (pavadinimas mažosiomis raidėmis
 ## Naujo straipsnio rašymas (/admin)
 
 1. Atidarykite **https://stiklutamsinimas.eu/admin** (arba `…pages.dev/admin`).
-2. Pirmą kartą: GitHub → *Settings → Developer settings → Fine-grained tokens → Generate new token*, pasirinkite saugyklą `stiklutamsinimas`, leidimas **Contents: Read and write**. Nukopijuotą raktą įklijuokite į „Sign In Using Access Token“.
+2. Prisijunkite: **Sign In with GitHub** (vieną kartą reikia įjungti – žr. [docs/admin-prisijungimas.md](docs/admin-prisijungimas.md)). Atsarginis būdas – GitHub raktas („Sign In Using Access Token“).
 3. **Naujienos → New**: pavadinimas, aprašymas, nuotrauka, tekstas → **Save**.
 4. Straipsnis įrašomas į GitHub, o Cloudflare per ~2 min. paskelbia jį svetainėje adresu `/straipsnio-pavadinimas`. Kiekviename straipsnyje automatiškai atsiranda dalinimosi mygtukai (Facebook, Instagram, TikTok, YouTube ir nuorodos kopijavimas).
+
+## Parduotuvė ir prekių importas
+
+- Parduotuvė, prekės, pristatymas, mokėjimai – [docs/parduotuve.md](docs/parduotuve.md).
+- Prekių importas iš AliExpress, Alibaba, Temu, eBay, Amazon su antkainiu – **stiklutamsinimas.eu/admin/importas**, instrukcija [docs/importas.md](docs/importas.md).
 
 ## Google atsiliepimai ir Instagram įrašai
 

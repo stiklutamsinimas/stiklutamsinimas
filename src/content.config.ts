@@ -120,6 +120,10 @@ const produktai = defineCollection({
       /** Rikiavimas (mažesnis – pirmiau) */
       order: z.number().default(100),
       draft: z.boolean().default(false),
+      /** Tiekėjas (dropshipping) – NErodoma pirkėjams ir neįtraukiama į viešą katalogą */
+      source: z.string().nullish(),
+      sourcePrice: z.number().nullish(),
+      sourceCurrency: z.string().nullish(),
     }),
 });
 

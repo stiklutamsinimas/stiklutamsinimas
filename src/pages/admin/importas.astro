@@ -1,0 +1,714 @@
+---
+/**
+ * PREKIŲ IMPORTAS (dropshipping): AliExpress, Alibaba, Temu, eBay, Amazon → stiklutamsinimas.eu/parduotuve.
+ * 1) Naršyklės mygtukas „➕ Į mano parduotuvę“ (bookmarklet) – spaudžiamas atidarytame prekės puslapyje;
+ * 2) arba įklijuojamos nuorodos (veikia ne visoms parduotuvėms – kai kurios serverio neįsileidžia).
+ * Prekės kaupiasi sąraše (šios naršyklės atmintyje), uždedamas antkainis, „Įkelti“ – įrašo į GitHub (functions/api/importas).
+ * Puslapis /admin/* – neindeksuojamas, be slapukų ir reklamos žymų.
+ */
+import '@fontsource-variable/manrope';
+import '@/styles/global.css';
+import fs from 'node:fs';
+import ts from 'typescript';
+import { site } from '@/config/site';
+
+// Naršyklės mygtukas surenkamas iš src/lib/import-extract.ts teksto (be importų)
+const target = new URL('/admin/importas', site.url).href;
+const extractor = fs.readFileSync('src/lib/import-extract.ts', 'utf8').replace(/^export /gm, '');
+const wrapper = `
+const __d = extractProduct(document, location.href, true);
+if (!__d.title || (!__d.images.length && __d.price === null)) {
+  alert('Nepavyko atpažinti prekės. Atidarykite konkrečios prekės puslapį ir spauskite dar kartą.');
+} else {
+  const __w = window.open(${JSON.stringify(target)} + '#preke=' + encodeURIComponent(JSON.stringify(__d)), 'stiklutamsinimas-importas');
+  if (!__w) alert('Naršyklė užblokavo naują langą – leiskite iššokančius langus ir spauskite dar kartą.');
+}`;
+const js = ts.transpileModule(extractor + wrapper, { compilerOptions: { target: ts.ScriptTarget.ES2019, removeComments: true } }).outputText;
+const bookmarklet = `javascript:${encodeURIComponent(`(()=>{${js}})()`)}`;
+
+const field =
+  'mt-1.5 block w-full rounded-xl border border-border bg-bg px-3.5 py-2.5 text-sm text-text transition focus:border-primary focus:ring-4 focus:ring-primary/15 focus:outline-none';
+---
+
+<!doctype html>
+<html lang="lt" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Prekių importas | stiklutamsinimas.eu</title>
+    <link rel="icon" href="/favicon.ico" />
+    <script is:inline src="/tema.js"></script>
+  </head>
+  <body class="min-h-dvh bg-bg text-text">
+    <header class="border-b border-border bg-card/70">
+      <div class="container-site flex flex-wrap items-center justify-between gap-3 py-4">
+        <div>
+          <p class="text-xs font-bold tracking-[0.16em] text-muted uppercase">stiklutamsinimas.eu · administravimas</p>
+          <h1 class="text-2xl">Prekių importas</h1>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-sm">
+          <a href="/admin" class="btn btn-outline !px-4 !py-2 text-sm">← Turinio redaktorius</a>
+          <a href="/parduotuve" class="btn btn-outline !px-4 !py-2 text-sm" target="_blank">Parduotuvė ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container-site grid gap-6 py-8">
+      <!-- Prisijungimas -->
+      <section class="login card p-5 sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 class="text-lg">1. Prisijungimas</h2>
+            <p class="login-status mt-1 text-sm text-muted">Tikrinama…</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" class="login-btn btn btn-primary !py-2.5 text-sm" hidden>Prisijungti su GitHub</button>
+            <button type="button" class="logout-btn btn btn-outline !py-2.5 text-sm" hidden>Atsijungti</button>
+          </div>
+        </div>
+        <details class="token-box mt-4 text-sm" hidden>
+          <summary class="cursor-pointer font-semibold text-link">Turite GitHub raktą? Įklijuokite jį čia</summary>
+          <div class="mt-3 flex flex-col gap-2 sm:flex-row">
+            <input type="password" class:list={[field, 'token-input !mt-0 flex-1']} placeholder="github_pat_… arba ghp_…" autocomplete="off" />
+            <button type="button" class="token-save btn btn-outline !py-2.5 text-sm">Naudoti</button>
+          </div>
+        </details>
+      </section>
+
+      <!-- Kaip pridėti prekes -->
+      <section class="card grid gap-6 p-5 sm:p-6 lg:grid-cols-2">
+        <div>
+          <h2 class="text-lg">2. Pridėkite prekes – mygtuku naršyklėje</h2>
+          <ol class="mt-3 list-decimal space-y-1.5 pl-5 text-sm text-muted">
+            <li>Įjunkite žymių juostą: <kbd class="rounded bg-soft px-1.5 font-semibold text-text">Ctrl</kbd> + <kbd class="rounded bg-soft px-1.5 font-semibold text-text">Shift</kbd> + <kbd class="rounded bg-soft px-1.5 font-semibold text-text">B</kbd></li>
+            <li><b class="text-text">Nutempkite</b> šį mygtuką pele į žymių juostą (vieną kartą):</li>
+          </ol>
+          <p class="mt-3">
+            <a
+              href={bookmarklet}
+              class="bookmarklet btn btn-primary cursor-grab !py-2.5 text-sm"
+              title="Nutempkite į žymių juostą"
+              draggable="true">➕ Į mano parduotuvę</a
+            >
+          </p>
+          <ol start="3" class="mt-3 list-decimal space-y-1.5 pl-5 text-sm text-muted">
+            <li>Atidarykite prekę <b class="text-text">AliExpress, Alibaba, Temu, eBay ar Amazon</b> ir paspauskite žymę „➕ Į mano parduotuvę“.</li>
+            <li>Prekė atsiras čia, sąraše. Kartokite su kitomis prekėmis, tada spauskite „Įkelti į parduotuvę“.</li>
+          </ol>
+          <p class="bookmarklet-note mt-3 hidden rounded-xl bg-soft px-3 py-2 text-xs text-muted">Šį mygtuką reikia nutempti į žymių juostą, o ne spausti čia.</p>
+        </div>
+        <div>
+          <h2 class="text-lg">…arba įklijuokite nuorodas</h2>
+          <p class="mt-1 text-sm text-muted">Po vieną eilutėje. Veikia ne su visomis parduotuvėmis (Amazon ir Temu dažnai neįsileidžia) – tada naudokite mygtuką.</p>
+          <textarea class:list={[field, 'links-input']} rows="4" placeholder="https://www.aliexpress.com/item/…&#10;https://www.ebay.com/itm/…"></textarea>
+          <button type="button" class="links-btn btn btn-outline mt-3 !py-2.5 text-sm">Nuskaityti nuorodas</button>
+          <p class="links-status mt-2 text-sm text-muted" role="status"></p>
+        </div>
+      </section>
+
+      <!-- Antkainis -->
+      <section class="card p-5 sm:p-6">
+        <h2 class="text-lg">3. Antkainis ir numatytieji nustatymai</h2>
+        <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <label class="text-sm font-bold">
+            Antkainis, %
+            <input type="number" min="0" max="1000" step="1" class:list={[field, 'set-pct']} />
+          </label>
+          <label class="text-sm font-bold">
+            + fiksuota suma, €
+            <input type="number" min="0" max="1000" step="0.5" class:list={[field, 'set-fixed']} />
+          </label>
+          <label class="text-sm font-bold">
+            Kategorija naujoms
+            <select class:list={[field, 'set-category']}>
+              <option value="irankiai">Įrankiai</option>
+              <option value="pleveles">Plėvelės</option>
+            </select>
+          </label>
+          <label class="flex items-center gap-2 self-end pb-2.5 text-sm font-semibold">
+            <input type="checkbox" class="set-round size-4 accent-[var(--c-primary)]" /> Apvalinti iki ,99
+          </label>
+          <label class="flex items-center gap-2 self-end pb-2.5 text-sm font-semibold">
+            <input type="checkbox" class="set-publish size-4 accent-[var(--c-primary)]" /> Paskelbti iškart
+          </label>
+        </div>
+        <p class="price-example mt-3 text-sm text-muted"></p>
+        <button type="button" class="reprice-btn btn btn-outline mt-3 !py-2 text-sm">Perskaičiuoti visų sąrašo prekių kainas</button>
+      </section>
+
+      <!-- Sąrašas -->
+      <section>
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <h2 class="text-lg">4. Prekės sąraše <span class="queue-count text-muted"></span></h2>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" class="clear-done btn btn-outline !py-2 text-sm">Išvalyti įkeltas</button>
+            <button type="button" class="clear-all btn btn-outline !py-2 text-sm">Išvalyti viską</button>
+          </div>
+        </div>
+        <p class="queue-empty card mt-4 p-8 text-center text-muted">Sąrašas tuščias. Pridėkite prekių mygtuku naršyklėje arba įklijuokite nuorodas.</p>
+        <div class="queue mt-4 grid gap-5"></div>
+      </section>
+    </main>
+
+    <div class="action-bar sticky bottom-0 border-t border-border bg-card/95 backdrop-blur" hidden>
+      <div class="container-site flex flex-wrap items-center justify-between gap-3 py-3">
+        <p class="upload-status text-sm text-muted" role="status"></p>
+        <button type="button" class="upload-btn btn btn-primary !py-3">Įkelti į parduotuvę</button>
+      </div>
+    </div>
+
+    <div class="toast fixed top-4 left-1/2 z-50 hidden max-w-md -translate-x-1/2 rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-on-primary shadow-lg" role="status"></div>
+  </body>
+</html>
+
+<script>
+  import { extractProduct, type ExtractedProduct } from '@/lib/import-extract';
+
+  // ---------- Būsena (saugoma šios naršyklės atmintyje; sinchronizuojama tarp kortelių)
+  type Category = 'pleveles' | 'irankiai';
+  interface Item {
+    id: string;
+    url: string;
+    site: string;
+    title: string;
+    category: Category;
+    cost: number | null;
+    currency: string;
+    price: number | null;
+    manualPrice: boolean;
+    description: string;
+    body: string;
+    images: { url: string; on: boolean }[];
+    specs: { label: string; value: string }[];
+    brand: string;
+    sku: string;
+    selected: boolean;
+    publish: boolean;
+    status: 'laukia' | 'keliama' | 'ikelta' | 'klaida';
+    message: string;
+    link: string;
+  }
+  interface Settings {
+    pct: number;
+    fixed: number;
+    round: boolean;
+    category: Category;
+    publish: boolean;
+  }
+  const QKEY = 'importas-eile-v1';
+  const SKEY = 'importas-nustatymai-v1';
+  const TKEY = 'importas-gh-token';
+  const REPO = 'stiklutamsinimas/stiklutamsinimas';
+  const MAX_IMAGES = 8;
+
+  const store = {
+    get<T>(k: string, d: T): T {
+      try {
+        const v = localStorage.getItem(k);
+        return v ? (JSON.parse(v) as T) : d;
+      } catch {
+        return d;
+      }
+    },
+    set(k: string, v: unknown) {
+      try {
+        localStorage.setItem(k, JSON.stringify(v));
+      } catch {
+        toast('Naršyklės atmintis pilna – įkelkite arba išvalykite dalį prekių.');
+      }
+    },
+  };
+  const settings: Settings = { pct: 100, fixed: 0, round: true, category: 'irankiai', publish: true, ...store.get<Partial<Settings>>(SKEY, {}) };
+  const loadQueue = () => store.get<Item[]>(QKEY, []);
+  const saveQueue = (q: Item[]) => store.set(QKEY, q);
+  /** Visada: perskaityti → pakeisti → įrašyti (kad kelios atidarytos kortelės neperrašytų viena kitos) */
+  function mutate(fn: (q: Item[]) => void, rerender = true) {
+    const q = loadQueue();
+    fn(q);
+    saveQueue(q);
+    if (rerender) render();
+    else updateBar();
+  }
+
+  const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector<T>(s)!;
+  const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+  const eur = (n: number | null) => (n === null ? '—' : `${n.toFixed(2).replace('.', ',')} €`);
+  let toastTimer = 0;
+  function toast(msg: string) {
+    const t = $('.toast');
+    t.textContent = msg;
+    t.classList.remove('hidden');
+    clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => t.classList.add('hidden'), 4500);
+  }
+
+  // ---------- Kainos
+  function salePrice(cost: number | null, currency: string): number | null {
+    if (cost === null || !(cost > 0) || currency !== 'EUR') return null;
+    let v = cost * (1 + settings.pct / 100) + settings.fixed;
+    if (settings.round) v = Math.max(0.99, Math.ceil(v - 0.0001) - 0.01);
+    return Math.round(v * 100) / 100;
+  }
+  function priceExample() {
+    $('.price-example').textContent = `Pavyzdys: tiekėjo kaina 4,20 € → jūsų kaina ${eur(salePrice(4.2, 'EUR'))}. Kai kaina ne eurais – įrašykite ją eurais rankiniu būdu.`;
+  }
+
+  // ---------- Prekės pridėjimas
+  function shortText(s: string) {
+    const t = s.replace(/\s+/g, ' ').trim();
+    if (t.length <= 260) return t;
+    const cut = t.slice(0, 260);
+    const dot = cut.lastIndexOf('. ');
+    return dot > 120 ? cut.slice(0, dot + 1) : `${cut.replace(/\s+\S*$/, '')} …`;
+  }
+  function addProduct(d: ExtractedProduct): boolean {
+    let added = false;
+    mutate((q) => {
+      if (q.some((i) => i.url === d.url && i.status !== 'ikelta')) return;
+      const currency = d.currency || 'EUR';
+      q.unshift({
+        id: Math.random().toString(36).slice(2, 10),
+        url: d.url,
+        site: d.site,
+        title: d.title,
+        category: settings.category,
+        cost: d.price,
+        currency,
+        price: salePrice(d.price, currency),
+        manualPrice: false,
+        description: shortText(d.description || d.title),
+        body: d.description,
+        images: d.images.map((url, i) => ({ url, on: i < MAX_IMAGES })),
+        specs: d.specs,
+        brand: d.brand,
+        sku: d.sku,
+        selected: true,
+        publish: settings.publish,
+        status: 'laukia',
+        message: '',
+        link: '',
+      });
+      added = true;
+    });
+    return added;
+  }
+
+  // Iš naršyklės mygtuko: #preke=<JSON>
+  function readHash() {
+    if (!location.hash.startsWith('#preke=')) return;
+    try {
+      const d = JSON.parse(decodeURIComponent(location.hash.slice(7))) as ExtractedProduct;
+      history.replaceState(null, '', location.pathname);
+      const ok = addProduct(d);
+      toast(ok ? `✓ Pridėta: ${d.title.slice(0, 60)}. Sąraše: ${loadQueue().filter((i) => i.status !== 'ikelta').length}` : 'Ši prekė jau yra sąraše.');
+    } catch {
+      toast('Nepavyko perskaityti prekės duomenų.');
+    }
+  }
+
+  // ---------- Atvaizdavimas
+  const statusBadge = (i: Item) =>
+    ({
+      laukia: '',
+      keliama: '<span class="rounded-full bg-soft px-2.5 py-0.5 text-xs font-bold text-link">Keliama…</span>',
+      ikelta: '<span class="rounded-full bg-[#128c4a]/15 px-2.5 py-0.5 text-xs font-bold text-[#128c4a] dark:text-[#4ade80]">✓ Įkelta</span>',
+      klaida: '<span class="rounded-full bg-red-500/15 px-2.5 py-0.5 text-xs font-bold text-red-600 dark:text-red-400">Klaida</span>',
+    })[i.status];
+
+  const F = 'mt-1 block w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-text focus:border-primary focus:outline-none';
+
+  function card(i: Item): string {
+    const on = i.images.filter((x) => x.on).length;
+    const done = i.status === 'ikelta';
+    const eurNote = i.currency !== 'EUR' ? `<p class="mt-1 text-xs font-semibold text-red-600 dark:text-red-400">Tiekėjo kaina ne eurais – įrašykite pardavimo kainą rankiniu būdu.</p>` : '';
+    return `<article class="card overflow-hidden ${done ? 'opacity-70' : ''}" data-id="${esc(i.id)}">
+      <header class="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
+        <label class="flex items-center gap-2 text-sm font-bold"><input type="checkbox" data-f="selected" ${i.selected ? 'checked' : ''} ${done ? 'disabled' : ''} class="size-4 accent-[var(--c-primary)]"> Įkelti</label>
+        <span class="rounded-full bg-soft px-2.5 py-0.5 text-xs font-bold text-muted">${esc(i.site)}</span>
+        ${statusBadge(i)}
+        ${i.message ? `<span class="text-xs ${i.status === 'klaida' ? 'text-red-600 dark:text-red-400' : 'text-muted'}">${esc(i.message)}</span>` : ''}
+        ${i.link ? `<a href="${esc(i.link)}" target="_blank" class="text-xs font-semibold text-link underline">Žiūrėti parduotuvėje ↗ (po ~2–3 min.)</a>` : ''}
+        <span class="ml-auto flex gap-3 text-xs">
+          <a href="${esc(i.url)}" target="_blank" rel="noopener noreferrer" class="font-semibold text-link underline">Tiekėjo puslapis ↗</a>
+          <button type="button" data-act="remove" class="font-semibold text-muted underline hover:text-red-600">Pašalinti</button>
+        </span>
+      </header>
+      <div class="grid gap-5 p-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+        <div>
+          <p class="mb-2 text-xs text-muted">Nuotraukos: pažymėta ${on} iš ${i.images.length} (iki ${MAX_IMAGES}; pirma – pagrindinė). Spauskite, kad pažymėtumėte.</p>
+          <div class="grid grid-cols-4 gap-2">
+            ${i.images
+              .map(
+                (im, n) => `<button type="button" data-act="img" data-n="${n}" class="relative aspect-square overflow-hidden rounded-lg border-2 ${im.on ? 'border-primary' : 'border-transparent opacity-40'}">
+                  <img src="${esc(im.url)}" alt="" loading="lazy" referrerpolicy="no-referrer" class="size-full object-cover">
+                  ${im.on ? '<span class="absolute top-1 right-1 grid size-5 place-items-center rounded-full bg-primary text-[0.65rem] font-bold text-on-primary">✓</span>' : ''}
+                </button>`,
+              )
+              .join('') || '<p class="col-span-4 text-sm text-red-600">Nuotraukų nerasta – šios prekės įkelti nepavyks.</p>'}
+          </div>
+        </div>
+        <div class="grid gap-3">
+          <label class="text-xs font-bold">Pavadinimas (rodomas parduotuvėje)
+            <input data-f="title" value="${esc(i.title)}" maxlength="100" class="${F}">
+          </label>
+          <div class="grid gap-3 sm:grid-cols-4">
+            <label class="text-xs font-bold">Kategorija
+              <select data-f="category" class="${F}">
+                <option value="irankiai" ${i.category === 'irankiai' ? 'selected' : ''}>Įrankiai</option>
+                <option value="pleveles" ${i.category === 'pleveles' ? 'selected' : ''}>Plėvelės</option>
+              </select>
+            </label>
+            <label class="text-xs font-bold">Tiekėjo kaina
+              <input data-f="cost" type="number" min="0" step="0.01" value="${i.cost ?? ''}" class="${F}">
+            </label>
+            <label class="text-xs font-bold">Valiuta
+              <select data-f="currency" class="${F}">${['EUR', 'USD', 'GBP', 'PLN', 'CNY'].map((c) => `<option ${i.currency === c ? 'selected' : ''}>${c}</option>`).join('')}</select>
+            </label>
+            <label class="text-xs font-bold">Jūsų kaina, €
+              <input data-f="price" type="number" min="0" step="0.01" value="${i.price ?? ''}" class="${F} !font-extrabold !text-link">
+            </label>
+          </div>
+          ${eurNote}
+          <label class="text-xs font-bold">Trumpas aprašymas (kortelėje ir Google paieškoje)
+            <textarea data-f="description" rows="2" maxlength="320" class="${F}">${esc(i.description)}</textarea>
+          </label>
+          <details>
+            <summary class="cursor-pointer text-xs font-bold text-link">Išsamus aprašymas ir savybės (${i.specs.length})</summary>
+            <textarea data-f="body" rows="6" class="${F}">${esc(i.body)}</textarea>
+            ${i.specs.length ? `<ul class="mt-2 grid gap-1 text-xs text-muted">${i.specs.map((s) => `<li><b class="text-text">${esc(s.label)}:</b> ${esc(s.value)}</li>`).join('')}</ul>` : ''}
+          </details>
+          <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" data-f="publish" ${i.publish ? 'checked' : ''} class="size-4 accent-[var(--c-primary)]"> Paskelbti iškart (kitaip – juodraštis, matomas tik /admin)</label>
+        </div>
+      </div>
+    </article>`;
+  }
+
+  function updateBar() {
+    const q = loadQueue();
+    const todo = q.filter((i) => i.selected && i.status !== 'ikelta');
+    $('.queue-count').textContent = q.length ? `(${q.length})` : '';
+    $('.action-bar').hidden = q.length === 0;
+    const btn = $<HTMLButtonElement>('.upload-btn');
+    btn.textContent = todo.length ? `Įkelti į parduotuvę (${todo.length})` : 'Nėra ką įkelti';
+    btn.disabled = !todo.length || uploading || !token;
+    if (!uploading) $('.upload-status').textContent = token ? '' : 'Prisijunkite (1 žingsnis), kad galėtumėte įkelti.';
+  }
+
+  function render() {
+    const q = loadQueue();
+    $('.queue-empty').hidden = q.length > 0;
+    $('.queue').innerHTML = q.map(card).join('');
+    updateBar();
+  }
+
+  // ---------- Redagavimas (vienas klausytojas visam sąrašui)
+  const itemOf = (el: Element) => el.closest<HTMLElement>('[data-id]')?.dataset.id ?? '';
+  $('.queue').addEventListener('input', (e) => {
+    const el = e.target as HTMLInputElement;
+    const f = el.dataset.f;
+    const id = itemOf(el);
+    if (!f || !id || f === 'selected' || f === 'publish') return;
+    mutate((q) => {
+      const it = q.find((x) => x.id === id);
+      if (!it) return;
+      if (f === 'cost') it.cost = el.value === '' ? null : Number(el.value);
+      else if (f === 'price') {
+        it.price = el.value === '' ? null : Number(el.value);
+        it.manualPrice = true;
+      } else if (f === 'title' || f === 'description' || f === 'body') it[f] = el.value;
+      else if (f === 'category') it.category = el.value as Category;
+      else if (f === 'currency') it.currency = el.value;
+      if ((f === 'cost' || f === 'currency') && !it.manualPrice) {
+        it.price = salePrice(it.cost, it.currency);
+        const priceInput = el.closest('[data-id]')?.querySelector<HTMLInputElement>('[data-f="price"]');
+        if (priceInput) priceInput.value = it.price === null ? '' : String(it.price);
+      }
+    }, false);
+  });
+  $('.queue').addEventListener('change', (e) => {
+    const el = e.target as HTMLInputElement;
+    const f = el.dataset.f;
+    const id = itemOf(el);
+    if (!id || (f !== 'selected' && f !== 'publish' && f !== 'currency' && f !== 'category')) return;
+    mutate((q) => {
+      const it = q.find((x) => x.id === id);
+      if (!it) return;
+      if (f === 'selected' || f === 'publish') it[f] = el.checked;
+    }, f === 'currency');
+  });
+  $('.queue').addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-act]');
+    const id = btn ? itemOf(btn) : '';
+    if (!btn || !id) return;
+    if (btn.dataset.act === 'remove')
+      mutate((q) => {
+        const idx = q.findIndex((x) => x.id === id);
+        if (idx >= 0) q.splice(idx, 1);
+      });
+    if (btn.dataset.act === 'img') {
+      mutate((q) => {
+        const it = q.find((x) => x.id === id);
+        const im = it?.images[Number(btn.dataset.n)];
+        if (!it || !im) return;
+        if (!im.on && it.images.filter((x) => x.on).length >= MAX_IMAGES) return toast(`Daugiausia ${MAX_IMAGES} nuotraukos.`);
+        im.on = !im.on;
+      });
+    }
+  });
+  $('.clear-done').addEventListener('click', () => mutate((q) => q.splice(0, q.length, ...q.filter((i) => i.status !== 'ikelta'))));
+  $('.clear-all').addEventListener('click', () => {
+    if (confirm('Išvalyti visą sąrašą? Į parduotuvę jau įkeltos prekės liks.')) mutate((q) => q.splice(0, q.length));
+  });
+  window.addEventListener('storage', (e) => e.key === QKEY && render());
+  window.addEventListener('hashchange', readHash);
+
+  // ---------- Antkainio nustatymai
+  const pct = $<HTMLInputElement>('.set-pct');
+  const fixed = $<HTMLInputElement>('.set-fixed');
+  const round = $<HTMLInputElement>('.set-round');
+  const cat = $<HTMLSelectElement>('.set-category');
+  const pub = $<HTMLInputElement>('.set-publish');
+  pct.value = String(settings.pct);
+  fixed.value = String(settings.fixed);
+  round.checked = settings.round;
+  cat.value = settings.category;
+  pub.checked = settings.publish;
+  const saveSettings = () => {
+    settings.pct = Math.max(0, Number(pct.value) || 0);
+    settings.fixed = Math.max(0, Number(fixed.value) || 0);
+    settings.round = round.checked;
+    settings.category = cat.value as Category;
+    settings.publish = pub.checked;
+    store.set(SKEY, settings);
+    priceExample();
+  };
+  [pct, fixed, round, cat, pub].forEach((el) => el.addEventListener('change', saveSettings));
+  $('.reprice-btn').addEventListener('click', () => {
+    saveSettings();
+    mutate((q) =>
+      q.forEach((i) => {
+        if (i.status === 'ikelta') return;
+        i.manualPrice = false;
+        i.price = salePrice(i.cost, i.currency);
+      }),
+    );
+    toast('Kainos perskaičiuotos pagal antkainį.');
+  });
+  priceExample();
+
+  // ---------- Prisijungimas (GitHub)
+  let token = '';
+  function sveltiaToken(): string {
+    try {
+      return JSON.parse(localStorage.getItem('sveltia-cms.user') || 'null')?.token || '';
+    } catch {
+      return '';
+    }
+  }
+  async function verify(t: string): Promise<string | null> {
+    const h = { Authorization: `Bearer ${t}`, Accept: 'application/vnd.github+json' };
+    const r = await fetch(`https://api.github.com/repos/${REPO}`, { headers: h }).catch(() => null);
+    if (!r?.ok) return null;
+    const repo = await r.json();
+    if (!repo.permissions?.push) return null;
+    const u = await fetch('https://api.github.com/user', { headers: h })
+      .then((x) => x.json())
+      .catch(() => ({}));
+    return u.login || 'GitHub';
+  }
+  async function useToken(t: string, remember: boolean) {
+    const who = t ? await verify(t) : null;
+    if (who) {
+      token = t;
+      if (remember) store.set(TKEY, t);
+      $('.login-status').textContent = `✓ Prisijungta kaip ${who}. Galite įkelti prekes.`;
+      $('.login-btn').hidden = true;
+      $('.logout-btn').hidden = false;
+      $('.token-box').hidden = true;
+    } else {
+      token = '';
+      $('.login-status').textContent = 'Prisijunkite su savo GitHub paskyra – ta pačia, su kuria valdoma svetainė.';
+      $('.login-btn').hidden = false;
+      $('.logout-btn').hidden = true;
+      $('.token-box').hidden = false;
+    }
+    updateBar();
+  }
+  function githubLogin(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const w = window.open(`/api/auth?provider=github&scope=repo&site_id=${location.hostname}`, 'gh-prisijungimas', 'width=640,height=760');
+      if (!w) return reject(new Error('Naršyklė užblokavo prisijungimo langą – leiskite iššokančius langus.'));
+      const onMsg = (e: MessageEvent) => {
+        if (e.origin !== location.origin || typeof e.data !== 'string') return;
+        if (e.data === 'authorizing:github') {
+          (e.source as Window | null)?.postMessage(e.data, e.origin);
+          return;
+        }
+        const m = e.data.match(/^authorization:github:(success|error):([\s\S]*)$/);
+        if (!m) return;
+        window.removeEventListener('message', onMsg);
+        const payload = JSON.parse(m[2]!);
+        if (m[1] === 'success' && payload.token) resolve(payload.token);
+        else reject(new Error(payload.error || 'Nepavyko prisijungti.'));
+      };
+      window.addEventListener('message', onMsg);
+    });
+  }
+  $('.login-btn').addEventListener('click', async () => {
+    try {
+      await useToken(await githubLogin(), true);
+    } catch (err) {
+      toast((err as Error).message);
+    }
+  });
+  $('.logout-btn').addEventListener('click', () => {
+    try {
+      localStorage.removeItem(TKEY);
+    } catch {
+      /* nebūtina */
+    }
+    useToken('', false);
+  });
+  $('.token-save').addEventListener('click', async () => {
+    const t = $<HTMLInputElement>('.token-input').value.trim();
+    await useToken(t, true);
+    if (!token) toast('Raktas netinka: jis neteisingas arba neturi teisės keisti svetainės.');
+  });
+
+  // ---------- Nuorodų nuskaitymas
+  $('.links-btn').addEventListener('click', async () => {
+    const status = $('.links-status');
+    if (!token) return toast('Pirmiausia prisijunkite.');
+    const links = $<HTMLTextAreaElement>('.links-input')
+      .value.split(/\s+/)
+      .map((s) => s.trim())
+      .filter((s) => /^https?:\/\//.test(s));
+    if (!links.length) return (status.textContent = 'Įklijuokite bent vieną nuorodą (https://…).');
+    const failed: string[] = [];
+    let ok = 0;
+    for (const [n, url] of links.entries()) {
+      status.textContent = `Nuskaitoma ${n + 1} iš ${links.length}…`;
+      try {
+        const r = await fetch('/api/importas/puslapis', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ url }),
+        });
+        const d = await r.json();
+        if (!d.ok) throw new Error(d.error);
+        const doc = new DOMParser().parseFromString(d.html, 'text/html');
+        const p = extractProduct(doc, d.url || url, false);
+        if (!p.title || !p.images.length) throw new Error('Prekė neatpažinta');
+        addProduct(p);
+        ok++;
+      } catch {
+        failed.push(url);
+      }
+    }
+    $<HTMLTextAreaElement>('.links-input').value = failed.join('\n');
+    status.textContent = failed.length
+      ? `Pridėta: ${ok}. Nepavyko: ${failed.length} (liko laukelyje) – atidarykite jas naršyklėje ir spauskite mygtuką „➕ Į mano parduotuvę“.`
+      : `Pridėta: ${ok}.`;
+  });
+
+  // ---------- Įkėlimas
+  let uploading = false;
+  $('.upload-btn').addEventListener('click', async () => {
+    if (!token) return toast('Pirmiausia prisijunkite.');
+    const todo = loadQueue().filter((i) => i.selected && i.status !== 'ikelta');
+    uploading = true;
+    updateBar();
+    let okCount = 0;
+    let lastSkipped = false;
+    for (const [n, item] of todo.entries()) {
+      $('.upload-status').textContent = `Keliama ${n + 1} iš ${todo.length}: ${item.title.slice(0, 50)}…`;
+      const it = loadQueue().find((x) => x.id === item.id);
+      if (!it) continue;
+      const images = it.images.filter((x) => x.on).map((x) => x.url);
+      const problem = !images.length ? 'Pažymėkite bent vieną nuotrauką.' : !(Number(it.price) > 0) ? 'Įrašykite jūsų kainą.' : it.title.trim().length < 3 ? 'Įrašykite pavadinimą.' : '';
+      if (problem) {
+        mutate((q) => Object.assign(q.find((x) => x.id === it.id) ?? {}, { status: 'klaida', message: problem }));
+        continue;
+      }
+      mutate((q) => Object.assign(q.find((x) => x.id === it.id) ?? {}, { status: 'keliama', message: '' }));
+      const skipBuild = n < todo.length - 1;
+      let d: { ok?: boolean; error?: string; url?: string; skippedImages?: number } = {};
+      try {
+        const r = await fetch('/api/importas/issaugoti', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            skipBuild,
+            product: {
+              title: it.title,
+              category: it.category,
+              price: it.price,
+              description: it.description,
+              body: it.body,
+              images,
+              specs: it.specs,
+              brand: it.brand,
+              sku: it.sku,
+              source: it.url,
+              sourcePrice: it.cost,
+              sourceCurrency: it.currency,
+              draft: !it.publish,
+            },
+          }),
+        });
+        d = await r.json();
+        if (r.status === 401) useToken('', false);
+      } catch {
+        d = { ok: false, error: 'Ryšio klaida – bandykite dar kartą.' };
+      }
+      if (d.ok) {
+        okCount++;
+        lastSkipped = skipBuild;
+        mutate((q) =>
+          Object.assign(q.find((x) => x.id === it.id) ?? {}, {
+            status: 'ikelta',
+            link: d.url ?? '',
+            message: d.skippedImages ? `${d.skippedImages} nuotr. nepavyko atsisiųsti` : '',
+            selected: false,
+          }),
+        );
+      } else {
+        lastSkipped = true;
+        mutate((q) => Object.assign(q.find((x) => x.id === it.id) ?? {}, { status: 'klaida', message: d.error || 'Nepavyko' }));
+      }
+    }
+    // Jei paskutinė prekė nepavyko – svetainė dar neatnaujinta, todėl paprašome atnaujinti
+    if (okCount && lastSkipped) {
+      await fetch('/api/importas/issaugoti', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ rebuild: true }),
+      }).catch(() => {});
+    }
+    uploading = false;
+    updateBar();
+    $('.upload-status').textContent = okCount
+      ? `Įkelta prekių: ${okCount}. Parduotuvėje jos atsiras po ~2–3 minučių.`
+      : 'Nepavyko įkelti – žr. klaidas prie prekių.';
+  });
+
+  // Mygtuką reikia tempti, ne spausti
+  $('.bookmarklet').addEventListener('click', (e) => {
+    e.preventDefault();
+    $('.bookmarklet-note').classList.remove('hidden');
+  });
+
+  // ---------- Paleidimas
+  function savedToken(): string {
+    try {
+      const raw = localStorage.getItem(TKEY) ?? '';
+      return raw.startsWith('"') ? (JSON.parse(raw) as string) : raw;
+    } catch {
+      return '';
+    }
+  }
+  render();
+  readHash();
+  useToken(savedToken() || sveltiaToken(), false);
+</script>

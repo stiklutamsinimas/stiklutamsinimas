@@ -1,11 +1,14 @@
 # Sveltia CMS nustatymai – straipsnių ir parduotuvės prekių redagavimas per naršyklę: https://stiklutamsinimas.eu/admin
-# Prisijungimas: „Sign In Using Access Token“ + GitHub raktas (žr. README.md → „Naujo straipsnio rašymas“).
+# Prisijungimas: mygtukas „Sign In with GitHub“ (žr. docs/admin-prisijungimas.md). Atsarginis būdas – „Sign In Using Access Token“.
 # Išsaugojus straipsnį, jis įrašomas į GitHub, o Cloudflare per ~2 min. atnaujina svetainę.
 
 backend:
   name: github
   repo: stiklutamsinimas/stiklutamsinimas
   branch: main
+  # Prisijungimas su GitHub per šios svetainės /api/auth (functions/api/auth.ts, callback.ts)
+  base_url: https://stiklutamsinimas.eu
+  auth_endpoint: api/auth
   commit_messages:
     create: 'Naujas įrašas ({{collection}}): {{slug}}'
     update: 'Atnaujinta ({{collection}}): {{slug}}'
@@ -99,7 +102,7 @@ collections:
   - name: produktai
     label: 'Parduotuvė – prekės'
     label_singular: 'Prekė'
-    description: 'Prekės adresas sudaromas iš pavadinimo (pvz. /parduotuve/pleveles/saules-kontroles-plevele). Pažymėjus „Juodraštis“ prekė svetainėje nerodoma. Parduotuvė meniu atsiranda, kai paskelbiama bent viena prekė.'
+    description: 'Prekės adresas sudaromas iš pavadinimo (pvz. /parduotuve/pleveles/saules-kontroles-plevele). Pažymėjus „Juodraštis“ prekė svetainėje nerodoma. Prekes iš AliExpress, Alibaba, Temu, eBay ir Amazon greičiausia kelti per stiklutamsinimas.eu/admin/importas'
     folder: src/content/produktai
     # Nuotraukų kelias – santykinis (../../assets/produktai/...), kad Astro jas optimizuotų
     media_folder: ../../assets/produktai
@@ -209,6 +212,13 @@ collections:
         default: 100
         hint: 'Mažesnis skaičius – rodoma pirmiau.'
       - { label: 'Juodraštis (nerodoma svetainėje)', name: draft, widget: boolean, default: false }
+      - label: 'Tiekėjo nuoroda (nerodoma pirkėjams)'
+        name: source
+        widget: string
+        required: false
+        hint: 'Kur užsakyti prekę, kai ją nuperka klientas (AliExpress, Temu ir pan.).'
+      - { label: 'Tiekėjo kaina (nerodoma pirkėjams)', name: sourcePrice, widget: number, value_type: float, min: 0, step: 0.01, required: false }
+      - { label: 'Tiekėjo kainos valiuta', name: sourceCurrency, widget: string, required: false, hint: 'Pvz. EUR, USD' }
       - label: 'Išsamus aprašymas'
         name: body
         widget: markdown

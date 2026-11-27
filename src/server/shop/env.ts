@@ -21,6 +21,9 @@ export interface Env {
   /** Stripe: slaptas raktas (sk_live_… / sk_test_…) ir webhook parašo raktas (whsec_…) */
   STRIPE_SECRET_KEY?: string;
   STRIPE_WEBHOOK_SECRET?: string;
+  /** Prisijungimas prie /admin su GitHub (GitHub → Settings → Developer settings → OAuth Apps). Žr. docs/admin-prisijungimas.md */
+  GITHUB_CLIENT_ID?: string;
+  GITHUB_CLIENT_SECRET?: string;
 }
 
 export interface Ctx {
