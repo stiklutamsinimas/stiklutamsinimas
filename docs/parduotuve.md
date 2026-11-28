@@ -32,6 +32,7 @@ Meniu nuoroda „Parduotuvė“ ir krepšelio ženkliukas atsiranda **automatiš
 - [ ] **Banko rekvizitai** (gavėjas, IBAN) – tada pirkėjas, pasirinkęs pavedimą, rekvizitus pamatys iškart. Jei tuščia – rašoma, kad sąskaitą atsiųsite el. paštu.
 - [ ] Peržiūrėkite **/pirkimo-taisykles** (grąžinimas, pristatymas) – jei reikia ką pakeisti, parašykite.
 - [ ] Nemokamas pristatymas nuo tam tikros sumos – jei norite (0 – išjungta).
+- [ ] **Pristatymas iš tiekėjo** (dropshipping prekėms) – pavadinimas, kaina ir terminas. Kai krepšelyje yra tiekėjo prekė, pirkėjui siūlomas tik šis būdas (į namų adresą). Numatyta: nemokamai, „Pristatymas per 10–20 darbo dienų“.
 
 ## 3. Kaip ateina užsakymai
 

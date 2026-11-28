@@ -89,8 +89,17 @@ const bankText = shopSettings.bank.iban ? 'Rekvizitus pamatysite iškart po užs
           <legend class="float-left mb-1 text-lg font-extrabold text-text">Pristatymas</legend>
           {
             deliveryOptions.map((d, i) => (
-              <label class={radio}>
-                <input type="radio" name="delivery" value={d.id} data-type={d.type} data-price={d.price} checked={i === 0} class="mt-1 accent-[var(--c-primary)]" />
+              <label class={radio} hidden={d.dropship}>
+                <input
+                  type="radio"
+                  name="delivery"
+                  value={d.id}
+                  data-type={d.type}
+                  data-price={d.price}
+                  checked={i === 0}
+                  disabled={d.dropship}
+                  class="mt-1 accent-[var(--c-primary)]"
+                />
                 <span class="flex-1">
                   <span class="flex justify-between gap-3 font-semibold text-text">
                     {d.name}
@@ -215,7 +224,20 @@ const bankText = shopSettings.bank.iban ? 'Rekvizitus pamatysite iškart po užs
 
 <script>
   import { clearCart, loadCatalog, readCart, setQty, CART_EVENT } from '@/scripts/cart';
-  import { allowedPayments, lineKey, money, newOrderNo, orderText, priceOrder, type Catalog, type Customer, type OrderRequest, type PaymentMethod } from '@/lib/shop-core';
+  import {
+    allowedPayments,
+    availableDeliveries,
+    lineKey,
+    money,
+    newOrderNo,
+    orderText,
+    priceOrder,
+    type Catalog,
+    type CartLine,
+    type Customer,
+    type OrderRequest,
+    type PaymentMethod,
+  } from '@/lib/shop-core';
 
   const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector<T>(s);
   const cfg = $('[data-shop-config]')!.dataset;
@@ -244,6 +266,7 @@ const bankText = shopSettings.bank.iban ? 'Rekvizitus pamatysite iškart po užs
     $('.cart-empty')!.hidden = valid.length > 0;
     $('.cart-full')!.hidden = valid.length === 0;
     if (!valid.length) return;
+    showDeliveries(valid);
 
     $('.cart-lines')!.innerHTML = valid
       .map((l) => {
@@ -270,6 +293,23 @@ const bankText = shopSettings.bank.iban ? 'Rekvizitus pamatysite iškart po užs
       })
       .join('');
     updateSummary();
+  }
+
+  /** Tiekėjo (dropshipping) prekėms – tik pristatymas iš tiekėjo; kitoms – įprasti būdai */
+  function showDeliveries(lines: CartLine[]) {
+    const allowed = availableDeliveries(catalog!, lines);
+    const radios = [...form.querySelectorAll<HTMLInputElement>('input[name="delivery"]')];
+    radios.forEach((r) => {
+      const ok = allowed.some((d) => d.id === r.value);
+      r.disabled = !ok;
+      const lbl = r.closest('label');
+      if (lbl) lbl.hidden = !ok;
+      if (!ok) r.checked = false;
+    });
+    if (!radios.some((r) => r.checked)) {
+      const first = radios.find((r) => !r.disabled);
+      if (first) first.checked = true;
+    }
   }
 
   function updateSummary() {

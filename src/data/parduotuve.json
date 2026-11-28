@@ -6,6 +6,11 @@
     { "name": "Į paštomatą (LP Express, Omniva, DPD)", "type": "pastomatas", "price": 3.5, "note": "Išsiunčiame per 1–2 darbo dienas." },
     { "name": "Kurjeriu į namus ar biurą", "type": "kurjeris", "price": 5.9, "note": "Išsiunčiame per 1–2 darbo dienas." }
   ],
+  "dropship": {
+    "name": "Pristatymas į namus iš tiekėjo sandėlio",
+    "price": 0,
+    "note": "Pristatymas per 10–20 darbo dienų."
+  },
   "freeShippingFrom": 0,
   "payOnPickup": true,
   "bank": { "receiver": "", "iban": "", "bank": "" },

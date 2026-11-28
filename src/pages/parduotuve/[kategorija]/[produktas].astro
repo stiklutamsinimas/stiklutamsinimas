@@ -7,7 +7,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/ui/Breadcrumbs.astro';
 import ProductCard from '@/components/shop/ProductCard.astro';
 import CartLink from '@/components/shop/CartLink.astro';
-import { categoryBySlug, categoryUrl, getProducts, priceRange, productUrl, shopUrl, type Product } from '@/lib/shop';
+import { categoryBySlug, categoryUrl, getProducts, isDropship, priceRange, productUrl, shopUrl, supplierDeliveryOption, type Product } from '@/lib/shop';
 import { money, toCents } from '@/lib/shop-core';
 import { breadcrumbSchema, ORG_ID } from '@/lib/schema';
 import { site, telHref } from '@/config/site';
@@ -42,6 +42,8 @@ const startPrice = firstAvailable?.price ?? d.price;
 const { min, max } = priceRange(p);
 const available = d.inStock && (variants.length === 0 || variants.some((v) => v.inStock));
 const related = all.filter((x) => x.data.category === d.category && x.id !== p.id).slice(0, 4);
+// Prekė siunčiama tiesiai iš tiekėjo – rodomas tikras pristatymo būdas ir terminas
+const fromSupplier = isDropship(p) && supplierDeliveryOption ? supplierDeliveryOption : null;
 
 const absolute = (path: string) => new URL(path, site.url).href;
 const availability = `https://schema.org/${available ? 'InStock' : 'OutOfStock'}`;
@@ -194,8 +196,22 @@ const productSchema = {
         </form>
 
         <ul class="mt-8 grid gap-3 border-t border-border pt-6 text-sm text-muted">
-          <li class="flex items-center gap-3"><Truck size={18} class="text-link" aria-hidden="true" /> Pristatymas į paštomatą arba kurjeriu visoje Lietuvoje</li>
-          <li class="flex items-center gap-3"><Store size={18} class="text-link" aria-hidden="true" /> Nemokamas atsiėmimas Kupiškyje, Rokiškyje ir Panevėžyje</li>
+          {
+            fromSupplier ? (
+              <li class="flex items-start gap-3">
+                <Truck size={18} class="mt-0.5 shrink-0 text-link" aria-hidden="true" />
+                <span>
+                  {fromSupplier.name}
+                  {fromSupplier.price ? ` – ${money(fromSupplier.price)}` : ' – nemokamai'}.{fromSupplier.note && ` ${fromSupplier.note}`}
+                </span>
+              </li>
+            ) : (
+              <>
+                <li class="flex items-center gap-3"><Truck size={18} class="text-link" aria-hidden="true" /> Pristatymas į paštomatą arba kurjeriu visoje Lietuvoje</li>
+                <li class="flex items-center gap-3"><Store size={18} class="text-link" aria-hidden="true" /> Nemokamas atsiėmimas Kupiškyje, Rokiškyje ir Panevėžyje</li>
+              </>
+            )
+          }
           <li class="flex items-center gap-3">
             <Phone size={18} class="text-link" aria-hidden="true" /> Klausimų? <a href={telHref} class="font-semibold text-link">{site.phoneDisplay}</a>
           </li>
