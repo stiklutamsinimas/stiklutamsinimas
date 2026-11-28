@@ -51,13 +51,36 @@ export function priceRange(p: Product): { min: number; max: number } {
   return { min: Math.min(...prices), max: Math.max(...prices) };
 }
 
-export const deliveryOptions: DeliveryOption[] = settings.delivery.map((d) => ({
-  id: slugify(d.name),
-  name: d.name,
-  type: d.type as DeliveryType,
-  price: toCents(d.price),
-  note: d.note || undefined,
-}));
+/** Ar prekė siunčiama tiesiai iš tiekėjo (dropshipping). Nenustatyta – taip, jei įrašyta tiekėjo nuoroda */
+export const isDropship = (p: Product) => p.data.dropship ?? Boolean(p.data.source);
+
+const supplierDelivery = (settings as { dropship?: { name?: string; price?: number; note?: string } }).dropship;
+
+export const deliveryOptions: DeliveryOption[] = [
+  ...settings.delivery.map((d) => ({
+    id: slugify(d.name),
+    name: d.name,
+    type: d.type as DeliveryType,
+    price: toCents(d.price),
+    note: d.note || undefined,
+  })),
+  // Pristatymas iš tiekėjo sandėlio (dropshipping prekėms) – visada į namų adresą
+  ...(supplierDelivery?.name?.trim()
+    ? [
+        {
+          id: `tiekejas-${slugify(supplierDelivery.name)}`,
+          name: supplierDelivery.name.trim(),
+          type: 'kurjeris' as DeliveryType,
+          price: toCents(Number(supplierDelivery.price) || 0),
+          note: supplierDelivery.note?.trim() || undefined,
+          dropship: true,
+        },
+      ]
+    : []),
+];
+
+/** Pristatymas iš tiekėjo (jei nustatytas) – rodomas tiekėjo prekių puslapiuose */
+export const supplierDeliveryOption = deliveryOptions.find((d) => d.dropship);
 
 export const shopSettings = settings;
 
@@ -78,6 +101,7 @@ export async function buildCatalog(): Promise<Catalog> {
         minQty: p.data.minQty,
         inStock: p.data.inStock,
         variants: p.data.variants.map((v) => ({ name: v.name, price: toCents(v.price ?? p.data.price), inStock: v.inStock })),
+        ...(isDropship(p) && { dropship: true }),
       };
     }),
   );

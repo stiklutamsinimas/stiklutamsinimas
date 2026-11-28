@@ -217,6 +217,11 @@ collections:
         widget: string
         required: false
         hint: 'Kur užsakyti prekę, kai ją nuperka klientas (AliExpress, Temu ir pan.).'
+      - label: 'Siunčiama tiesiai iš tiekėjo (dropshipping)'
+        name: dropship
+        widget: boolean
+        required: false
+        hint: 'Įjungta – krepšelyje šiai prekei siūlomas tik pristatymas iš tiekėjo (žr. Nustatymai → Parduotuvė → „Pristatymas iš tiekėjo“). Jei laukas nenustatytas – įjungta, kai įrašyta tiekėjo nuoroda.'
       - { label: 'Tiekėjo kaina (nerodoma pirkėjams)', name: sourcePrice, widget: number, value_type: float, min: 0, step: 0.01, required: false }
       - { label: 'Tiekėjo kainos valiuta', name: sourceCurrency, widget: string, required: false, hint: 'Pvz. EUR, USD' }
       - label: 'Išsamus aprašymas'
@@ -281,6 +286,14 @@ collections:
                   - { label: 'Kurjeris į adresą', value: kurjeris }
               - { label: 'Kaina, €', name: price, widget: number, value_type: float, min: 0, step: 0.01, default: 0 }
               - { label: 'Pastaba (nebūtina)', name: note, widget: string, required: false }
+          - label: 'Pristatymas iš tiekėjo (dropshipping prekėms)'
+            name: dropship
+            widget: object
+            hint: 'Kai krepšelyje yra prekė, siunčiama tiesiai iš tiekėjo (AliExpress ir pan.), pirkėjui siūlomas tik šis pristatymo būdas – į namų adresą. Nurodykite tikrą terminą.'
+            fields:
+              - { label: 'Pavadinimas', name: name, widget: string, default: 'Pristatymas į namus iš tiekėjo sandėlio' }
+              - { label: 'Kaina, €', name: price, widget: number, value_type: float, min: 0, step: 0.01, default: 0 }
+              - { label: 'Pristatymo terminas / pastaba', name: note, widget: string, default: 'Pristatymas per 10–20 darbo dienų.' }
           - label: 'Nemokamas pristatymas nuo, € (0 – išjungta)'
             name: freeShippingFrom
             widget: number

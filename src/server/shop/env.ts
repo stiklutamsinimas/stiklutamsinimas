@@ -4,9 +4,12 @@
  * Raktai (API key, slaptažodžiai) – kaip „Secret“, ne paprastas tekstas. Žr. docs/parduotuve.md.
  */
 import type { Catalog, PaymentMethod } from '../../lib/shop-core.ts';
+import type { AiBinding } from './translate.ts';
 
 export interface Env {
   ASSETS?: { fetch: (input: Request | URL | string) => Promise<Response> };
+  /** Cloudflare Workers AI (Settings → Bindings → Workers AI, pavadinimas „AI“) – automatinis prekių vertimas į lietuvių kalbą */
+  AI?: AiBinding;
   /** El. laiškai (resend.com) – užsakymai jums ir patvirtinimai pirkėjams */
   RESEND_API_KEY?: string;
   /** Siuntėjas, pvz. „Stiklų tamsinimas <uzsakymai@stiklutamsinimas.eu>“ (domenas patvirtintas Resend) */

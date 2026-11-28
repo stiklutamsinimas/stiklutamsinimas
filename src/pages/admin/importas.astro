@@ -164,9 +164,12 @@ const field =
 
 <script>
   import { extractProduct, type ExtractedProduct } from '@/lib/import-extract';
+  import { looksLithuanian } from '@/lib/lt-text';
 
   // ---------- Būsena (saugoma šios naršyklės atmintyje; sinchronizuojama tarp kortelių)
   type Category = 'pleveles' | 'irankiai';
+  /** Vertimas į lietuvių kalbą: ne – dar neišversta, taip – lietuviškai, isjungta – vertimas neįjungtas serveryje */
+  type LtState = 'ne' | 'verciama' | 'taip' | 'klaida' | 'isjungta';
   interface Item {
     id: string;
     url: string;
@@ -188,6 +191,8 @@ const field =
     status: 'laukia' | 'keliama' | 'ikelta' | 'klaida';
     message: string;
     link: string;
+    lt?: LtState;
+    ltMsg?: string;
   }
   interface Settings {
     pct: number;
@@ -288,6 +293,8 @@ const field =
         status: 'laukia',
         message: '',
         link: '',
+        lt: looksLithuanian(`${d.title} ${d.description}`) ? 'taip' : 'ne',
+        ltMsg: '',
       });
       added = true;
     });
@@ -302,8 +309,67 @@ const field =
       history.replaceState(null, '', location.pathname);
       const ok = addProduct(d);
       toast(ok ? `✓ Pridėta: ${d.title.slice(0, 60)}. Sąraše: ${loadQueue().filter((i) => i.status !== 'ikelta').length}` : 'Ši prekė jau yra sąraše.');
+      translatePending();
     } catch {
       toast('Nepavyko perskaityti prekės duomenų.');
+    }
+  }
+
+  // ---------- Vertimas į lietuvių kalbą (functions/api/importas/versti.ts, Cloudflare Workers AI)
+  const inflight = new Map<string, Promise<void>>();
+  let aiDisabled = false;
+  function translateItem(id: string, force = false): Promise<void> {
+    const running = inflight.get(id);
+    if (running) return running;
+    const run = (async () => {
+      const it = loadQueue().find((x) => x.id === id);
+      if (!it || it.status === 'ikelta' || !token) return;
+      if (!force && it.lt !== 'ne') return;
+      mutate((q) => Object.assign(q.find((x) => x.id === id) ?? {}, { lt: 'verciama', ltMsg: '' }));
+      let d: { ok?: boolean; disabled?: boolean; error?: string; title?: string; description?: string; body?: string; specs?: Item['specs'] } = {};
+      try {
+        const r = await fetch('/api/importas/versti', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ title: it.title, description: it.description, body: it.body, specs: it.specs }),
+        });
+        d = r.headers.get('content-type')?.includes('json') ? await r.json() : { ok: false, error: 'Vertimas nepasiekiamas.' };
+        if (r.status === 401) useToken('', false);
+      } catch {
+        d = { ok: false, error: 'Ryšio klaida – vertimas nepavyko.' };
+      }
+      if (d.disabled) aiDisabled = true;
+      mutate((q) => {
+        const x = q.find((y) => y.id === id);
+        if (!x) return;
+        if (d.ok && d.title) {
+          Object.assign(x, {
+            title: d.title,
+            description: d.description || x.description,
+            body: d.body || x.body,
+            specs: Array.isArray(d.specs) ? d.specs : x.specs,
+            lt: 'taip',
+            ltMsg: '',
+          });
+        } else Object.assign(x, { lt: d.disabled ? 'isjungta' : 'klaida', ltMsg: d.error || 'Vertimas nepavyko.' });
+      });
+    })().finally(() => inflight.delete(id));
+    inflight.set(id, run);
+    return run;
+  }
+  /** Išverčia visas sąrašo prekes, kurios dar neišverstos (po vieną) */
+  let pumping = false;
+  async function translatePending() {
+    if (pumping || !token || aiDisabled) return;
+    pumping = true;
+    try {
+      for (;;) {
+        const next = loadQueue().find((i) => i.lt === 'ne' && i.status !== 'ikelta' && !inflight.has(i.id));
+        if (!next || !token || aiDisabled) break;
+        await translateItem(next.id);
+      }
+    } finally {
+      pumping = false;
     }
   }
 
@@ -316,20 +382,41 @@ const field =
       klaida: '<span class="rounded-full bg-red-500/15 px-2.5 py-0.5 text-xs font-bold text-red-600 dark:text-red-400">Klaida</span>',
     })[i.status];
 
+  const ltBadge = (i: Item) => {
+    if (i.status === 'ikelta') return '';
+    if (i.lt === 'verciama') return '<span class="rounded-full bg-soft px-2.5 py-0.5 text-xs font-bold text-link">Verčiama į lietuvių…</span>';
+    if (i.lt === 'taip') return '<span class="rounded-full bg-[#128c4a]/15 px-2.5 py-0.5 text-xs font-bold text-[#128c4a] dark:text-[#4ade80]">✓ Lietuviškai</span>';
+    if (i.lt === 'klaida' || i.lt === 'isjungta')
+      return `<span class="rounded-full bg-red-500/15 px-2.5 py-0.5 text-xs font-bold text-red-600 dark:text-red-400" title="${esc(i.ltMsg)}">Neišversta</span>`;
+    if (i.lt === 'ne') return '<span class="rounded-full bg-soft px-2.5 py-0.5 text-xs font-bold text-muted">Laukia vertimo</span>';
+    return '';
+  };
+
   const F = 'mt-1 block w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-text focus:border-primary focus:outline-none';
 
   function card(i: Item): string {
     const on = i.images.filter((x) => x.on).length;
     const done = i.status === 'ikelta';
+    const busy = i.lt === 'verciama' ? 'disabled' : '';
+    const ltNote =
+      !done && (i.lt === 'klaida' || i.lt === 'isjungta')
+        ? `<p class="text-xs font-semibold text-red-600 dark:text-red-400">${esc(i.ltMsg || 'Vertimas nepavyko.')} Galite spausti „Versti į lietuvių“ dar kartą arba pataisyti tekstą patys.</p>`
+        : '';
+    const ltBtn =
+      done || i.lt === 'verciama'
+        ? ''
+        : `<button type="button" data-act="translate" class="font-semibold text-link underline">${i.lt === 'taip' ? 'Versti iš naujo' : 'Versti į lietuvių'}</button>`;
     const eurNote = i.currency !== 'EUR' ? `<p class="mt-1 text-xs font-semibold text-red-600 dark:text-red-400">Tiekėjo kaina ne eurais – įrašykite pardavimo kainą rankiniu būdu.</p>` : '';
     return `<article class="card overflow-hidden ${done ? 'opacity-70' : ''}" data-id="${esc(i.id)}">
       <header class="flex flex-wrap items-center gap-3 border-b border-border px-4 py-3">
         <label class="flex items-center gap-2 text-sm font-bold"><input type="checkbox" data-f="selected" ${i.selected ? 'checked' : ''} ${done ? 'disabled' : ''} class="size-4 accent-[var(--c-primary)]"> Įkelti</label>
         <span class="rounded-full bg-soft px-2.5 py-0.5 text-xs font-bold text-muted">${esc(i.site)}</span>
         ${statusBadge(i)}
+        ${ltBadge(i)}
         ${i.message ? `<span class="text-xs ${i.status === 'klaida' ? 'text-red-600 dark:text-red-400' : 'text-muted'}">${esc(i.message)}</span>` : ''}
         ${i.link ? `<a href="${esc(i.link)}" target="_blank" class="text-xs font-semibold text-link underline">Žiūrėti parduotuvėje ↗ (po ~2–3 min.)</a>` : ''}
         <span class="ml-auto flex gap-3 text-xs">
+          ${ltBtn}
           <a href="${esc(i.url)}" target="_blank" rel="noopener noreferrer" class="font-semibold text-link underline">Tiekėjo puslapis ↗</a>
           <button type="button" data-act="remove" class="font-semibold text-muted underline hover:text-red-600">Pašalinti</button>
         </span>
@@ -349,8 +436,9 @@ const field =
           </div>
         </div>
         <div class="grid gap-3">
+          ${ltNote}
           <label class="text-xs font-bold">Pavadinimas (rodomas parduotuvėje)
-            <input data-f="title" value="${esc(i.title)}" maxlength="100" class="${F}">
+            <input data-f="title" value="${esc(i.title)}" maxlength="100" ${busy} class="${F}">
           </label>
           <div class="grid gap-3 sm:grid-cols-4">
             <label class="text-xs font-bold">Kategorija
@@ -371,11 +459,11 @@ const field =
           </div>
           ${eurNote}
           <label class="text-xs font-bold">Trumpas aprašymas (kortelėje ir Google paieškoje)
-            <textarea data-f="description" rows="2" maxlength="320" class="${F}">${esc(i.description)}</textarea>
+            <textarea data-f="description" rows="2" maxlength="320" ${busy} class="${F}">${esc(i.description)}</textarea>
           </label>
           <details>
             <summary class="cursor-pointer text-xs font-bold text-link">Išsamus aprašymas ir savybės (${i.specs.length})</summary>
-            <textarea data-f="body" rows="6" class="${F}">${esc(i.body)}</textarea>
+            <textarea data-f="body" rows="6" ${busy} class="${F}">${esc(i.body)}</textarea>
             ${i.specs.length ? `<ul class="mt-2 grid gap-1 text-xs text-muted">${i.specs.map((s) => `<li><b class="text-text">${esc(s.label)}:</b> ${esc(s.value)}</li>`).join('')}</ul>` : ''}
           </details>
           <label class="flex items-center gap-2 text-xs font-semibold"><input type="checkbox" data-f="publish" ${i.publish ? 'checked' : ''} class="size-4 accent-[var(--c-primary)]"> Paskelbti iškart (kitaip – juodraštis, matomas tik /admin)</label>
@@ -446,6 +534,13 @@ const field =
         const idx = q.findIndex((x) => x.id === id);
         if (idx >= 0) q.splice(idx, 1);
       });
+    if (btn.dataset.act === 'translate') {
+      if (!token) return toast('Pirmiausia prisijunkite.');
+      const it = loadQueue().find((x) => x.id === id);
+      if (it?.lt === 'taip' && !confirm('Išversti iš naujo? Jūsų pataisymai pavadinime ir aprašyme bus perrašyti.')) return;
+      aiDisabled = false;
+      translateItem(id, true);
+    }
     if (btn.dataset.act === 'img') {
       mutate((q) => {
         const it = q.find((x) => x.id === id);
@@ -526,6 +621,7 @@ const field =
       $('.login-btn').hidden = true;
       $('.logout-btn').hidden = false;
       $('.token-box').hidden = true;
+      translatePending();
     } else {
       token = '';
       $('.login-status').textContent = 'Prisijunkite su savo GitHub paskyra – ta pačia, su kuria valdoma svetainė.';
@@ -610,6 +706,7 @@ const field =
     status.textContent = failed.length
       ? `Pridėta: ${ok}. Nepavyko: ${failed.length} (liko laukelyje) – atidarykite jas naršyklėje ir spauskite mygtuką „➕ Į mano parduotuvę“.`
       : `Pridėta: ${ok}.`;
+    translatePending();
   });
 
   // ---------- Įkėlimas
@@ -622,9 +719,16 @@ const field =
     let okCount = 0;
     let lastSkipped = false;
     for (const [n, item] of todo.entries()) {
-      $('.upload-status').textContent = `Keliama ${n + 1} iš ${todo.length}: ${item.title.slice(0, 50)}…`;
+      // Pirmiausia – vertimas į lietuvių kalbą (jei dar neišversta)
+      const before = loadQueue().find((x) => x.id === item.id);
+      if (!before) continue;
+      if (inflight.has(before.id) || (before.lt === 'ne' && !aiDisabled)) {
+        $('.upload-status').textContent = `Verčiama į lietuvių ${n + 1} iš ${todo.length}: ${before.title.slice(0, 50)}…`;
+        await (inflight.get(before.id) ?? translateItem(before.id));
+      }
       const it = loadQueue().find((x) => x.id === item.id);
       if (!it) continue;
+      $('.upload-status').textContent = `Keliama ${n + 1} iš ${todo.length}: ${it.title.slice(0, 50)}…`;
       const images = it.images.filter((x) => x.on).map((x) => x.url);
       const problem = !images.length ? 'Pažymėkite bent vieną nuotrauką.' : !(Number(it.price) > 0) ? 'Įrašykite jūsų kainą.' : it.title.trim().length < 3 ? 'Įrašykite pavadinimą.' : '';
       if (problem) {
@@ -665,11 +769,14 @@ const field =
       if (d.ok) {
         okCount++;
         lastSkipped = skipBuild;
+        const notes = [d.skippedImages ? `${d.skippedImages} nuotr. nepavyko atsisiųsti` : '', it.lt === 'klaida' || it.lt === 'isjungta' ? 'įkelta neišversta' : '']
+          .filter(Boolean)
+          .join('; ');
         mutate((q) =>
           Object.assign(q.find((x) => x.id === it.id) ?? {}, {
             status: 'ikelta',
             link: d.url ?? '',
-            message: d.skippedImages ? `${d.skippedImages} nuotr. nepavyko atsisiųsti` : '',
+            message: notes,
             selected: false,
           }),
         );
@@ -708,6 +815,8 @@ const field =
       return '';
     }
   }
+  // Jei puslapis buvo uždarytas verčiant – vertimas bus pakartotas
+  mutate((q) => q.forEach((i) => i.lt === 'verciama' && (i.lt = 'ne')), false);
   render();
   readHash();
   useToken(savedToken() || sveltiaToken(), false);

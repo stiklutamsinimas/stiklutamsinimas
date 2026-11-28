@@ -23,6 +23,8 @@ export interface CatalogItem {
   minQty: number;
   inStock: boolean;
   variants: CatalogVariant[];
+  /** Siunčiama tiesiai iš tiekėjo (dropshipping) – tada tinka tik pristatymas iš tiekėjo */
+  dropship?: boolean;
 }
 
 export type DeliveryType = 'atsiemimas' | 'pastomatas' | 'kurjeris';
@@ -33,6 +35,8 @@ export interface DeliveryOption {
   price: number;
   type: DeliveryType;
   note?: string;
+  /** Pristatymas iš tiekėjo sandėlio – tik tiekėjo (dropshipping) prekėms */
+  dropship?: boolean;
 }
 
 /** Viešas katalogas: /parduotuve/katalogas.json (serveris kainas tikrina pagal jį, ne pagal naršyklę) */
@@ -120,6 +124,18 @@ export const slugify = (s: string) =>
 
 export const lineKey = (id: string, v: string) => `${id}::${v}`;
 
+/**
+ * Kokie pristatymo būdai tinka krepšeliui: jei yra prekė, siunčiama tiesiai iš tiekėjo (dropshipping) –
+ * tik pristatymas iš tiekėjo (į namų adresą, ilgesnis terminas); kitaip – įprasti būdai.
+ * Jei pristatymas iš tiekėjo nenustatytas – visada įprasti būdai.
+ */
+export function availableDeliveries(catalog: Catalog, items: CartLine[]): DeliveryOption[] {
+  const supplier = catalog.delivery.filter((d) => d.dropship);
+  if (!supplier.length) return catalog.delivery;
+  const dropship = (items ?? []).some((it) => catalog.products.find((p) => p.id === it?.id)?.dropship);
+  return dropship ? supplier : catalog.delivery.filter((d) => !d.dropship);
+}
+
 /** Suskaičiuoja užsakymą pagal katalogą. Klaidos – lietuviškai, rodomos pirkėjui. */
 export function priceOrder(catalog: Catalog, items: CartLine[], deliveryId: string): { ok: true; order: PricedOrder } | { ok: false; error: string } {
   if (!Array.isArray(items) || items.length === 0) return { ok: false, error: 'Krepšelis tuščias.' };
@@ -155,6 +171,13 @@ export function priceOrder(catalog: Catalog, items: CartLine[], deliveryId: stri
 
   const delivery = catalog.delivery.find((d) => d.id === deliveryId);
   if (!delivery) return { ok: false, error: 'Pasirinkite pristatymo būdą.' };
+  const possible = availableDeliveries(catalog, items);
+  if (!possible.some((d) => d.id === delivery.id)) {
+    return {
+      ok: false,
+      error: delivery.dropship ? 'Pasirinkite pristatymo būdą.' : `Kai kurios prekės siunčiamos tiesiai iš tiekėjo – pasirinkite „${possible[0]?.name ?? 'pristatymą iš tiekėjo'}“.`,
+    };
+  }
 
   const subtotal = lines.reduce((s, l) => s + l.total, 0);
   const shipping = catalog.freeShippingFrom > 0 && subtotal >= catalog.freeShippingFrom ? 0 : delivery.price;

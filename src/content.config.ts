@@ -124,6 +124,8 @@ const produktai = defineCollection({
       source: z.string().nullish(),
       sourcePrice: z.number().nullish(),
       sourceCurrency: z.string().nullish(),
+      /** Siunčiama tiesiai iš tiekėjo – krepšelyje siūlomas tik pristatymas iš tiekėjo. Nenustatyta – taip, jei yra tiekėjo nuoroda */
+      dropship: z.boolean().nullish(),
     }),
 });
 

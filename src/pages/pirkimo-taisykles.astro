@@ -53,6 +53,14 @@ const sellerName = seller.name || site.name;
         {deliveryOptions.map((d) => <li>{d.name} – {d.price ? money(d.price) : 'nemokamai'}{d.note ? `. ${d.note}` : ''}</li>)}
       </ul>
       {freeShippingFrom > 0 && <p>Užsakymams nuo {money(toCents(freeShippingFrom))} pristatymas nemokamas.</p>}
+      {
+        deliveryOptions.some((d) => d.dropship) && (
+          <p>
+            Kai kurios prekės siunčiamos tiesiai iš tiekėjo sandėlio – tai nurodyta prekės puslapyje. Užsakymams su tokiomis prekėmis taikomas
+            tik pristatymas į nurodytą adresą, o pristatymo terminas nurodytas prie šio pristatymo būdo.
+          </p>
+        )
+      }
       <p>
         Prekes išsiunčiame gavę apmokėjimą (jei pasirinktas išankstinis apmokėjimas). Pristatymo terminai priklauso nuo vežėjo. Gavę siuntą,
         apžiūrėkite ją – pastebėję pažeidimų, užfiksuokite juos kartu su kurjeriu arba nedelsdami praneškite mums.

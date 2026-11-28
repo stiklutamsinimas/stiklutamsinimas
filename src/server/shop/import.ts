@@ -143,6 +143,8 @@ export function productMarkdown(p: ImportProduct, imagePaths: string[]): string 
     ...(p.source ? [`source: ${q(p.source)}`] : []),
     ...(p.sourcePrice !== null ? [`sourcePrice: ${p.sourcePrice}`] : []),
     ...(p.sourceCurrency ? [`sourceCurrency: ${p.sourceCurrency}`] : []),
+    // Importuota prekė siunčiama tiesiai iš tiekėjo – krepšelyje siūlomas pristatymas iš tiekėjo
+    ...(p.source ? ['dropship: true'] : []),
     '---',
     '',
     p.body,
